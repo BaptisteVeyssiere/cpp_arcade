@@ -5,11 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Tue Mar 21 11:33:44 2017 Nathan Scutari
-<<<<<<< HEAD
-// Last update Thu Mar 30 01:21:52 2017 Baptiste Veyssiere
-=======
-// Last update Sun Mar 26 00:24:51 2017 Nathan Scutari
->>>>>>> 255d75b3f150b691d7f2a56d1c2ff6289c44eb57
+// Last update Thu Mar 30 01:53:55 2017 Baptiste Veyssiere
 //
 
 #ifndef __IGRAPH_HPP__
