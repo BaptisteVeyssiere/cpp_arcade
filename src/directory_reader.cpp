@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 23:06:22 2017 Baptiste Veyssiere
-// Last update Mon Mar 27 17:03:32 2017 Baptiste Veyssiere
+// Last update Thu Mar 30 23:50:57 2017 Baptiste Veyssiere
 //
 
 #include <string>
@@ -15,7 +15,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
-std::vector<std::string>	get_directory_filenames(const std::string &name)
+std::vector<std::string>	&get_directory_filenames(const std::string &name)
 {
   DIR				*dir;
   struct dirent			*file;

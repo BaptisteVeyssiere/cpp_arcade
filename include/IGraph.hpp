@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Tue Mar 21 11:33:44 2017 Nathan Scutari
-// Last update Thu Mar 30 01:53:55 2017 Baptiste Veyssiere
+// Last update Thu Mar 30 23:55:32 2017 Baptiste Veyssiere
 //
 
 #ifndef __IGRAPH_HPP__
@@ -19,10 +19,12 @@ class IGraph
 public:
   virtual ~IGraph() {}
 
-  virtual int	Init(const std::string &game) = 0;
-  virtual void	Loop_Display(const t_map &map) const = 0;
+  virtual void	Init(const std::string &game) = 0;
+  virtual void	Loop_display(const t_map &map) const = 0;
   virtual void	Release() = 0;
   virtual void	Get_key(t_gamedata &gamedata) const = 0;
 };
+
+std::vector<std::string>	&get_directory_filenames(const std::string &);
 
 #endif // __IGRAPH_HPP__

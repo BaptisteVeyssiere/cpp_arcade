@@ -5,17 +5,17 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Thu Mar 30 01:44:08 2017 Baptiste Veyssiere
+// Last update Fri Mar 31 14:12:13 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
 # define __NCURSES_HPP__
 
-# include <string>
 # include <iostream>
-# include <vector>
 # include <ncurses.h>
+# include <algorithm>
 # include <unistd.h>
+# include <fstream>
 # include "IGraph.hpp"
 
 # define HEIGHT		25
@@ -35,18 +35,22 @@
 # define WADDCH_ERROR	"Error occured while calling waddch()"
 # define WMOVE_ERROR	"Error occured while calling wmove()"
 # define CURS_SET_ERROR	"Error occured while calling curs_set()"
+# define OPEN_ERROR	"Error occured while calling open()"
+# define FIND_ERROR	"Error: sprite not found"
+# define GETLINE_ERROR	"Error: sprite file is empty"
 # define KEY_ESC	27
-# define KEY_2		195
+# define KEY_2		50087
 # define KEY_3		34
 # define KEY_4		39
 # define KEY_5		40
 # define KEY_8		95
-# define KEY_9		195
+# define KEY_9		50089
 
 class	Ncurses : public IGraph
 {
 private:
   WINDOW	*win;
+  std::string	symlist;
 
 public:
   Ncurses();
@@ -61,6 +65,10 @@ public:
   virtual void	Loop_display(const t_map &map) const;
   virtual void	Release();
   virtual void	Get_key(t_gamedata &gamedata) const;
+
+private:
+  void	Get_sprites();
+  char	get_sym(const std::string &) const;
 };
 
 #endif // !__NCURSES_HPP__

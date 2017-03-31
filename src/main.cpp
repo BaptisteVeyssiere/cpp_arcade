@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Thu Mar 30 01:47:34 2017 Baptiste Veyssiere
+// Last update Fri Mar 31 14:48:38 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -26,6 +26,7 @@ int		main(void)
       {blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK,blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK},
       {blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK}
     };
+  char	ch;
 
   data.prev_graph = false;
   data.next_graph = false;
@@ -55,9 +56,4 @@ int		main(void)
     std::cout << "'9' key pressed" << std::endl;
   else if (data.exit_game)
     std::cout << "'escape' key pressed" << std::endl;
-  std::cout << data.ch << std::endl;
-  if (has_key(data.ch))
-    std::cout << "key OK" << std::endl;
-  else
-    std::cout << "key KO" << std::endl;
 }

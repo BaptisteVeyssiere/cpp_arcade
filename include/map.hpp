@@ -5,13 +5,14 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Tue Mar 21 12:05:08 2017 Nathan Scutari
-// Last update Sun Mar 26 22:00:51 2017 Baptiste Veyssiere
+// Last update Thu Mar 30 23:56:08 2017 Baptiste Veyssiere
 //
 
 #ifndef __MAP_HPP__
 # define __MAP_HPP__
 
-#include <stdint.h>
+# include <stdint.h>
+# include <vector>
 
 enum class blockType : uint16_t
 {
@@ -23,7 +24,8 @@ enum class blockType : uint16_t
   MY_SHOOT	= 5,
   POWERUP	= 6,
   PACGUM	= 7,
-  SNAKTAIL	= 8
+  SNAKTAIL	= 8,
+  PLAYER	= 9
 };
 
 typedef struct				s_map
