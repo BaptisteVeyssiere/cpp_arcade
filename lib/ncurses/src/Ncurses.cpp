@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Sat Apr  1 14:18:47 2017 Baptiste Veyssiere
+// Last update Sun Apr  2 01:17:55 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -55,7 +55,7 @@ void	Ncurses::Get_sprites()
     };
   int	i;
 
-  tab = get_directory_filenames("ncurses/sprites");
+  get_directory_filenames("ncurses/sprites", tab);
   i = -1;
   while (++i < 10)
     {
@@ -69,7 +69,7 @@ void	Ncurses::Init(const std::string &game)
 {
   (void)game;
   initscr();
-  check_ncurses_ret(raw(), ERR, CBREAK_ERROR);
+  check_ncurses_ret(cbreak(), ERR, CBREAK_ERROR);
   check_ncurses_ret(refresh(), ERR, REFRESH_ERROR);
   check_ncurses_ret((this->win = newwin(HEIGHT, WIDTH, STARTY, STARTX)) != NULL,
                      0, NEWWIN_ERROR);
@@ -92,7 +92,7 @@ void	Ncurses::Loop_display(const t_map &map) const
   for (size_t i = 0; i < map.height; i++)
     {
       for (size_t j = 0; j < map.width; j++)
-        check_ncurses_ret(waddch(this->win, this->sym[static_cast<int>(map.map[i][j])]),
+        check_ncurses_ret(waddch(this->win, this->symlist[static_cast<int>(map.map[i][j])]),
 			  ERR, WADDCH_ERROR);
       check_ncurses_ret(wmove(this->win, i + 2, 1), ERR, WMOVE_ERROR);
     }
@@ -120,7 +120,7 @@ void	Ncurses::Get_key(t_gamedata &gamedata) const
     gamedata.exit_game = true;
 }
 
-IGraph	*factory()
+extern "C" IGraph	*factory()
 {
   return (new Ncurses);
 }

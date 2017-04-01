@@ -5,13 +5,15 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Sat Apr  1 17:47:58 2017 Baptiste Veyssiere
+// Last update Sun Apr  2 01:21:11 2017 Baptiste Veyssiere
 //
 
 #include "Core_program.hpp"
 
 Core_program::Core_program(const std::string &graphic_libname)
 {
+  this->game_handle = NULL;
+  this->graphic_handle = NULL;
   this->graphic_handle = dlopen(graphic_libname.c_str(), RTLD_NOW);
   if (!this->graphic_handle)
     throw core_program_exception(dlerror());

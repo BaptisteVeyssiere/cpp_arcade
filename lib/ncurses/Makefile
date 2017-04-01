@@ -7,7 +7,7 @@
 ## Started on  Wed May 18 21:26:30 2016 Baptiste veyssiere
 ##
 
-NAME	= arcade
+NAME	= lib_arcade_ncurses.so
 
 RM	= rm -f
 
@@ -15,8 +15,7 @@ CXX	= g++
 
 MKDIR	= mkdir -p
 
-SRC	= src/main.cpp \
-	src/Core_program.cpp \
+SRC	= src/Ncurses.cpp \
 	src/directory_reader.cpp
 
 SRCDIR	= src
@@ -25,17 +24,17 @@ OBJDIR	= obj
 
 OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
-CXXFLAGS	= -Iinclude -g
+CXXFLAGS	= -Iinclude
 
-LDFLAGS		= -ldl
+LDFLAGS = -lncurses
 
 $(NAME): $(OBJ)
-	@$(CXX) $(LDFLAGS) -o $(NAME) $(OBJ)
+	@$(CXX) $(LDFLAGS) -shared -o $(NAME) $(OBJ)
 	@echo "Linking complete!"
 
 $(OBJ): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	@$(MKDIR) $(OBJDIR)
-	@$(CXX) $(CXXFLAGS) -c $< -o $@
+	@$(CXX) $(LDFLAGS) $(CXXFLAGS) -c $< -o $@ -fPIC
 	@echo "Compiled "$<" successfully!"
 
 all: $(NAME)

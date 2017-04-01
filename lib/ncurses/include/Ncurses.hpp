@@ -5,18 +5,19 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Sat Apr  1 14:17:46 2017 Baptiste Veyssiere
+// Last update Sun Apr  2 00:48:57 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
 # define __NCURSES_HPP__
 
 # include <iostream>
-# include <ncurses.h>
 # include <algorithm>
 # include <unistd.h>
 # include <fstream>
+# include <ncurses.h>
 # include "IGraph.hpp"
+# include "library_error.hpp"
 
 # define HEIGHT		25
 # define WIDTH		80
@@ -71,6 +72,6 @@ private:
   char	get_sym(const std::string &) const;
 };
 
-IGraph	*factory();
+extern "C" IGraph	*factory();
 
 #endif // !__NCURSES_HPP__
