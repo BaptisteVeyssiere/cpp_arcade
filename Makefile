@@ -15,6 +15,10 @@ CXX	= g++
 
 MKDIR	= mkdir -p
 
+SNAKEDIR	= games/snake/
+
+NCURSESDIR	= lib/ncurses/
+
 SRC	= src/main.cpp \
 	src/Core_program.cpp \
 	src/directory_reader.cpp
@@ -32,6 +36,10 @@ LDFLAGS		= -ldl
 $(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -o $(NAME) $(OBJ)
 	@echo "Linking complete!"
+	@$(MAKE) -C $(NCURSESDIR)
+	@echo "Ncurses library linked"
+	@$(MAKE) -C $(SNAKEDIR)
+	@echo "Snake library linked"
 
 $(OBJ): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	@$(MKDIR) $(OBJDIR)
@@ -42,11 +50,15 @@ all: $(NAME)
 
 clean:
 	@$(RM) $(OBJ)
+	@$(MAKE) -C $(NCURSESDIR) clean
+	@$(MAKE) -C $(SNAKEDIR) clean
 	@echo "Cleanup complete!"
 
 fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(LIBNAME)
+	@$(MAKE) -C $(NCURSESDIR) fclean
+	@$(MAKE) -C $(SNAKEDIR) fclean
 
 re: fclean all
 
