@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Tue Mar 21 11:33:44 2017 Nathan Scutari
-// Last update Thu Mar 30 23:55:32 2017 Baptiste Veyssiere
+// Last update Sat Apr  1 17:49:10 2017 Baptiste Veyssiere
 //
 
 #ifndef __IGRAPH_HPP__
@@ -25,6 +25,6 @@ public:
   virtual void	Get_key(t_gamedata &gamedata) const = 0;
 };
 
-std::vector<std::string>	&get_directory_filenames(const std::string &);
+void	get_directory_filenames(const std::string &, std::vector<std::string> &);
 
 #endif // __IGRAPH_HPP__

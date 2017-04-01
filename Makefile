@@ -15,7 +15,9 @@ CXX	= g++
 
 MKDIR	= mkdir -p
 
-SRC	= src/main.cpp
+SRC	= src/main.cpp \
+	src/Core_program.cpp \
+	src/directory_reader.cpp
 
 SRCDIR	= src
 
@@ -25,8 +27,10 @@ OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 CXXFLAGS	= -Iinclude
 
+LDFLAGS		= -ldl
+
 $(NAME): $(OBJ)
-	@$(CXX) -o $(NAME) $(OBJ)
+	@$(CXX) $(LDFLAGS) -o $(NAME) $(OBJ)
 	@echo "Linking complete!"
 
 $(OBJ): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp

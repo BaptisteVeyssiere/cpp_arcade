@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Fri Mar 31 14:42:30 2017 Baptiste Veyssiere
+// Last update Sat Apr  1 17:47:58 2017 Baptiste Veyssiere
 //
 
 #include "Core_program.hpp"
@@ -19,10 +19,10 @@ Core_program::Core_program(const std::string &graphic_libname)
 
 Core_program::~Core_program()
 {
-  if (this->graphic_handle && dlclose(this->graphic_handle))
-    throw core_program_exception(dlerror());
-  if (this->game_handle && dlclose(this->game_handle))
-    throw core_program_exception(dlerror());
+  if (this->graphic_handle)
+    dlclose(this->graphic_handle);
+  if (this->game_handle)
+    dlclose(this->game_handle);
 }
 
 void	Core_program::load_graphic_lib(const std::string &graphic_libname)

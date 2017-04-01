@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 23:06:22 2017 Baptiste Veyssiere
-// Last update Thu Mar 30 23:50:57 2017 Baptiste Veyssiere
+// Last update Sat Apr  1 17:50:22 2017 Baptiste Veyssiere
 //
 
 #include <string>
@@ -15,11 +15,11 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
-std::vector<std::string>	&get_directory_filenames(const std::string &name)
+void	get_directory_filenames(const std::string &name,
+				std::vector<std::string> &tab)
 {
   DIR				*dir;
   struct dirent			*file;
-  std::vector<std::string>	tab;
   std::string			full_path;
   std::string			path;
   struct stat			path_stat;
@@ -39,7 +39,7 @@ std::vector<std::string>	&get_directory_filenames(const std::string &name)
 	throw std::exception();
       if (S_ISDIR(path_stat.st_mode))
 	{
-	  buffer = get_directory_filenames(full_path);
+	  get_directory_filenames(full_path, buffer);
 	  for (size_t i = 0; i < buffer.size(); i++)
 	    tab.push_back(buffer[i]);
 	}
@@ -48,17 +48,4 @@ std::vector<std::string>	&get_directory_filenames(const std::string &name)
     }
   if (closedir(dir) == -1)
     throw std::exception();
-  return (tab);
-}
-
-int	main(int ac, char **av)
-{
-  std::vector<std::string>	tab;
-  std::string			name;
-
-  name = av[1];
-  tab = get_directory_filenames(name);
-  for (size_t i = 0; i < tab.size(); i++)
-    std::cout << tab[i] << std::endl;
-  return (0);
 }

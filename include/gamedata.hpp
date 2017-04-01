@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Mar 30 00:59:21 2017 Baptiste Veyssiere
-// Last update Fri Mar 31 15:56:07 2017 Baptiste Veyssiere
+// Last update Sat Apr  1 17:19:48 2017 Baptiste Veyssiere
 //
 
 #ifndef __GAMEDATA_HPP__
@@ -13,7 +13,6 @@
 
 # include <cstdint>
 # include <vector>
-# include "map.hpp"
 
 enum class blockType : uint16_t
 {
