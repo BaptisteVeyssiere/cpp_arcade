@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Fri Mar 31 14:12:13 2017 Baptiste Veyssiere
+// Last update Sat Apr  1 14:17:46 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
@@ -70,5 +70,7 @@ private:
   void	Get_sprites();
   char	get_sym(const std::string &) const;
 };
+
+IGraph	*factory();
 
 #endif // !__NCURSES_HPP__

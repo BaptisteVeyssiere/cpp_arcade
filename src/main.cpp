@@ -5,55 +5,49 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Fri Mar 31 14:48:38 2017 Baptiste Veyssiere
+// Last update Sat Apr  1 14:29:49 2017 Baptiste Veyssiere
 //
 
-#include "Ncurses.hpp"
+#include "Core_program.hpp"
 
-int		main(void)
+static void	init_gamedata(t_gamedata &data)
 {
-  Ncurses	ncur;
-  t_map		obj;
-  t_gamedata	data;
-  std::vector<std::vector<blockType>>	map =
-    {
-      {blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK},
-      {blockType::BLOCK,blockType::PACGUM,blockType::POWERUP,blockType::MY_SHOOT,blockType::EVIL_SHOOT,blockType::EVIL_DUDE,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK},
-      {blockType::BLOCK,blockType::OBSTACLE,blockType::SNAKTAIL,blockType::EMPTY,blockType::BLOCK,blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK},
-      {blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK,blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK},
-      {blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK},
-      {blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK,blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK},
-      {blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK,blockType::BLOCK,blockType::EMPTY,blockType::EMPTY,blockType::EMPTY,blockType::BLOCK},
-      {blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK,blockType::BLOCK}
-    };
-  char	ch;
+  gamedata.prev_graph = false;
+  gamedata.next_graph = false;
+  gamedata.prev_game = false;
+  gamedata.next_game = false;
+  gamedata.restart = false;
+  gamedata.menu = false;
+  gamedata.exit_game = false;
+}
 
-  data.prev_graph = false;
-  data.next_graph = false;
-  data.next_game = false;
-  data.prev_game = false;
-  data.menu = false;
-  data.restart = false;
-  data.exit_game = false;
-  obj.height = map.size();
-  obj.width = map[0].size();
-  obj.map = map;
-  ncur.Init("pacman");
-  ncur.Loop_display(obj);
-  ncur.Get_key(data);
-  ncur.Release();
-  if (data.prev_graph)
-    std::cout << "'2' key pressed" << std::endl;
-  else if (data.next_graph)
-    std::cout << "'3' key pressed" << std::endl;
-  else if (data.prev_game)
-    std::cout << "'4' key pressed" << std::endl;
-  else if (data.next_game)
-    std::cout << "'5' key pressed" << std::endl;
-  else if (data.restart)
-    std::cout << "'8' key pressed" << std::endl;
-  else if (data.menu)
-    std::cout << "'9' key pressed" << std::endl;
-  else if (data.exit_game)
-    std::cout << "'escape' key pressed" << std::endl;
+static void	main_loop(const std::string &libname)
+{
+  Core_program	core(libname);
+  t_gamedata	data;
+  IGraph	*graph;
+  IGame		*game;
+
+  init_gamedata(data);
+  graph = static_cast<Igraph *()>core.get_graphic_function("factory")();
+  graph->Init("");
+  game = static_cast<IGame *()>core.get_game_function("factory")();
+  while (data.exit_game == false)
+    {
+      game->Game_loop(data->map);
+      graph->Loop_display();
+      graph->Get_key(data);
+    }
+  graph->Release();
+}
+
+int	main(int ac, char **av)
+{
+  if (ac != 2)
+    {
+      std::cout << "USAGE: " << av[0] << " PATH_TO/lib_arcade_xxx.so" << std::endl;
+      return (0);
+    }
+  main_loop(av[1]);
+  return (0);
 }

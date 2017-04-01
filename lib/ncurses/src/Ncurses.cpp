@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Fri Mar 31 14:09:49 2017 Baptiste Veyssiere
+// Last update Sat Apr  1 14:18:47 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -118,4 +118,9 @@ void	Ncurses::Get_key(t_gamedata &gamedata) const
     gamedata.menu = true;
   else if (ch == KEY_ESC)
     gamedata.exit_game = true;
+}
+
+IGraph	*factory()
+{
+  return (new Ncurses);
 }
