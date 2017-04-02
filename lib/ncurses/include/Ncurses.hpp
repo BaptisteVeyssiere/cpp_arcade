@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Sun Apr  2 00:48:57 2017 Baptiste Veyssiere
+// Last update Sun Apr  2 22:52:23 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
@@ -28,6 +28,7 @@
 # define ENDWIN_ERROR	"Error occured while calling endwin()"
 # define DELWIN_ERROR	"Error occured while calling delwin()"
 # define CBREAK_ERROR	"Error occured while calling cbreak()"
+# define NOECHO_ERROR	"Error occured while calling noecho()"
 # define REFRESH_ERROR	"Error occured while calling refresh()"
 # define NEWWIN_ERROR	"Error occured while calling newwin()"
 # define BOX_ERROR	"Error occured while calling box()"
@@ -37,15 +38,15 @@
 # define WMOVE_ERROR	"Error occured while calling wmove()"
 # define CURS_SET_ERROR	"Error occured while calling curs_set()"
 # define OPEN_ERROR	"Error occured while calling open()"
-# define FIND_ERROR	"Error: sprite not found"
+# define FIND_ERROR(s)	"Error: sprite not found: " + s
 # define GETLINE_ERROR	"Error: sprite file is empty"
 # define KEY_ESC	27
-# define KEY_2		50087
-# define KEY_3		34
-# define KEY_4		39
-# define KEY_5		40
-# define KEY_8		95
-# define KEY_9		50089
+# define KEY_2		505
+# define KEY_3		515
+# define KEY_4	        525
+# define KEY_5		535
+# define KEY_8		565
+# define KEY_9		575
 
 class	Ncurses : public IGraph
 {

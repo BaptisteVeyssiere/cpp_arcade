@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Sun Apr  2 01:17:55 2017 Baptiste Veyssiere
+// Last update Sun Apr  2 22:57:31 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -42,25 +42,25 @@ void	Ncurses::Get_sprites()
   std::vector<std::string>::iterator	it;
   std::vector<std::string>		name =
     {
-      "empty",
-      "block",
-      "obstacle",
-      "evil_dude",
-      "evil_shoot",
-      "my_shoot",
-      "power_up",
-      "pacgum",
-      "snaktail",
-      "player"
+      "lib/ncurses/sprites/empty",
+      "lib/ncurses/sprites/block",
+      "lib/ncurses/sprites/obstacle",
+      "lib/ncurses/sprites/evil_dude",
+      "lib/ncurses/sprites/evil_shoot",
+      "lib/ncurses/sprites/my_shoot",
+      "lib/ncurses/sprites/powerup",
+      "lib/ncurses/sprites/pacgum",
+      "lib/ncurses/sprites/snaktail",
+      "lib/ncurses/sprites/player"
     };
   int	i;
 
-  get_directory_filenames("ncurses/sprites", tab);
+  get_directory_filenames("lib/ncurses/sprites", tab);
   i = -1;
   while (++i < 10)
     {
       if ((it = find(tab.begin(), tab.end(), name[i])) == tab.end())
-	throw library_error(FIND_ERROR);
+	throw library_error(FIND_ERROR(name[i]));
       this->symlist += this->get_sym(name[i]);
     }
 }
@@ -70,6 +70,7 @@ void	Ncurses::Init(const std::string &game)
   (void)game;
   initscr();
   check_ncurses_ret(cbreak(), ERR, CBREAK_ERROR);
+  check_ncurses_ret(noecho(), ERR, NOECHO_ERROR);
   check_ncurses_ret(refresh(), ERR, REFRESH_ERROR);
   check_ncurses_ret((this->win = newwin(HEIGHT, WIDTH, STARTY, STARTX)) != NULL,
                      0, NEWWIN_ERROR);
@@ -77,6 +78,7 @@ void	Ncurses::Init(const std::string &game)
   check_ncurses_ret(keypad(this->win, true), ERR, KEYPAD_ERROR);
   check_ncurses_ret(wrefresh(this->win), ERR, WREFRESH_ERROR);
   check_ncurses_ret(curs_set(0), ERR, CURS_SET_ERROR);
+  this->Get_sprites();
   timeout(1000);
 }
 

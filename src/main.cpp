@@ -5,10 +5,11 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sun Apr  2 01:35:31 2017 Baptiste Veyssiere
+// Last update Sun Apr  2 23:00:53 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
+#include <ctime>
 #include "Core_program.hpp"
 #include "IGraph.hpp"
 #include "IGame.hpp"
@@ -30,6 +31,7 @@ static void	main_loop(const std::string &libname)
   t_gamedata	gamedata;
   IGraph	*graph;
   IGame		*game;
+  clock_t	t;
 
   init_gamedata(gamedata);
   core.load_game_lib("games/snake/lib_arcade_snake.so");
@@ -40,7 +42,9 @@ static void	main_loop(const std::string &libname)
     {
       game->Game_loop(gamedata.map);
       graph->Loop_display(gamedata.map);
+      t = clock() + 500;
       graph->Get_key(gamedata);
+      while (clock() < t);
     }
   graph->Release();
 }
