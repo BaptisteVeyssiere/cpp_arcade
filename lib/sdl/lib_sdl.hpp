@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Tue Mar 21 11:33:44 2017 Nathan Scutari
-// Last update Sun Mar 26 00:30:29 2017 Nathan Scutari
+// Last update Mon Apr  3 15:44:33 2017 Nathan Scutari
 //
 
 #ifndef __LIB_SDL_HPP__
@@ -15,7 +15,7 @@
 #include <string>
 #include <SDL/SDL.h>
 #include "IGraph.hpp"
-#include "map.hpp"
+#include "gamedata.hpp"
 
 class lib_sdl : public IGraph
 {
@@ -30,8 +30,9 @@ public:
   lib_sdl();
   virtual ~lib_sdl();
 
-  int	Init(const std::string &game);
-  void	Loop_Display(const t_map &map) const;
+  void	Init(const std::string &game);
+  void	Loop_display(const t_map &map) const;
+  void	Get_key(t_gamedata &gamedata) const;
   void	Release();
 };
 

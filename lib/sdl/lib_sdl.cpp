@@ -5,13 +5,17 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Sun Mar 26 00:31:48 2017 Nathan Scutari
+// Last update Mon Apr  3 22:57:47 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <string>
+#include <vector>
+#include <iostream>
+#include <map>
 #include "lib_sdl.hpp"
+#include "technical_spec.hpp"
 
 lib_sdl::lib_sdl()
 {
@@ -36,31 +40,70 @@ std::string	get_name(std::string str)
   return (str.substr(pos_s + 1, (pos_e - pos_s - 1)));
 }
 
-void	lib_sdl::Loop_Display(const t_map &map) const
+std::string	tile_to_file(t_block const &tile)
 {
+  std::string	file;
+  int		value;
 
+  value = static_cast<int>(tile.type);
+  file = std::to_string(value);
+  file += "-";
+  file += tile.sprite + 48;
+  std::cout << file << std::endl;
+  return (file);
 }
 
-int	lib_sdl::Init(const std::string &game)
+void	lib_sdl::Loop_display(const t_map &map) const
 {
-  int	i;
-  std::string	file_name;
-  char		**files;
+  int		y;
+  int		x;
+  int		x_size;
+  int		y_size;
+  std::string	file;
+  SDL_Rect	pos;
   SDL_Surface	*tmp;
 
-  /*  if ((files = load_textures(game)) == NULL)
-      return (1);*/
-  i = -1;
-  while (files[++i])
+  x_size = WINSIDE / map.width;
+  y_size = WINSIDE / map.height;
+  y = -1;
+  while (++y < map.height)
     {
-      file_name = get_name(files[i]);
-      if ((tmp = IMG_Load(files[i])) == NULL)
-	return (1);
-      textures.emplace(file_name, tmp);
+      x = -1;
+      while (++x < map.width)
+	{
+	  pos.x = x * x_size;
+	  pos.y = y * y_size;
+	  file = tile_to_file(map.map[y][x]);
+	  if (textures.find(file) == textures.end())
+	    throw std::exception();
+	  tmp = textures.at(file);
+	  SDL_BlitSurface(tmp, NULL, win, &pos);
+	}
+    }
+  SDL_Flip(win);
+}
+
+void	lib_sdl::Init(const std::string &game)
+{
+  std::string	file_name;
+  std::vector<std::string>	files;
+  SDL_Surface	*tmp;
+
+  get_directory_filenames(game, files);
+  while (files.size() > 0)
+    {
+      file_name = get_name(files.back());
+      if ((tmp = IMG_Load(files.back().c_str())) != NULL)
+	textures.emplace(file_name, tmp);
+      files.pop_back();
     }
   if ((win = SDL_SetVideoMode(1280, 720, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
-    return (1);
-  return (0);
+    throw std::exception();
+}
+
+void	lib_sdl::Get_key(t_gamedata &gamedata) const
+{
+
 }
 
 void	lib_sdl::Release()
