@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Mon Apr  3 15:08:20 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 01:28:04 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -51,8 +51,7 @@ void	Ncurses::Get_sprites(const std::string &game)
       "games/"+game+"/sprites/text/powerup",
       "games/"+game+"/sprites/text/pacgum",
       "games/"+game+"/sprites/text/snaktail",
-      "games/"+game+"/sprites/text/snakhead",
-      "games/"+game+"/sprites/text/pacman"
+      "games/"+game+"/sprites/text/player"
     };
   int	i;
 
@@ -101,25 +100,64 @@ void	Ncurses::Loop_display(const t_map &map) const
   check_ncurses_ret(wrefresh(this->win), ERR, WREFRESH_ERROR);
 }
 
+void	Ncurses::set_prev_graph(t_gamedata &gamedata) const
+{
+  gamedata.prev_graph = true;
+}
+
+void	Ncurses::set_next_graph(t_gamedata &gamedata) const
+{
+  gamedata.next_graph = true;
+}
+
+void	Ncurses::set_prev_game(t_gamedata &gamedata) const
+{
+  gamedata.prev_game = true;
+}
+
+void	Ncurses::set_next_game(t_gamedata &gamedata) const
+{
+  gamedata.next_game = true;
+}
+
+void	Ncurses::set_restart(t_gamedata &gamedata) const
+{
+  gamedata.restart = true;
+}
+
+void	Ncurses::set_menu(t_gamedata &gamedata) const
+{
+  gamedata.menu = true;
+}
+
+void	Ncurses::set_exit_game(t_gamedata &gamedata) const
+{
+  gamedata.exit_game = true;
+}
+
 void	Ncurses::Get_key(t_gamedata &gamedata) const
 {
   int	ch;
+  std::vector<int>	keys =
+    {KEY_2, KEY_3, KEY_4, KEY_5, KEY_8, KEY_9, KEY_ESC};
+  std::vector<std::function<void(const Ncurses&, t_gamedata&)>> ptr =
+    {
+      &Ncurses::set_prev_graph,
+      &Ncurses::set_next_graph,
+      &Ncurses::set_prev_game,
+      &Ncurses::set_next_game,
+      &Ncurses::set_restart,
+      &Ncurses::set_menu,
+      &Ncurses::set_exit_game
+    };
 
   ch = getch();
-  if (ch == KEY_2)
-    gamedata.prev_graph = true;
-  else if (ch == KEY_3)
-    gamedata.next_graph = true;
-  else if (ch == KEY_4)
-    gamedata.prev_game = true;
-  else if (ch == KEY_5)
-    gamedata.next_game = true;
-  else if (ch == KEY_8)
-    gamedata.restart = true;
-  else if (ch == KEY_9)
-    gamedata.menu = true;
-  else if (ch == KEY_ESC)
-    gamedata.exit_game = true;
+  for (size_t i = 0; i < keys.size(); i++)
+    if (ch == keys[i])
+      {
+	ptr[i](*this, gamedata);
+	break;
+      }
 }
 
 extern "C" IGraph	*factory()

@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Mon Apr  3 15:06:21 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 01:21:20 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
@@ -15,12 +15,14 @@
 # include <algorithm>
 # include <unistd.h>
 # include <fstream>
+# include <functional>
 # include <ncurses.h>
 # include "IGraph.hpp"
 # include "library_error.hpp"
+# include "technical_spec.hpp"
 
-# define HEIGHT		25
-# define WIDTH		80
+# define HEIGHT		40
+# define WIDTH		40
 # define STARTX		0
 # define STARTY		0
 # define BOXX		0
@@ -71,6 +73,13 @@ public:
 private:
   void	Get_sprites(const std::string &);
   char	get_sym(const std::string &) const;
+  void	set_prev_graph(t_gamedata &) const;
+  void	set_next_graph(t_gamedata &) const;
+  void	set_prev_game(t_gamedata &) const;
+  void	set_next_game(t_gamedata &) const;
+  void	set_restart(t_gamedata &) const;
+  void	set_menu(t_gamedata &) const;
+  void	set_exit_game(t_gamedata &) const;
 };
 
 extern "C" IGraph	*factory();
