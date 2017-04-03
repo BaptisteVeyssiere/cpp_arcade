@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Mar 30 00:59:21 2017 Baptiste Veyssiere
-// Last update Sun Apr  2 01:08:34 2017 Baptiste Veyssiere
+// Last update Mon Apr  3 14:51:09 2017 Baptiste Veyssiere
 //
 
 #ifndef __GAMEDATA_HPP__
@@ -13,7 +13,6 @@
 
 # include <cstdint>
 # include <vector>
-# include <cstddef>
 
 enum class blockType : uint16_t
 {
@@ -26,14 +25,21 @@ enum class blockType : uint16_t
   POWERUP       = 6,
   PACGUM        = 7,
   SNAKTAIL      = 8,
-  PLAYER        = 9
+  SNAKHEAD      = 9,
+  PACMAN	= 10
 };
+
+typedef struct	s_block
+{
+  blockType	type;
+  unsigned char	sprite;
+}		t_block;
 
 typedef struct                          s_map
 {
   size_t                                width;
   size_t                                height;
-  std::vector<std::vector<blockType>>   map;
+  std::vector<std::vector<t_block>>	map;
 }                                       t_map;
 
 typedef struct	s_gamedata

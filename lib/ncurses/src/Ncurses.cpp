@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Sun Apr  2 22:57:31 2017 Baptiste Veyssiere
+// Last update Mon Apr  3 15:08:20 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -36,28 +36,29 @@ char	Ncurses::get_sym(const std::string &name) const
   return (line[0]);
 }
 
-void	Ncurses::Get_sprites()
+void	Ncurses::Get_sprites(const std::string &game)
 {
   std::vector<std::string>		tab;
   std::vector<std::string>::iterator	it;
   std::vector<std::string>		name =
     {
-      "lib/ncurses/sprites/empty",
-      "lib/ncurses/sprites/block",
-      "lib/ncurses/sprites/obstacle",
-      "lib/ncurses/sprites/evil_dude",
-      "lib/ncurses/sprites/evil_shoot",
-      "lib/ncurses/sprites/my_shoot",
-      "lib/ncurses/sprites/powerup",
-      "lib/ncurses/sprites/pacgum",
-      "lib/ncurses/sprites/snaktail",
-      "lib/ncurses/sprites/player"
+      "games/"+game+"/sprites/text/empty",
+      "games/"+game+"/sprites/text/block",
+      "games/"+game+"/sprites/text/obstacle",
+      "games/"+game+"/sprites/text/evil_dude",
+      "games/"+game+"/sprites/text/evil_shoot",
+      "games/"+game+"/sprites/text/my_shoot",
+      "games/"+game+"/sprites/text/powerup",
+      "games/"+game+"/sprites/text/pacgum",
+      "games/"+game+"/sprites/text/snaktail",
+      "games/"+game+"/sprites/text/snakhead",
+      "games/"+game+"/sprites/text/pacman"
     };
   int	i;
 
-  get_directory_filenames("lib/ncurses/sprites", tab);
+  get_directory_filenames("games/"+game+"/sprites/text/", tab);
   i = -1;
-  while (++i < 10)
+  while (++i < name.size())
     {
       if ((it = find(tab.begin(), tab.end(), name[i])) == tab.end())
 	throw library_error(FIND_ERROR(name[i]));
@@ -67,7 +68,6 @@ void	Ncurses::Get_sprites()
 
 void	Ncurses::Init(const std::string &game)
 {
-  (void)game;
   initscr();
   check_ncurses_ret(cbreak(), ERR, CBREAK_ERROR);
   check_ncurses_ret(noecho(), ERR, NOECHO_ERROR);
@@ -78,7 +78,7 @@ void	Ncurses::Init(const std::string &game)
   check_ncurses_ret(keypad(this->win, true), ERR, KEYPAD_ERROR);
   check_ncurses_ret(wrefresh(this->win), ERR, WREFRESH_ERROR);
   check_ncurses_ret(curs_set(0), ERR, CURS_SET_ERROR);
-  this->Get_sprites();
+  this->Get_sprites(game);
   timeout(1000);
 }
 
@@ -94,7 +94,7 @@ void	Ncurses::Loop_display(const t_map &map) const
   for (size_t i = 0; i < map.height; i++)
     {
       for (size_t j = 0; j < map.width; j++)
-        check_ncurses_ret(waddch(this->win, this->symlist[static_cast<int>(map.map[i][j])]),
+        check_ncurses_ret(waddch(this->win, this->symlist[static_cast<int>(map.map[i][j].type)]),
 			  ERR, WADDCH_ERROR);
       check_ncurses_ret(wmove(this->win, i + 2, 1), ERR, WMOVE_ERROR);
     }

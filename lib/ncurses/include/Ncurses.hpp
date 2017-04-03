@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Sun Apr  2 22:52:23 2017 Baptiste Veyssiere
+// Last update Mon Apr  3 15:06:21 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
@@ -69,7 +69,7 @@ public:
   virtual void	Get_key(t_gamedata &gamedata) const;
 
 private:
-  void	Get_sprites();
+  void	Get_sprites(const std::string &);
   char	get_sym(const std::string &) const;
 };
 
