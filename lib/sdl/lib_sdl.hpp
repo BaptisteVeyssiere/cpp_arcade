@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Tue Mar 21 11:33:44 2017 Nathan Scutari
-// Last update Mon Apr  3 15:44:33 2017 Nathan Scutari
+// Last update Tue Apr  4 20:17:15 2017 Nathan Scutari
 //
 
 #ifndef __LIB_SDL_HPP__
@@ -19,6 +19,7 @@
 
 class lib_sdl : public IGraph
 {
+  bool					first_loop;
   std::map<std::string, SDL_Surface *>	textures;
   SDL_Surface				*win;
 
@@ -31,8 +32,11 @@ public:
   virtual ~lib_sdl();
 
   void	Init(const std::string &game);
-  void	Loop_display(const t_map &map) const;
+  void	Loop_display(const t_map &map);
   void	Get_key(t_gamedata &gamedata) const;
+  bool	is_map_texture(std::string file_name) const;
+  void	resize_textures(std::map<std::string, SDL_Surface *> &textures,
+			bool &first_loop, int x_size, int y_size);
   void	Release();
 };
 

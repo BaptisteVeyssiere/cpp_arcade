@@ -5,11 +5,12 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Tue Apr  4 12:20:41 2017 Nathan Scutari
+// Last update Tue Apr  4 22:20:55 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include <SDL/SDL_rotozoom.h>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -49,11 +50,48 @@ std::string	tile_to_file(t_block const &tile)
   file = std::to_string(value);
   file += "-";
   file += tile.sprite + 48;
-  std::cout << file << std::endl;
   return (file);
 }
 
-void	lib_sdl::Loop_display(const t_map &map) const
+bool	lib_sdl::is_map_texture(std::string file_name) const
+{
+  size_t	pos_s;
+  int		i;
+
+  if ((pos_s = file_name.find_last_of("-")) == std::string::npos ||
+      pos_s == file_name.size() - 1 || pos_s == 0)
+    return (false);
+  i = -1;
+  while (++i < pos_s)
+    if (file_name[i] < '0' || file_name[i] > '9')
+      return (false);
+  while (++i < file_name.size())
+    if (file_name[i] < '0' || file_name[i] > '9')
+      return (false);
+  return (true);
+}
+
+void	lib_sdl::resize_textures(std::map<std::string, SDL_Surface *> &textures,
+				 bool &first_loop, int x_size, int y_size)
+{
+  SDL_Surface	*tmp;
+
+  first_loop = false;
+  if (textures.find("bg") == textures.end())
+    throw std::exception();
+  for (std::map<std::string, SDL_Surface *>::iterator it = textures.begin() ;
+       it != textures.end() ; ++it)
+    {
+      if (is_map_texture(it->first))
+	{
+	  tmp = it->second;
+	  it->second = zoomSurface(tmp, x_size / tmp->w, y_size / tmp->h, 1);
+	  SDL_FreeSurface(tmp);
+	}
+    }
+}
+
+void	lib_sdl::Loop_display(const t_map &map)
 {
   int		y;
   int		x;
@@ -66,6 +104,8 @@ void	lib_sdl::Loop_display(const t_map &map) const
   x_size = WINSIDE / map.width;
   y_size = WINSIDE / map.height;
   y = -1;
+  if (first_loop)
+    resize_textures(textures, first_loop, x_size, y_size);
   while (++y < map.height)
     {
       x = -1;
@@ -76,8 +116,14 @@ void	lib_sdl::Loop_display(const t_map &map) const
 	  file = tile_to_file(map.map[y][x]);
 	  if (textures.find(file) == textures.end())
 	    throw std::exception();
-	  tmp = textures.at(file);
-	  SDL_BlitSurface(tmp, NULL, win, &pos);
+	  if (map.map[y][x].angle != 0)
+	    {
+	      tmp = rotozoomSurface(textures.at(file), map.map[y][x].angle, 1, 1);
+	      SDL_BlitSurface(tmp, NULL, win, &pos);
+	      SDL_FreeSurface(tmp);
+	    }
+	  else
+	    SDL_BlitSurface(textures.at(file), NULL, win, &pos);
 	}
     }
   SDL_Flip(win);
@@ -100,9 +146,10 @@ void	lib_sdl::Init(const std::string &game)
     }
   SDL_putenv(center);
   if ((win = SDL_SetVideoMode(WINSIDE, WINSIDE, 32,
-			      SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_NOFRAME)) == NULL)
+			      SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
     throw std::exception();
   SDL_WM_SetCaption(get_name(game).c_str(), NULL);
+  first_loop = true;
 }
 
 void	lib_sdl::Get_key(t_gamedata &gamedata) const

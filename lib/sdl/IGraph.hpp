@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Tue Mar 21 11:33:44 2017 Nathan Scutari
-// Last update Mon Apr  3 15:45:09 2017 Nathan Scutari
+// Last update Tue Apr  4 20:17:43 2017 Nathan Scutari
 //
 
 #ifndef __IGRAPH_HPP__
@@ -20,7 +20,7 @@ public:
   virtual ~IGraph() {}
 
   virtual void	Init(const std::string &game) = 0;
-  virtual void	Loop_display(const t_map &map) const = 0;
+  virtual void	Loop_display(const t_map &map) = 0;
   virtual void	Release() = 0;
   virtual void	Get_key(t_gamedata &gamedata) const = 0;
 };
