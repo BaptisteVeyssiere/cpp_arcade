@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Mar 30 00:59:21 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 01:14:41 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 22:49:47 2017 Baptiste Veyssiere
 //
 
 #ifndef __GAMEDATA_HPP__
@@ -52,6 +52,10 @@ typedef struct	s_gamedata
   bool		next_game;
   bool		restart;
   bool		menu;
+  bool		up;
+  bool		down;
+  bool		right;
+  bool		left;
   bool		exit_game;
 }		t_gamedata;
 

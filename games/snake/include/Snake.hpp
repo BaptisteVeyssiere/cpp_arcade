@@ -5,18 +5,30 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:39:26 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 00:59:57 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 22:42:12 2017 Baptiste Veyssiere
 //
 
 #ifndef __SNAKE_HPP__
 # define __SNAKE_HPP__
 
 # include <fstream>
+# include <list>
 # include "IGame.hpp"
 # include "game_error.hpp"
 
+typedef struct	s_cell
+{
+  unsigned int	x;
+  unsigned int	y;
+}		t_cell;
+
 class	Snake : public IGame
 {
+private:
+  std::list<t_cell>	head;
+  char		player_xdirection;
+  char		player_ydirection;
+
 private:
   Snake(const Snake &);
   Snake &operator=(const Snake &);
@@ -26,12 +38,20 @@ public:
   virtual ~Snake();
 
 public:
-  virtual void	Game_loop(t_map &) const;
-  virtual void	Get_map(t_map &) const;
+  virtual int	Game_loop(t_gamedata &);
+  virtual void	Get_map(t_map &);
 
 private:
   void	Get_file_content(std::vector<std::string> &) const;
   void	Add_mapline(const std::string &, std::vector<std::vector<t_block>> &) const;
+  void	Add_player(t_map &);
+  void	Add_cell(t_map &, unsigned int, unsigned int);
+  int	check_ahead(t_map &);
+  void	change_direction(t_gamedata &);
+  void	move_snake(t_map &);
+  void	move(t_map &);
+  void	Add_powerup(t_map &) const;
+  void	Remove_last_cell(t_map &);
 };
 
 extern "C" IGame	*factory();

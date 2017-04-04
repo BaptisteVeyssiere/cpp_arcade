@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 22:30:19 2017 Nathan Scutari
+// Last update Tue Apr  4 23:04:07 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -74,11 +74,11 @@ void	Ncurses::Init(const std::string &game)
   check_ncurses_ret((this->win = newwin(HEIGHT, WIDTH, STARTY, STARTX)) != NULL,
                      0, NEWWIN_ERROR);
   check_ncurses_ret(box(this->win, BOXY, BOXX), ERR, BOX_ERROR);
-  check_ncurses_ret(keypad(this->win, true), ERR, KEYPAD_ERROR);
+  check_ncurses_ret(keypad(stdscr, true), ERR, KEYPAD_ERROR);
   check_ncurses_ret(wrefresh(this->win), ERR, WREFRESH_ERROR);
   check_ncurses_ret(curs_set(0), ERR, CURS_SET_ERROR);
   this->Get_sprites(game);
-  timeout(1000);
+  timeout(500);
 }
 
 void	Ncurses::Release()
@@ -100,62 +100,38 @@ void	Ncurses::Loop_display(const t_map &map) const
   check_ncurses_ret(wrefresh(this->win), ERR, WREFRESH_ERROR);
 }
 
-void	Ncurses::set_prev_graph(t_gamedata &gamedata) const
-{
-  gamedata.prev_graph = true;
-}
-
-void	Ncurses::set_next_graph(t_gamedata &gamedata) const
-{
-  gamedata.next_graph = true;
-}
-
-void	Ncurses::set_prev_game(t_gamedata &gamedata) const
-{
-  gamedata.prev_game = true;
-}
-
-void	Ncurses::set_next_game(t_gamedata &gamedata) const
-{
-  gamedata.next_game = true;
-}
-
-void	Ncurses::set_restart(t_gamedata &gamedata) const
-{
-  gamedata.restart = true;
-}
-
-void	Ncurses::set_menu(t_gamedata &gamedata) const
-{
-  gamedata.menu = true;
-}
-
-void	Ncurses::set_exit_game(t_gamedata &gamedata) const
-{
-  gamedata.exit_game = true;
-}
-
 void	Ncurses::Get_key(t_gamedata &gamedata) const
 {
   int	ch;
+  bool	*value;
   std::vector<int>	keys =
-    {KEY_2, KEY_3, KEY_4, KEY_5, KEY_8, KEY_9, KEY_ESC};
-  std::vector<std::function<void(const Ncurses&, t_gamedata&)>> ptr =
     {
-      &Ncurses::set_prev_graph,
-      &Ncurses::set_next_graph,
-      &Ncurses::set_prev_game,
-      &Ncurses::set_next_game,
-      &Ncurses::set_restart,
-      &Ncurses::set_menu,
-      &Ncurses::set_exit_game
+      KEY_2,
+      KEY_3,
+      KEY_4,
+      KEY_5,
+      KEY_8,
+      KEY_9,
+      KEY_UP,
+      KEY_DOWN,
+      KEY_RIGHT,
+      KEY_LEFT,
+      KEY_ESC
     };
 
   ch = getch();
+  value = static_cast<bool*>(&gamedata.prev_graph);
+  for (size_t i = 0; i < keys.size(); i++)
+    value[i] = false;
   for (size_t i = 0; i < keys.size(); i++)
     if (ch == keys[i])
       {
-	ptr[i](*this, gamedata);
-	break;
+	value[i] = true;
+	i = keys.size();
       }
+}
+
+extern "C" IGraph	*factory()
+{
+  return (new Ncurses);
 }

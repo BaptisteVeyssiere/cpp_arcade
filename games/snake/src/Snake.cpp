@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 01:27:34 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 22:54:15 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -44,10 +44,38 @@ void	Snake::Add_mapline(const std::string &line, std::vector<std::vector<t_block
   map.push_back(mapline);
 }
 
-void	Snake::Get_map(t_map &game_map) const
+void	Snake::Add_cell(t_map &map, unsigned int y, unsigned int x)
+{
+  t_cell	cell;
+
+  cell.x = x;
+  cell.y = y;
+  this->head.push_back(cell);
+  map.map[y][x].type = blockType::SNAKTAIL;
+  map.map[y][x].sprite = 1;
+}
+
+void	Snake::Add_player(t_map &game_map)
+{
+  t_cell	head;
+
+  head.x = game_map.width / 2 + 1;
+  head.y = game_map.height / 2;
+  this->head.push_back(head);
+  this->player_xdirection = 1;
+  this->player_ydirection = 0;
+  game_map.map[head.y][head.x].type = blockType::PLAYER;
+  game_map.map[head.y][head.x].sprite = 1;
+  this->Add_cell(game_map, head.y, head.x - 1);
+  this->Add_cell(game_map, head.y, head.x - 2);
+  this->Add_cell(game_map, head.y, head.x - 3);
+}
+
+void	Snake::Get_map(t_map &game_map)
 {
   std::vector<std::string>	coded_map;
 
+  srand(time(NULL));
   this->Get_file_content(coded_map);
   for (size_t i = 0; i < coded_map.size(); i++)
     {
@@ -56,16 +84,105 @@ void	Snake::Get_map(t_map &game_map) const
       this->Add_mapline(coded_map[i], game_map.map);
     }
   game_map.height = game_map.map.size();
-  if (game_map.height < 3)
+  if (game_map.height < 10)
     throw game_error("Error: map height is too small");
   game_map.width = game_map.map[0].size();
-  if (game_map.width < 3)
+  if (game_map.width < 10)
     throw game_error("Error: map width is too small");
+  this->Add_player(game_map);
+  for (unsigned int i = 0; i < (game_map.width + game_map.height) / 2; i++)
+    this->Add_powerup(game_map);
 }
 
-void	Snake::Game_loop(t_map &game_map) const
+int	Snake::check_ahead(t_map &game_map)
 {
-  (void)game_map;
+  blockType	next_block;
+
+  next_block = game_map.map[this->head.begin()->y + this->player_ydirection][this->head.begin()->x + this->player_xdirection].type;
+  if (next_block == blockType::BLOCK ||
+      next_block == blockType::SNAKTAIL ||
+      next_block == blockType::OBSTACLE)
+    return (1);
+  return (0);
+}
+
+void	Snake::change_direction(t_gamedata &data)
+{
+  if (data.up || data.down || data.right || data.left)
+    {
+      this->player_ydirection = 0;
+      this->player_xdirection = 0;
+    }
+  if (data.up)
+    this->player_ydirection = -1;
+  else if (data.right)
+    this->player_xdirection = 1;
+  else if (data.down)
+    this->player_ydirection = 1;
+  else if (data.left)
+    this->player_xdirection = -1;
+}
+
+
+void	Snake::Remove_last_cell(t_map &map)
+{
+  map.map[(this->head.back()).y][(this->head.back()).x].type = blockType::EMPTY;
+  this->head.pop_back();
+}
+
+void	Snake::move(t_map &map)
+{
+  t_cell	cell;
+
+  cell.x = this->head.begin()->x;
+  cell.y = this->head.begin()->y;
+  this->head.begin()->x += this->player_xdirection;
+  this->head.begin()->y += this->player_ydirection;
+  map.map[cell.y][cell.x].type = blockType::SNAKTAIL;
+  map.map[this->head.begin()->y][this->head.begin()->x].type = blockType::PLAYER;
+  this->head.insert(++this->head.begin(), cell);
+}
+
+void	Snake::Add_powerup(t_map &map) const
+{
+  unsigned int	x;
+  unsigned int	y;
+  bool		done;
+
+  done = false;
+  while (!done)
+    {
+      x = rand() % (map.width - 2) + 1;
+      y = rand() % (map.height - 2) + 1;
+      if (map.map[y][x].type == blockType::EMPTY)
+	{
+	  map.map[y][x].type = blockType::POWERUP;
+	  done = true;
+	}
+    }
+}
+
+void	Snake::move_snake(t_map &map)
+{
+  bool	powerup;
+
+  powerup = false;
+  if (map.map[this->head.begin()->y + this->player_ydirection][this->head.begin()->x + this->player_xdirection].type == blockType::POWERUP)
+    powerup = true;
+  this->move(map);
+  if (!powerup)
+    this->Remove_last_cell(map);
+  else
+    this->Add_powerup(map);
+}
+
+int	Snake::Game_loop(t_gamedata &data)
+{
+  this->change_direction(data);
+  if (this->check_ahead(data.map))
+    return (1);
+  this->move_snake(data.map);
+  return (0);
 }
 
 extern "C" IGame	*factory()

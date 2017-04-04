@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Mar 30 00:59:21 2017 Baptiste Veyssiere
-// Last update Mon Apr  3 14:51:09 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 20:34:05 2017 Baptiste Veyssiere
 //
 
 #ifndef __GAMEDATA_HPP__
@@ -13,6 +13,8 @@
 
 # include <cstdint>
 # include <vector>
+
+# define BLOCK_NBR	10
 
 enum class blockType : uint16_t
 {
@@ -25,8 +27,7 @@ enum class blockType : uint16_t
   POWERUP       = 6,
   PACGUM        = 7,
   SNAKTAIL      = 8,
-  SNAKHEAD      = 9,
-  PACMAN	= 10
+  PLAYER	= 9,
 };
 
 typedef struct	s_block
@@ -52,6 +53,10 @@ typedef struct	s_gamedata
   bool		restart;
   bool		menu;
   bool		exit_game;
+  bool		up;
+  bool		down;
+  bool		right;
+  bool		left;
 }		t_gamedata;
 
 #endif // !__GAMEDATA_HPP__

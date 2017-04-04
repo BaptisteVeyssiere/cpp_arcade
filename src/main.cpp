@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 01:09:42 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 22:48:47 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -41,7 +41,8 @@ static void	main_loop(const std::string &libname)
   game->Get_map(gamedata.map);
   while (gamedata.exit_game == false)
     {
-      game->Game_loop(gamedata.map);
+      if (game->Game_loop(gamedata))
+	break;
       graph->Loop_display(gamedata.map);
       t = clock() + 500;
       graph->Get_key(gamedata);
