@@ -15,9 +15,9 @@ private:
   
 private:
 
-  GLuint	getTextureId(std::string const& name);
-  std::string	getFileName(std::string str);
-  std::string	tile_to_file(t_block const &tile);
+  GLuint	getTextureId(std::string const& name) const;
+  std::string	getFileName(std::string str) const;
+  std::string	tile_to_file(t_block const &tile) const;
     
 public:
 
