@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Tue Apr  4 22:30:52 2017 Nathan Scutari
+// Last update Tue Apr  4 22:57:52 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -106,6 +106,9 @@ void	lib_sdl::Loop_display(const t_map &map)
   y = -1;
   if (first_loop)
     resize_textures(textures, first_loop, x_size, y_size);
+  if (textures.find("bg") == textures.end())
+    throw std::exception();
+  SDL_BlitSurface(textures["bg"], NULL, win, 0);
   while (++y < map.height)
     {
       x = -1;

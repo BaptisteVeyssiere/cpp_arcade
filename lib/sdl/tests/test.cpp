@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Mon Apr  3 15:41:48 2017 Nathan Scutari
-// Last update Tue Apr  4 22:22:00 2017 Nathan Scutari
+// Last update Tue Apr  4 22:58:11 2017 Nathan Scutari
 //
 
 #include <iostream>
@@ -26,7 +26,7 @@ int	main(void)
   /**/
   block.type = blockType::PLAYER;
   block.sprite = 0;
-  block.angle = 90;
+  block.angle = 0;
   grid.push_back(block);
   map.width = 29;
   map.height = 29;
