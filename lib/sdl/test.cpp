@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Mon Apr  3 15:41:48 2017 Nathan Scutari
-// Last update Mon Apr  3 22:51:40 2017 Nathan Scutari
+// Last update Tue Apr  4 12:08:10 2017 Nathan Scutari
 //
 
 #include "IGraph.hpp"
@@ -29,7 +29,7 @@ int	main(void)
   map.height = 1;
   /**/
 
-  lib->Init("../../games/snake/");
+  lib->Init("../../games/snake");
   lib->Loop_display(map);
   sleep(4);
   return (0);

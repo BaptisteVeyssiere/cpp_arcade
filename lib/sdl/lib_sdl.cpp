@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Mon Apr  3 22:57:47 2017 Nathan Scutari
+// Last update Tue Apr  4 12:20:41 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -36,7 +36,7 @@ std::string	get_name(std::string str)
   if ((pos_s = str.find_last_of("/")) == std::string::npos)
     return (name);
   if ((pos_e = str.find_last_of(".")) == std::string::npos)
-    return (name);
+    return (str.substr(pos_s + 1));
   return (str.substr(pos_s + 1, (pos_e - pos_s - 1)));
 }
 
@@ -85,6 +85,7 @@ void	lib_sdl::Loop_display(const t_map &map) const
 
 void	lib_sdl::Init(const std::string &game)
 {
+  char		center[] = "SDL_VIDEO_WINDOW_POS=center";
   std::string	file_name;
   std::vector<std::string>	files;
   SDL_Surface	*tmp;
@@ -97,13 +98,36 @@ void	lib_sdl::Init(const std::string &game)
 	textures.emplace(file_name, tmp);
       files.pop_back();
     }
-  if ((win = SDL_SetVideoMode(1280, 720, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
+  SDL_putenv(center);
+  if ((win = SDL_SetVideoMode(WINSIDE, WINSIDE, 32,
+			      SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_NOFRAME)) == NULL)
     throw std::exception();
+  SDL_WM_SetCaption(get_name(game).c_str(), NULL);
 }
 
 void	lib_sdl::Get_key(t_gamedata &gamedata) const
 {
-
+  bool		*value;
+  SDL_Event	event;
+  int		i;
+  int		key[] =
+    {
+      SDLK_2,
+      SDLK_3,
+      SDLK_4,
+      SDLK_5,
+      SDLK_8,
+      SDLK_9,
+      SDLK_ESCAPE
+    };
+  SDL_PollEvent(&event);
+  i = -1;
+  value = static_cast<bool*>(&gamedata.prev_graph);
+  while (++i < 7)
+    {
+      if (event.key.keysym.sym == key[i])
+	value[i] = true;
+    }
 }
 
 void	lib_sdl::Release()
