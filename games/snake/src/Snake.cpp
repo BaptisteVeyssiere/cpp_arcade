@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 22:54:15 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 23:32:58 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -39,6 +39,7 @@ void	Snake::Add_mapline(const std::string &line, std::vector<std::vector<t_block
 			 std::string("' is unknown"));
       block.type = static_cast<blockType>(line[i] - '0');
       block.sprite = 0;
+      block.angle = 0;
       mapline.push_back(block);
     }
   map.push_back(mapline);
@@ -65,6 +66,7 @@ void	Snake::Add_player(t_map &game_map)
   this->player_xdirection = 1;
   this->player_ydirection = 0;
   game_map.map[head.y][head.x].type = blockType::PLAYER;
+  game_map.map[head.y][head.x].angle = 270;
   game_map.map[head.y][head.x].sprite = 1;
   this->Add_cell(game_map, head.y, head.x - 1);
   this->Add_cell(game_map, head.y, head.x - 2);
@@ -133,13 +135,24 @@ void	Snake::Remove_last_cell(t_map &map)
 void	Snake::move(t_map &map)
 {
   t_cell	cell;
+  unsigned int	angle;
 
+  angle = 0;
+  if (this->player_xdirection == 1)
+    angle = 270;
+  else if (this->player_xdirection = -1)
+    angle = 90;
+  else if (this->player_ydirection = -1)
+    angle = 180;
   cell.x = this->head.begin()->x;
   cell.y = this->head.begin()->y;
   this->head.begin()->x += this->player_xdirection;
   this->head.begin()->y += this->player_ydirection;
   map.map[cell.y][cell.x].type = blockType::SNAKTAIL;
+  map.map[cell.y][cell.x].angle = 0;
   map.map[this->head.begin()->y][this->head.begin()->x].type = blockType::PLAYER;
+  map.map[this->head.begin()->y][this->head.begin()->x].angle =
+    angle;
   this->head.insert(++this->head.begin(), cell);
 }
 

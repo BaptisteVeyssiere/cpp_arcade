@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 23:04:07 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 23:16:49 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -60,8 +60,9 @@ void	Ncurses::Get_sprites(const std::string &game)
   while (++i < name.size())
     {
       if ((it = find(tab.begin(), tab.end(), name[i])) == tab.end())
-	throw library_error(FIND_ERROR(name[i]));
-      this->symlist += this->get_sym(name[i]);
+	this->symlist += static_cast<char>(0);
+      else
+	this->symlist += this->get_sym(name[i]);
     }
 }
 

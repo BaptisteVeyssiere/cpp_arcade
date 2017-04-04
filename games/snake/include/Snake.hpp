@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:39:26 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 22:42:12 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 23:30:17 2017 Baptiste Veyssiere
 //
 
 #ifndef __SNAKE_HPP__
