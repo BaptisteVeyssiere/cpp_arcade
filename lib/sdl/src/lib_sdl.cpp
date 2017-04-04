@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Tue Apr  4 22:20:55 2017 Nathan Scutari
+// Last update Tue Apr  4 22:30:52 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -183,4 +183,9 @@ void	lib_sdl::Release()
        it != textures.end() ; ++it)
     SDL_FreeSurface(it->second);
   SDL_Quit();
+}
+
+extern "C" IGraph	*factory()
+{
+  return (new lib_sdl);
 }

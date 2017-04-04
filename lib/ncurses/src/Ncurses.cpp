@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 01:28:04 2017 Baptiste Veyssiere
+// Last update Tue Apr  4 22:30:19 2017 Nathan Scutari
 //
 
 #include "Ncurses.hpp"
@@ -158,9 +158,4 @@ void	Ncurses::Get_key(t_gamedata &gamedata) const
 	ptr[i](*this, gamedata);
 	break;
       }
-}
-
-extern "C" IGraph	*factory()
-{
-  return (new Ncurses);
 }

@@ -7,7 +7,7 @@
 ## Started on  Wed May 18 21:26:30 2016 Baptiste veyssiere
 ##
 
-NAME	= lib_arcade_ncurses.so
+NAME	= lib_arcade_sdl.so
 
 RM	= rm -f
 
@@ -15,7 +15,7 @@ CXX	= g++
 
 MKDIR	= mkdir -p
 
-SRC	= src/Ncurses.cpp \
+SRC	= src/lib_sdl.cpp \
 	src/directory_reader.cpp
 
 SRCDIR	= src
@@ -26,7 +26,7 @@ OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 CXXFLAGS	= -Iinclude
 
-LDFLAGS = -lncurses
+LDFLAGS = -lSDL -lSDL_image -lSDL_gfx
 
 $(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -shared -o $(NAME) $(OBJ)
