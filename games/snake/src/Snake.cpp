@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 13:21:59 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 18:56:19 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -91,6 +91,7 @@ void	Snake::Get_map(t_map &game_map)
   game_map.width = game_map.map[0].size();
   if (game_map.width < 10)
     throw game_error("Error: map width is too small");
+  this->score = 0;
   this->Add_player(game_map);
   this->Add_powerup(game_map);
 }
@@ -184,7 +185,20 @@ void	Snake::move_snake(t_map &map)
   if (!powerup)
     this->Remove_last_cell(map);
   else
-    this->Add_powerup(map);
+    {
+      this->Add_powerup(map);
+      this->score += POWERUP_SCORE;
+    }
+}
+
+int	Snake::Save_score() const
+{
+  std::ofstream	file("highscores");
+
+  if (file.is_open())
+    for (std::list<t_score>::iterator it = this->highscores.begin(); it != this->highscores.end(); i++)
+      file << it->username << ": " << it->score << std::endl;
+  return (1);
 }
 
 int	Snake::Game_loop(t_gamedata &data)
@@ -194,7 +208,7 @@ int	Snake::Game_loop(t_gamedata &data)
   if (this->counter > (FPS / 5))
     {
       if (this->check_ahead(data.map))
-	return (1);
+	return (this->Save_score());
       this->move_snake(data.map);
       this->counter = 0;
     }
