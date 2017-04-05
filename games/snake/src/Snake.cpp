@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 18:56:19 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 21:04:37 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -191,16 +191,6 @@ void	Snake::move_snake(t_map &map)
     }
 }
 
-int	Snake::Save_score() const
-{
-  std::ofstream	file("highscores");
-
-  if (file.is_open())
-    for (std::list<t_score>::iterator it = this->highscores.begin(); it != this->highscores.end(); i++)
-      file << it->username << ": " << it->score << std::endl;
-  return (1);
-}
-
 int	Snake::Game_loop(t_gamedata &data)
 {
   ++this->counter;
@@ -208,7 +198,7 @@ int	Snake::Game_loop(t_gamedata &data)
   if (this->counter > (FPS / 5))
     {
       if (this->check_ahead(data.map))
-	return (this->Save_score());
+	return (1);
       this->move_snake(data.map);
       this->counter = 0;
     }

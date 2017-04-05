@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:39:26 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 18:33:19 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 21:04:24 2017 Baptiste Veyssiere
 //
 
 #ifndef __SNAKE_HPP__
@@ -17,6 +17,8 @@
 # include "game_error.hpp"
 # include "technical_spec.hpp"
 
+# define POWERUP_SCORE	42;
+
 typedef struct	s_cell
 {
   unsigned int	x;
@@ -27,10 +29,10 @@ class	Snake : public IGame
 {
 private:
   std::list<t_cell>	head;
-  char		player_xdirection;
-  char		player_ydirection;
-  int		counter;
-  unsigned int	score;
+  char			player_xdirection;
+  char			player_ydirection;
+  int			counter;
+  unsigned int		score;
 
 private:
   Snake(const Snake &);
