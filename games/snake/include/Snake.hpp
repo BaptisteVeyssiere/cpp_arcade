@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:39:26 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 21:04:24 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 23:23:56 2017 Baptiste Veyssiere
 //
 
 #ifndef __SNAKE_HPP__
@@ -33,6 +33,7 @@ private:
   char			player_ydirection;
   int			counter;
   unsigned int		score;
+  int			last_key;
 
 private:
   Snake(const Snake &);

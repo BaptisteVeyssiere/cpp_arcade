@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 21:19:08 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 23:30:59 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -91,9 +91,16 @@ void	Snake::Get_map(t_map &game_map)
   game_map.width = game_map.map[0].size();
   if (game_map.width < 10)
     throw game_error("Error: map width is too small");
+  if (game_map.width != game_map.height)
+    throw game_error("The map must be squared");
   this->score = 0;
   this->Add_player(game_map);
   this->Add_powerup(game_map);
+  for (size_t i = 0; i < game_map.map.size(); i++)
+    for (size_t j = 0; j < game_map.map[0].size(); j++)
+      if ((i == 0 || j == 0) && game_map.map[i][j].type != blockType::BLOCK)
+	throw game_error("The map must be surrounded by blocks");
+  this->last_key = -1;
 }
 
 int	Snake::check_ahead(t_map &game_map)
@@ -110,18 +117,33 @@ int	Snake::check_ahead(t_map &game_map)
 
 void	Snake::change_direction(t_gamedata &data)
 {
-  if (data.up || data.down)
-    this->player_xdirection = 0;
-  else if (data.right || data.left)
-    this->player_ydirection = 0;
-  if (data.up && this->player_ydirection == 0)
-    this->player_ydirection = -1;
-  else if (data.right && this->player_xdirection == 0)
-    this->player_xdirection = 1;
-  else if (data.down && this->player_ydirection == 0)
-    this->player_ydirection = 1;
-  else if (data.left && this->player_xdirection == 0)
-    this->player_xdirection = -1;
+  if (this->counter > (FPS / 5))
+    {
+      if (this->last_key == 0 || this->last_key == 2)
+	this->player_xdirection = 0;
+      else if (this->last_key == 1 || this->last_key == 3)
+	this->player_ydirection = 0;
+      if (this->last_key == 0 && this->player_ydirection != 1)
+	this->player_ydirection = -1;
+      else if (this->last_key == 1 && this->player_xdirection != -1)
+	this->player_xdirection = 1;
+      else if (this->last_key == 2 && this->player_ydirection != -1)
+	this->player_ydirection = 1;
+      else if (this->last_key == 3 && this->player_xdirection != 1)
+	this->player_xdirection = -1;
+      this->last_key = -1;
+    }
+  else
+    {
+      if (data.up)
+	this->last_key = 0;
+      else if (data.right)
+	this->last_key = 1;
+      else if (data.down)
+	this->last_key = 2;
+      else if (data.left)
+	this->last_key = 3;
+    }
 }
 
 
@@ -198,7 +220,7 @@ int	Snake::Game_loop(t_gamedata &data)
   if (this->counter > (FPS / 5))
     {
       if (this->check_ahead(data.map))
-	return (this->score);
+	return (1);
       this->move_snake(data.map);
       this->counter = 0;
     }
