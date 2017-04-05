@@ -5,12 +5,12 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 23:32:58 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 10:21:18 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
 
-Snake::Snake() {}
+Snake::Snake() : counter(0) {}
 
 Snake::~Snake() {}
 
@@ -53,7 +53,7 @@ void	Snake::Add_cell(t_map &map, unsigned int y, unsigned int x)
   cell.y = y;
   this->head.push_back(cell);
   map.map[y][x].type = blockType::SNAKTAIL;
-  map.map[y][x].sprite = 1;
+  map.map[y][x].sprite = 0;
 }
 
 void	Snake::Add_player(t_map &game_map)
@@ -67,7 +67,7 @@ void	Snake::Add_player(t_map &game_map)
   this->player_ydirection = 0;
   game_map.map[head.y][head.x].type = blockType::PLAYER;
   game_map.map[head.y][head.x].angle = 270;
-  game_map.map[head.y][head.x].sprite = 1;
+  game_map.map[head.y][head.x].sprite = 0;
   this->Add_cell(game_map, head.y, head.x - 1);
   this->Add_cell(game_map, head.y, head.x - 2);
   this->Add_cell(game_map, head.y, head.x - 3);
@@ -191,10 +191,15 @@ void	Snake::move_snake(t_map &map)
 
 int	Snake::Game_loop(t_gamedata &data)
 {
-  this->change_direction(data);
-  if (this->check_ahead(data.map))
-    return (1);
-  this->move_snake(data.map);
+  ++this->counter;
+  if (this->counter > (FPS / 2))
+    {
+      this->change_direction(data);
+      if (this->check_ahead(data.map))
+	return (1);
+      this->move_snake(data.map);
+      this->counter = 0;
+    }
   return (0);
 }
 

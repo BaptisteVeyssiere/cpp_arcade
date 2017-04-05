@@ -5,16 +5,18 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:15:00 2017 Baptiste Veyssiere
-// Last update Fri Mar 31 15:57:17 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 10:19:18 2017 Baptiste Veyssiere
 //
 
 #ifndef __CORE_PROGRAM_HPP__
 # define __CORE_PROGRAM_HPP__
 
-#include <string>
-#include <dlfcn.h>
-#include "core_program_exception.hpp"
-#include "gamedata.hpp"
+# include <string>
+# include <dlfcn.h>
+# include <unistd.h>
+# include "core_program_exception.hpp"
+# include "technical_spec.hpp"
+# include "gamedata.hpp"
 
 class	Core_program
 {

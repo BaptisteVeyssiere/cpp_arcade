@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:39:26 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 23:30:17 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 10:22:50 2017 Baptiste Veyssiere
 //
 
 #ifndef __SNAKE_HPP__
@@ -15,6 +15,7 @@
 # include <list>
 # include "IGame.hpp"
 # include "game_error.hpp"
+# include "technical_spec.hpp"
 
 typedef struct	s_cell
 {
@@ -28,6 +29,7 @@ private:
   std::list<t_cell>	head;
   char		player_xdirection;
   char		player_ydirection;
+  int		counter;
 
 private:
   Snake(const Snake &);

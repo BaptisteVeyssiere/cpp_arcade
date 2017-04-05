@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 20:45:32 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 10:09:01 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
@@ -39,7 +39,7 @@
 # define WMOVE_ERROR	"Error occured while calling wmove()"
 # define CURS_SET_ERROR	"Error occured while calling curs_set()"
 # define OPEN_ERROR	"Error occured while calling open()"
-# define FIND_ERROR(s)	"Error: sprite not found: " + s
+# define NODELAY_ERROR	"Error occured while calling nodelay()"
 # define GETLINE_ERROR	"Error: sprite file is empty"
 # define KEY_ESC	27
 # define KEY_2		505

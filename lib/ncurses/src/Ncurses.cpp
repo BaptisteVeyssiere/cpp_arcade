@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 23:16:49 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 10:08:04 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -79,7 +79,7 @@ void	Ncurses::Init(const std::string &game)
   check_ncurses_ret(wrefresh(this->win), ERR, WREFRESH_ERROR);
   check_ncurses_ret(curs_set(0), ERR, CURS_SET_ERROR);
   this->Get_sprites(game);
-  timeout(500);
+  check_ncurses_ret(nodelay(stdscr, true), ERR, NODELAY_ERROR);
 }
 
 void	Ncurses::Release()
