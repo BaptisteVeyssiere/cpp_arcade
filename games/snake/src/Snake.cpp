@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 21:04:37 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 21:06:09 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -198,7 +198,7 @@ int	Snake::Game_loop(t_gamedata &data)
   if (this->counter > (FPS / 5))
     {
       if (this->check_ahead(data.map))
-	return (1);
+	return (this->score);
       this->move_snake(data.map);
       this->counter = 0;
     }
