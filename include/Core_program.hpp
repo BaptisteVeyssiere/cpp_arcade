@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:15:00 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 10:19:18 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 12:43:39 2017 Nathan Scutari
 //
 
 #ifndef __CORE_PROGRAM_HPP__
@@ -22,6 +22,10 @@ class	Core_program
 {
   void	*graphic_handle;
   void	*game_handle;
+
+public:
+  int	graph_selector;
+  int	game_selector;
 
 private:
   Core_program(const Core_program &);

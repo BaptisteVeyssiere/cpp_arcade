@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 10:32:27 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 13:00:09 2017 Nathan Scutari
 //
 
 #include <iostream>
@@ -29,6 +29,44 @@ static void	init_gamedata(t_gamedata &gamedata)
   gamedata.right = false;
 }
 
+void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_program &core)
+{
+  if (gamedata.next_graph)
+    {
+      if (++core.graph_selector == core.graph_list.size())
+	core.graph_selector = 0;
+      core.load_graphic_lib("/lib/lib_arcade_" + core.graph_list[core.graph_selector] + ".so");
+      (*graph)->Release();
+      *graph = reinterpret_cast<IGraph *(*)()>(reinterpret_cast<long>(core.get_graphic_function("factory")))();
+      (*graph)->Init(core.game_list[core.game_selector]);
+    }
+  else if (gamedata.prev_graph)
+    {
+      if (--core.graph_selector < 0)
+	core.graph_selector = core.graph_list.size() - 1;
+      core.load_graphic_lib("/lib/lib_arcade_" + core.graph_list[core.graph_selector] + ".so");
+      (*graph)->Release();
+      *graph = reinterpret_cast<IGraph *(*)()>(reinterpret_cast<long>(core.get_graphic_function("factory")))();
+      (*graph)->Init(core.game_list[core.game_selector]);
+    }
+  else if (gamedata.next_game)
+    {
+      if (++core.game_selector == core.game_list.size())
+	core.game_selector = 0;
+      core.load_game_lib("/lib/lib_arcade_" + core.game_list[core.game_selector] + ".so");
+      (*game) = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
+      (*game)->Get_map(gamedata.map);
+    }
+  else if (gamedata.prev_game)
+    {
+      if (--core.game_selector < 0)
+	core.game_selector = core.game_list.size() - 1;
+      core.load_game_lib("/lib/lib_arcade_" + core.game_list[core.game_selector] + ".so");
+      (*game) = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
+      (*game)->Get_map(gamedata.map);
+    }
+}
+
 static void	main_loop(const std::string &libname)
 {
   Core_program	core(libname);
@@ -36,6 +74,7 @@ static void	main_loop(const std::string &libname)
   IGraph	*graph;
   IGame		*game;
   clock_t	t;
+  clock_t	previous;
 
   init_gamedata(gamedata);
   core.load_game_lib("games/snake/lib_arcade_snake.so");
@@ -43,7 +82,7 @@ static void	main_loop(const std::string &libname)
   graph->Init("snake");
   game = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
   game->Get_map(gamedata.map);
-  t = clock();
+  previous = clock();
   while (gamedata.exit_game == false)
     {
       if (game->Game_loop(gamedata))
@@ -51,8 +90,10 @@ static void	main_loop(const std::string &libname)
       graph->Loop_display(gamedata.map);
       init_gamedata(gamedata);
       graph->Get_key(gamedata);
-      t = clock() - t;
-      usleep((1000000 / FPS - t) < 0 ? 0 : (1000000 / FPS - t));
+      check_lib_change(gamedata, &graph, &game, core);
+      t = clock();
+      usleep((1000000 / FPS - (t - previous)) < 0 ? 0 : (1000000 / FPS - (t - previous)));
+      previous = t;
     }
   graph->Release();
 }

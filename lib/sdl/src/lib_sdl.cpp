@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Tue Apr  4 22:57:52 2017 Nathan Scutari
+// Last update Wed Apr  5 11:11:05 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -47,6 +47,8 @@ std::string	tile_to_file(t_block const &tile)
   int		value;
 
   value = static_cast<int>(tile.type);
+  if (value == 0)
+    return (file);
   file = std::to_string(value);
   file += "-";
   file += tile.sprite + 48;
@@ -117,15 +119,18 @@ void	lib_sdl::Loop_display(const t_map &map)
 	  pos.x = x * x_size;
 	  pos.y = y * y_size;
 	  file = tile_to_file(map.map[y][x]);
-	  if (textures.find(file) == textures.end())
-	    throw std::exception();
-	  if (map.map[y][x].angle != 0)
+	  if (file.size() > 0 && textures.find(file) == textures.end())
+	    {
+	      std::cout << file << std::endl;
+	      throw std::exception();
+	    }
+	  if (file.size() > 0 && map.map[y][x].angle != 0)
 	    {
 	      tmp = rotozoomSurface(textures.at(file), map.map[y][x].angle, 1, 1);
 	      SDL_BlitSurface(tmp, NULL, win, &pos);
 	      SDL_FreeSurface(tmp);
 	    }
-	  else
+	  else if (file.size() > 0)
 	    SDL_BlitSurface(textures.at(file), NULL, win, &pos);
 	}
     }
@@ -139,7 +144,8 @@ void	lib_sdl::Init(const std::string &game)
   std::vector<std::string>	files;
   SDL_Surface	*tmp;
 
-  get_directory_filenames(game, files);
+  file_name = "games/" + game;
+  get_directory_filenames(file_name, files);
   while (files.size() > 0)
     {
       file_name = get_name(files.back());
@@ -151,7 +157,7 @@ void	lib_sdl::Init(const std::string &game)
   if ((win = SDL_SetVideoMode(WINSIDE, WINSIDE, 32,
 			      SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
     throw std::exception();
-  SDL_WM_SetCaption(get_name(game).c_str(), NULL);
+  SDL_WM_SetCaption(game.c_str(), NULL);
   first_loop = true;
 }
 
@@ -168,12 +174,16 @@ void	lib_sdl::Get_key(t_gamedata &gamedata) const
       SDLK_5,
       SDLK_8,
       SDLK_9,
+      SDLK_UP,
+      SDLK_DOWN,
+      SDLK_RIGHT,
+      SDLK_LEFT,
       SDLK_ESCAPE
     };
   SDL_PollEvent(&event);
   i = -1;
   value = static_cast<bool*>(&gamedata.prev_graph);
-  while (++i < 7)
+  while (++i < 11)
     {
       if (event.key.keysym.sym == key[i])
 	value[i] = true;
