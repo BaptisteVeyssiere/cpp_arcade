@@ -21,6 +21,8 @@ NCURSESDIR	= lib/ncurses/
 
 SDLDIR		= lib/sdl/
 
+GLDIR		= lib/opengl
+
 SRC	= src/main.cpp \
 	src/Core_program.cpp \
 	src/directory_reader.cpp
@@ -42,6 +44,8 @@ $(NAME): $(OBJ)
 	@echo "Ncurses library linked"
 	@$(MAKE) -C $(SDLDIR)
 	@echo "SDL library linked"
+	@$(MAKE) -C $(GLDIR)
+	@echo "openGL library linked"
 	@$(MAKE) -C $(SNAKEDIR)
 	@echo "Snake library linked"
 

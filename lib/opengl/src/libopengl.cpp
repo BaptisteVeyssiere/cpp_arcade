@@ -5,19 +5,19 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 // 
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Tue Apr  4 23:21:28 2017 ilyas semmaoui
+// Last update Wed Apr  5 18:48:42 2017 ilyas semmaoui
 //
 
 #include <iostream>
-#include <stdexcept>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include "library_error.hpp"
 #include "technical_spec.hpp"
 #include "libopengl.hpp"
 
 libopengl::libopengl() {
   if (SDL_Init(SDL_INIT_VIDEO) == -1)
-    throw std::runtime_error("Failed to initialize libopengl !");
+    throw library_error("Failed to initialize libopengl !");
 }
 
 libopengl::~libopengl() {
@@ -52,7 +52,7 @@ GLuint	libopengl::getTextureId(std::string const &name) const {
   GLuint	id;
 
   if ((surface = IMG_Load(name.c_str())) == NULL)
-    throw std::runtime_error("Failed to load textures !");
+    throw library_error("Failed to load textures !");
   glGenTextures(1, &id);
   glBindTexture(GL_TEXTURE_2D, id);
   glTexImage2D(GL_TEXTURE_2D, 0, 4, surface->w, surface->h, 0,
@@ -75,7 +75,7 @@ void	libopengl::Init(const std::string &game) {
   }
   SDL_WM_SetCaption(game.c_str(), NULL);
   if (SDL_SetVideoMode(WINSIDE, WINSIDE, 32, SDL_OPENGL) == NULL)
-    throw std::runtime_error("Failed to initialize libopengl !");
+    throw library_error("Failed to initialize libopengl !");
   glEnable(GL_TEXTURE_2D);
 }
 
@@ -102,7 +102,7 @@ void	libopengl::Loop_display(const t_map &map) const {
 	  posy = (y * y_size) * 2 / WINSIDE;
 	  file = this->tile_to_file(map.map[y][x]);
 	  if (textures.find(file) == textures.end())
-	    throw std::runtime_error("Failed to find a texture !");
+	    throw library_error("Failed to find a texture !");
 	  tmp = textures.at(file);
 	  glBindTexture(GL_TEXTURE_2D, tmp);
 	  glBegin(GL_QUADS);
@@ -126,8 +126,34 @@ void	libopengl::Release() {
 }
 
 void	libopengl::Get_key(t_gamedata &gamedata) const {
-  SDL_Event	ev;
+  bool		*value;
+  SDL_Event	event;
+  int		i;
+  int		key[] =
+    {
+      SDLK_2,
+      SDLK_3,
+      SDLK_4,
+      SDLK_5,
+      SDLK_8,
+      SDLK_9,
+      SDLK_UP,
+      SDLK_DOWN,
+      SDLK_RIGHT,
+      SDLK_LEFT,
+      SDLK_ESCAPE
+    };
+  SDL_PollEvent(&event);
+  i = -1;
+  value = static_cast<bool*>(&gamedata.prev_graph);
+  while (++i < 11)
+    {
+      if (event.key.keysym.sym == key[i])
+	value[i] = true;
+    }
+}
 
-  SDL_PollEvent(&ev);
-  //je fais quoi maintenant ?
+extern "C" IGraph	*factory()
+{
+  return (new libopengl);
 }
