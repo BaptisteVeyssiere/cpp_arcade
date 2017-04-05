@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 13:00:09 2017 Nathan Scutari
+// Last update Wed Apr  5 13:15:05 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -77,6 +77,7 @@ static void	main_loop(const std::string &libname)
   clock_t	previous;
 
   init_gamedata(gamedata);
+  core.Display_menu();
   core.load_game_lib("games/snake/lib_arcade_snake.so");
   graph = reinterpret_cast<IGraph *(*)()>(reinterpret_cast<long>(core.get_graphic_function("factory")))();
   graph->Init("snake");

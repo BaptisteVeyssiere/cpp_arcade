@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 11:04:09 2017 Nathan Scutari
+// Last update Wed Apr  5 13:21:59 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -109,11 +109,10 @@ int	Snake::check_ahead(t_map &game_map)
 
 void	Snake::change_direction(t_gamedata &data)
 {
-  if (data.up || data.down || data.right || data.left)
-    {
-      this->player_ydirection = 0;
-      this->player_xdirection = 0;
-    }
+  if (data.up || data.down)
+    this->player_xdirection = 0;
+  if (data.right || data.left)
+    this->player_ydirection = 0;
   if (data.up && this->player_ydirection == 0)
     this->player_ydirection = -1;
   else if (data.right && this->player_xdirection == 0)
