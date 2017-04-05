@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 10:26:46 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 21:49:25 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -125,6 +125,8 @@ void	Ncurses::Get_key(t_gamedata &gamedata) const
   for (size_t i = 0; i < keys.size(); i++)
     if (ch == keys[i])
       {
+	wprintw(this->win, "%d", i);
+	wrefresh(this->win);
 	value[i] = true;
 	i = keys.size();
       }

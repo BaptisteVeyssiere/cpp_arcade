@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 21:06:09 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 21:19:08 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -112,7 +112,7 @@ void	Snake::change_direction(t_gamedata &data)
 {
   if (data.up || data.down)
     this->player_xdirection = 0;
-  if (data.right || data.left)
+  else if (data.right || data.left)
     this->player_ydirection = 0;
   if (data.up && this->player_ydirection == 0)
     this->player_ydirection = -1;

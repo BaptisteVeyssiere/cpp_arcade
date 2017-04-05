@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 10:09:01 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 21:49:09 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
@@ -42,12 +42,12 @@
 # define NODELAY_ERROR	"Error occured while calling nodelay()"
 # define GETLINE_ERROR	"Error: sprite file is empty"
 # define KEY_ESC	27
-# define KEY_2		505
-# define KEY_3		515
-# define KEY_4	        525
-# define KEY_5		535
-# define KEY_8		565
-# define KEY_9		575
+# define KEY_2		169
+# define KEY_3		34
+# define KEY_4	        39
+# define KEY_5		40
+# define KEY_8		95
+# define KEY_9		167
 
 class	Ncurses : public IGraph
 {
