@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 10:08:04 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 10:26:46 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -122,8 +122,6 @@ void	Ncurses::Get_key(t_gamedata &gamedata) const
 
   ch = getch();
   value = static_cast<bool*>(&gamedata.prev_graph);
-  for (size_t i = 0; i < keys.size(); i++)
-    value[i] = false;
   for (size_t i = 0; i < keys.size(); i++)
     if (ch == keys[i])
       {

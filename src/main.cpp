@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 10:22:09 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 10:32:27 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -23,6 +23,10 @@ static void	init_gamedata(t_gamedata &gamedata)
   gamedata.restart = false;
   gamedata.menu = false;
   gamedata.exit_game = false;
+  gamedata.up = false;
+  gamedata.down = false;
+  gamedata.left = false;
+  gamedata.right = false;
 }
 
 static void	main_loop(const std::string &libname)
@@ -45,6 +49,7 @@ static void	main_loop(const std::string &libname)
       if (game->Game_loop(gamedata))
 	break;
       graph->Loop_display(gamedata.map);
+      init_gamedata(gamedata);
       graph->Get_key(gamedata);
       t = clock() - t;
       usleep((1000000 / FPS - t) < 0 ? 0 : (1000000 / FPS - t));

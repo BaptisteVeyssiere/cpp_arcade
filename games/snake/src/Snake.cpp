@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 10:21:18 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 10:36:13 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -92,8 +92,7 @@ void	Snake::Get_map(t_map &game_map)
   if (game_map.width < 10)
     throw game_error("Error: map width is too small");
   this->Add_player(game_map);
-  for (unsigned int i = 0; i < (game_map.width + game_map.height) / 2; i++)
-    this->Add_powerup(game_map);
+  this->Add_powerup(game_map);
 }
 
 int	Snake::check_ahead(t_map &game_map)
@@ -142,7 +141,7 @@ void	Snake::move(t_map &map)
     angle = 270;
   else if (this->player_xdirection = -1)
     angle = 90;
-  else if (this->player_ydirection = -1)
+  else if (this->player_ydirection = 1)
     angle = 180;
   cell.x = this->head.begin()->x;
   cell.y = this->head.begin()->y;
@@ -192,9 +191,9 @@ void	Snake::move_snake(t_map &map)
 int	Snake::Game_loop(t_gamedata &data)
 {
   ++this->counter;
+  this->change_direction(data);
   if (this->counter > (FPS / 2))
     {
-      this->change_direction(data);
       if (this->check_ahead(data.map))
 	return (1);
       this->move_snake(data.map);
