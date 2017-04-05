@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 10:36:13 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 10:48:26 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -139,9 +139,9 @@ void	Snake::move(t_map &map)
   angle = 0;
   if (this->player_xdirection == 1)
     angle = 270;
-  else if (this->player_xdirection = -1)
+  else if (this->player_xdirection == -1)
     angle = 90;
-  else if (this->player_ydirection = 1)
+  else if (this->player_ydirection == 1)
     angle = 180;
   cell.x = this->head.begin()->x;
   cell.y = this->head.begin()->y;
