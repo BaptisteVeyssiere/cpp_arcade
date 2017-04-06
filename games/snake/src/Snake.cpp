@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Thu Apr  6 09:08:35 2017 Baptiste Veyssiere
+// Last update Thu Apr  6 09:10:48 2017 Nathan Scutari
 //
 
 #include "Snake.hpp"
@@ -125,7 +125,7 @@ void	Snake::change_direction(t_gamedata &data)
     this->last_key = 2;
   else if (data.left)
     this->last_key = 3;
-  if (this->counter > (FPS / 5))
+  if (this->counter > (FPS / 8))
     {
       if (this->last_key == 0 || this->last_key == 2)
 	this->player_xdirection = 0;
@@ -214,7 +214,7 @@ int	Snake::Game_loop(t_gamedata &data)
 {
   ++this->counter;
   this->change_direction(data);
-  if (this->counter > (FPS / 5))
+  if (this->counter > (FPS / 8))
     {
       if (this->check_ahead(data.map))
 	return (1);

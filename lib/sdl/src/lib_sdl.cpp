@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Wed Apr  5 11:11:05 2017 Nathan Scutari
+// Last update Wed Apr  5 22:26:46 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -168,19 +168,21 @@ void	lib_sdl::Get_key(t_gamedata &gamedata) const
   int		i;
   int		key[] =
     {
-      SDLK_2,
-      SDLK_3,
-      SDLK_4,
-      SDLK_5,
-      SDLK_8,
-      SDLK_9,
+      233,
+      34,
+      39,
+      40,
+      95,
+      231,
       SDLK_UP,
       SDLK_DOWN,
       SDLK_RIGHT,
       SDLK_LEFT,
       SDLK_ESCAPE
     };
-  SDL_PollEvent(&event);
+
+  if (SDL_PollEvent(&event) == 0 || event.key.state == SDL_RELEASED)
+    return ;
   i = -1;
   value = static_cast<bool*>(&gamedata.prev_graph);
   while (++i < 11)

@@ -60,6 +60,7 @@ clean:
 	@$(RM) $(OBJ)
 	@$(MAKE) -C $(NCURSESDIR) clean
 	@$(MAKE) -C $(SDLDIR) clean
+	@$(MAKE) -C $(GLDIR) clean
 	@$(MAKE) -C $(SNAKEDIR) clean
 	@echo "Cleanup complete!"
 
@@ -67,6 +68,7 @@ fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(LIBNAME)
 	@$(MAKE) -C $(NCURSESDIR) fclean
+	@$(MAKE) -C $(GLDIR) fclean
 	@$(MAKE) -C $(SDLDIR) fclean
 	@$(MAKE) -C $(SNAKEDIR) fclean
 

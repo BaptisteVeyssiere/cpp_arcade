@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 13:17:42 2017 Baptiste Veyssiere
+// Last update Wed Apr  5 19:03:49 2017 Nathan Scutari
 //
 
 #include "Core_program.hpp"
@@ -19,6 +19,8 @@ Core_program::Core_program(const std::string &graphic_libname)
     throw core_program_exception(dlerror());
   this->Set_Games();
   this->Set_Graph();
+  this->game_selector = 0;
+  this->graph_selector = 0;
 }
 
 Core_program::~Core_program()
@@ -31,6 +33,7 @@ Core_program::~Core_program()
 
 void	Core_program::load_graphic_lib(const std::string &graphic_libname)
 {
+  std::cout << graphic_libname << std::endl;
   if (this->graphic_handle && dlclose(this->graphic_handle))
     throw core_program_exception(dlerror());
   this->graphic_handle = dlopen(graphic_libname.c_str(), RTLD_NOW);
