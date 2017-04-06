@@ -15,7 +15,7 @@ CXX	= g++
 
 MKDIR	= mkdir -p
 
-SNAKEDIR	= games/snake/
+NIBBLERDIR	= games/nibbler/
 
 NCURSESDIR	= lib/ncurses/
 
@@ -46,8 +46,8 @@ $(NAME): $(OBJ)
 	@echo "SDL library linked"
 	@$(MAKE) -C $(GLDIR)
 	@echo "openGL library linked"
-	@$(MAKE) -C $(SNAKEDIR)
-	@echo "Snake library linked"
+	@$(MAKE) -C $(NIBBLERDIR)
+	@echo "Nibbler library linked"
 
 $(OBJ): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	@$(MKDIR) $(OBJDIR)
@@ -60,7 +60,7 @@ clean:
 	@$(RM) $(OBJ)
 	@$(MAKE) -C $(NCURSESDIR) clean
 	@$(MAKE) -C $(SDLDIR) clean
-	@$(MAKE) -C $(SNAKEDIR) clean
+	@$(MAKE) -C $(NIBBLERDIR) clean
 	@echo "Cleanup complete!"
 
 fclean: clean
@@ -68,7 +68,7 @@ fclean: clean
 	@$(RM) $(LIBNAME)
 	@$(MAKE) -C $(NCURSESDIR) fclean
 	@$(MAKE) -C $(SDLDIR) fclean
-	@$(MAKE) -C $(SNAKEDIR) fclean
+	@$(MAKE) -C $(NIBBLERDIR) fclean
 
 re: fclean all
 

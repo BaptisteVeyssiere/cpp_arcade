@@ -7,7 +7,7 @@
 ## Started on  Wed May 18 21:26:30 2016 Baptiste veyssiere
 ##
 
-NAME	= lib_arcade_snake.so
+NAME	= lib_arcade_nibbler.so
 
 RM	= rm -f
 
@@ -15,7 +15,7 @@ CXX	= g++
 
 MKDIR	= mkdir -p
 
-SRC	= src/Snake.cpp
+SRC	= src/Nibbler.cpp
 
 SRCDIR	= src
 
