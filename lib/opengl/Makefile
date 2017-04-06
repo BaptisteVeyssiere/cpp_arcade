@@ -24,11 +24,11 @@ OBJDIR	= obj
 
 OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
-CXXFLAGS	= -Iinclude -I../../deps/SDL-1.2.15/install/include
+CXXFLAGS	= -Iinclude
 
-LDFLAGS = -lSDL_image -L../../deps/SDL-1.2.15/install/lib/ -lGL
+LDFLAGS = -lSDL_image -lGL
 
-$(NAME): $(OBJ) deps
+$(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -shared -o $(NAME) $(OBJ)
 	@echo "Linking complete!"
 
@@ -36,9 +36,6 @@ $(OBJ): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	@$(MKDIR) $(OBJDIR)
 	@$(CXX) $(LDFLAGS) $(CXXFLAGS) -c $< -o $@ -fPIC
 	@echo "Compiled "$<" successfully!"
-
-deps:
-	cd ../../deps/SDL-1.2.15/; ./configure --prefix=${PWD}/install --enable-shared=yes ; make; make install;
 
 all: $(NAME)
 
