@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Apr  6 13:49:35 2017 Baptiste Veyssiere
-// Last update Thu Apr  6 16:48:30 2017 Baptiste Veyssiere
+// Last update Thu Apr  6 17:05:06 2017 Baptiste Veyssiere
 //
 
 # include <iostream>
@@ -165,7 +165,10 @@ extern "C" void	Play(void)
   snake = new arcade::WhereAmI[sizeof(arcade::WhereAmI) + sizeof(arcade::Position)];
   InitPosition(snake);
   while ((ch = getchar()))
+    {
+      std::cerr << ch << std::endl;
       choose_function(ch, map, snake, direction);
+    }
   delete map;
   delete snake;
 }
