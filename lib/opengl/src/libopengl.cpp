@@ -1,11 +1,11 @@
 //
 // libopengl.cpp for libopengl in /home/ilyas/rendu/CPP/cpp_arcade/lib/opengl
-// 
+//
 // Made by ilyas semmaoui
 // Login   <ilyas.semmaoui@epitech.eu>
-// 
+//
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Thu Apr  6 09:02:28 2017 ilyas semmaoui
+// Last update Thu Apr  6 14:07:28 2017 Nathan Scutari
 //
 
 #include <iostream>
@@ -68,11 +68,13 @@ GLuint	libopengl::getTextureId(std::string const &name) const {
 }
 
 void	libopengl::Init(const std::string &game) {
+  char		center[] = "SDL_VIDEO_WINDOW_POS=center";
   std::vector<std::string>	files;
   std::string			fname;
   GLuint			tmp;
 
   SDL_WM_SetCaption(game.c_str(), NULL);
+  SDL_putenv(center);
   if (SDL_SetVideoMode(WINSIDE, WINSIDE, 32, SDL_OPENGL) == NULL)
     throw library_error("Failed to initialize libopengl !");
   glEnable(GL_TEXTURE_2D);
@@ -118,22 +120,22 @@ void	libopengl::Loop_display(const t_map &map) const {
 	      glRotatef(angle, 0.0, 0.0, 1.0);
 	      glMatrixMode(GL_MODELVIEW);
 	      glBegin(GL_QUADS);
-	      
-	      
-	      
-	      
+
+
+
+
 	      glTexCoord2d(0, 0);
 	      glVertex2d(posx-1, (posy-1+(y_size*2/WINSIDE))*-1);
-	      
+
 	      glTexCoord2d(1, 0);
 	      glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1+(y_size*2/WINSIDE))*-1);
-	      
+
 	      glTexCoord2d(1, 1);
 	      glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1)*-1);
 
 	      glTexCoord2d(0, 1);
 	      glVertex2d(posx-1, (posy-1)*-1);
-	      
+
 	      glEnd();
 	      glMatrixMode(GL_TEXTURE);
 	      glPopMatrix();
@@ -154,19 +156,20 @@ void	libopengl::Get_key(t_gamedata &gamedata) const {
   int		i;
   int		key[] =
     {
-      SDLK_2,
-      SDLK_3,
-      SDLK_4,
-      SDLK_5,
-      SDLK_8,
-      SDLK_9,
+      233,
+      34,
+      39,
+      40,
+      95,
+      231,
       SDLK_UP,
       SDLK_DOWN,
       SDLK_RIGHT,
       SDLK_LEFT,
       SDLK_ESCAPE
     };
-  SDL_PollEvent(&event);
+  if (SDL_PollEvent(&event) == 0 || event.key.state == SDL_RELEASED)
+    return ;
   i = -1;
   value = static_cast<bool*>(&gamedata.prev_graph);
   while (++i < 11)

@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Thu Apr  6 13:28:23 2017 Nathan Scutari
+// Last update Thu Apr  6 13:38:50 2017 Nathan Scutari
 //
 
 #include "Nibbler.hpp"
@@ -126,7 +126,7 @@ void	Nibbler::change_direction(t_gamedata &data)
     this->last_key = 2;
   else if (data.left)
     this->last_key = 3;
-  if (this->counter > (FPS / 8))
+  if (this->counter > (FPS / 12))
     {
       if (this->last_key == 0 || this->last_key == 2)
 	this->player_xdirection = 0;
@@ -215,7 +215,7 @@ int	Nibbler::Game_loop(t_gamedata &data)
 {
   ++this->counter;
   this->change_direction(data);
-  if (this->counter > (FPS / 8))
+  if (this->counter > (FPS / 12))
     {
       if (this->check_ahead(data.map))
 	return (1);

@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Wed Apr  5 22:26:46 2017 Nathan Scutari
+// Last update Thu Apr  6 16:26:36 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -17,11 +17,12 @@
 #include <map>
 #include "lib_sdl.hpp"
 #include "technical_spec.hpp"
+#include "library_error.hpp"
 
 lib_sdl::lib_sdl()
 {
   if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) == -1)
-    throw std::exception();
+    throw library_error("SDL_Init failed\n");
 }
 
 lib_sdl::~lib_sdl()
@@ -76,18 +77,22 @@ bool	lib_sdl::is_map_texture(std::string file_name) const
 void	lib_sdl::resize_textures(std::map<std::string, SDL_Surface *> &textures,
 				 bool &first_loop, int x_size, int y_size)
 {
+  double	x_resize;
+  double	y_resize;
   SDL_Surface	*tmp;
 
   first_loop = false;
   if (textures.find("bg") == textures.end())
-    throw std::exception();
+    throw library_error("Couldn't find background texture \"bg\"");
   for (std::map<std::string, SDL_Surface *>::iterator it = textures.begin() ;
        it != textures.end() ; ++it)
     {
       if (is_map_texture(it->first))
 	{
 	  tmp = it->second;
-	  it->second = zoomSurface(tmp, x_size / tmp->w, y_size / tmp->h, 1);
+	  x_resize = static_cast<double>(x_size) / static_cast<double>(tmp->w);
+	  y_resize = static_cast<double>(y_size) / static_cast<double>(tmp->h);
+	  it->second = zoomSurface(tmp, x_resize, y_resize, 1);
 	  SDL_FreeSurface(tmp);
 	}
     }
@@ -97,27 +102,25 @@ void	lib_sdl::Loop_display(const t_map &map)
 {
   int		y;
   int		x;
-  int		x_size;
-  int		y_size;
+  double	x_size;
+  double	y_size;
   std::string	file;
   SDL_Rect	pos;
   SDL_Surface	*tmp;
 
-  x_size = WINSIDE / map.width;
-  y_size = WINSIDE / map.height;
+  x_size = static_cast<double>(WINSIDE) / static_cast<double>(map.width);
+  y_size = static_cast<double>(WINSIDE) / static_cast<double>(map.height);
   y = -1;
   if (first_loop)
     resize_textures(textures, first_loop, x_size, y_size);
-  if (textures.find("bg") == textures.end())
-    throw std::exception();
   SDL_BlitSurface(textures["bg"], NULL, win, 0);
   while (++y < map.height)
     {
       x = -1;
       while (++x < map.width)
 	{
-	  pos.x = x * x_size;
-	  pos.y = y * y_size;
+	  pos.x = static_cast<double>(x) * x_size;
+	  pos.y = static_cast<double>(y) * y_size;
 	  file = tile_to_file(map.map[y][x]);
 	  if (file.size() > 0 && textures.find(file) == textures.end())
 	    {
