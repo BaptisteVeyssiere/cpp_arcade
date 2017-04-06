@@ -1,32 +1,32 @@
 //
-// Snake.cpp for Project-Master in /home/veyssi_b/rendu/tek2/CPP/cpp_arcade/games/snake
+// Nibbler.cpp for Project-Master in /home/veyssi_b/rendu/tek2/CPP/cpp_arcade/games/nibbler
 //
 // Made by Baptiste Veyssiere
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Thu Apr  6 09:08:35 2017 Baptiste Veyssiere
+// Last update Thu Apr  6 13:28:23 2017 Nathan Scutari
 //
 
-#include "Snake.hpp"
+#include "Nibbler.hpp"
 
-Snake::Snake() : counter(0) {}
+Nibbler::Nibbler() : counter(0) {}
 
-Snake::~Snake() {}
+Nibbler::~Nibbler() {}
 
-void	Snake::Get_file_content(std::vector<std::string> &coded_map) const
+void	Nibbler::Get_file_content(std::vector<std::string> &coded_map) const
 {
-  std::ifstream	file("games/snake/map/map.txt");
+  std::ifstream	file("games/nibbler/map/map.txt");
   std::string	str;
 
   if (file.is_open())
     while (getline(file, str))
       coded_map.push_back(str);
   else
-    throw game_error("map.txt was not found (must be in games/snake/map/)");
+    throw game_error("map.txt was not found (must be in games/nibbler/map/)");
 }
 
-void	Snake::Add_mapline(const std::string &line, std::vector<std::vector<t_block>> &map) const
+void	Nibbler::Add_mapline(const std::string &line, std::vector<std::vector<t_block>> &map) const
 {
   std::vector<t_block>	mapline;
   t_block		block;
@@ -45,7 +45,7 @@ void	Snake::Add_mapline(const std::string &line, std::vector<std::vector<t_block
   map.push_back(mapline);
 }
 
-void	Snake::Add_cell(t_map &map, unsigned int y, unsigned int x)
+void	Nibbler::Add_cell(t_map &map, unsigned int y, unsigned int x)
 {
   t_cell	cell;
 
@@ -56,7 +56,7 @@ void	Snake::Add_cell(t_map &map, unsigned int y, unsigned int x)
   map.map[y][x].sprite = 0;
 }
 
-void	Snake::Add_player(t_map &game_map)
+void	Nibbler::Add_player(t_map &game_map)
 {
   t_cell	head;
 
@@ -73,11 +73,12 @@ void	Snake::Add_player(t_map &game_map)
   this->Add_cell(game_map, head.y, head.x - 3);
 }
 
-void	Snake::Get_map(t_map &game_map)
+void	Nibbler::Get_map(t_map &game_map)
 {
   std::vector<std::string>	coded_map;
 
   srand(time(NULL));
+  game_map.map.clear();
   this->Get_file_content(coded_map);
   for (size_t i = 0; i < coded_map.size(); i++)
     {
@@ -103,7 +104,7 @@ void	Snake::Get_map(t_map &game_map)
   this->last_key = -1;
 }
 
-int	Snake::check_ahead(t_map &game_map)
+int	Nibbler::check_ahead(t_map &game_map)
 {
   blockType	next_block;
 
@@ -115,7 +116,7 @@ int	Snake::check_ahead(t_map &game_map)
   return (0);
 }
 
-void	Snake::change_direction(t_gamedata &data)
+void	Nibbler::change_direction(t_gamedata &data)
 {
   if (data.up)
     this->last_key = 0;
@@ -125,7 +126,7 @@ void	Snake::change_direction(t_gamedata &data)
     this->last_key = 2;
   else if (data.left)
     this->last_key = 3;
-  if (this->counter > (FPS / 5))
+  if (this->counter > (FPS / 8))
     {
       if (this->last_key == 0 || this->last_key == 2)
 	this->player_xdirection = 0;
@@ -144,13 +145,13 @@ void	Snake::change_direction(t_gamedata &data)
 }
 
 
-void	Snake::Remove_last_cell(t_map &map)
+void	Nibbler::Remove_last_cell(t_map &map)
 {
   map.map[(this->head.back()).y][(this->head.back()).x].type = blockType::EMPTY;
   this->head.pop_back();
 }
 
-void	Snake::move(t_map &map)
+void	Nibbler::move(t_map &map)
 {
   t_cell	cell;
   unsigned int	angle;
@@ -174,7 +175,7 @@ void	Snake::move(t_map &map)
   this->head.insert(++this->head.begin(), cell);
 }
 
-void	Snake::Add_powerup(t_map &map) const
+void	Nibbler::Add_powerup(t_map &map) const
 {
   unsigned int	x;
   unsigned int	y;
@@ -193,7 +194,7 @@ void	Snake::Add_powerup(t_map &map) const
     }
 }
 
-void	Snake::move_snake(t_map &map)
+void	Nibbler::move_nibbler(t_map &map)
 {
   bool	powerup;
 
@@ -210,15 +211,15 @@ void	Snake::move_snake(t_map &map)
     }
 }
 
-int	Snake::Game_loop(t_gamedata &data)
+int	Nibbler::Game_loop(t_gamedata &data)
 {
   ++this->counter;
   this->change_direction(data);
-  if (this->counter > (FPS / 5))
+  if (this->counter > (FPS / 8))
     {
       if (this->check_ahead(data.map))
 	return (1);
-      this->move_snake(data.map);
+      this->move_nibbler(data.map);
       this->counter = 0;
     }
   return (0);
@@ -226,5 +227,5 @@ int	Snake::Game_loop(t_gamedata &data)
 
 extern "C" IGame	*factory()
 {
-  return (new Snake);
+  return (new Nibbler);
 }

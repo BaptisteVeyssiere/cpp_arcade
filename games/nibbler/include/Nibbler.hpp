@@ -5,11 +5,11 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:39:26 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 23:23:56 2017 Baptiste Veyssiere
+// Last update Thu Apr  6 13:10:22 2017 Baptiste Veyssiere
 //
 
-#ifndef __SNAKE_HPP__
-# define __SNAKE_HPP__
+#ifndef __NIBBLER_HPP__
+# define __NIBBLER_HPP__
 
 # include <fstream>
 # include <list>
@@ -25,7 +25,7 @@ typedef struct	s_cell
   unsigned int	y;
 }		t_cell;
 
-class	Snake : public IGame
+class	Nibbler : public IGame
 {
 private:
   std::list<t_cell>	head;
@@ -36,12 +36,12 @@ private:
   int			last_key;
 
 private:
-  Snake(const Snake &);
-  Snake &operator=(const Snake &);
+  Nibbler(const Nibbler &);
+  Nibbler &operator=(const Nibbler &);
 
 public:
-  Snake();
-  virtual ~Snake();
+  Nibbler();
+  virtual ~Nibbler();
 
 public:
   virtual int	Game_loop(t_gamedata &);
@@ -54,7 +54,7 @@ private:
   void	Add_cell(t_map &, unsigned int, unsigned int);
   int	check_ahead(t_map &);
   void	change_direction(t_gamedata &);
-  void	move_snake(t_map &);
+  void	move_nibbler(t_map &);
   void	move(t_map &);
   void	Add_powerup(t_map &) const;
   void	Remove_last_cell(t_map &);
@@ -62,4 +62,4 @@ private:
 
 extern "C" IGame	*factory();
 
-#endif // !__SNAKE_HPP__
+#endif // !__NIBBLER_HPP__
