@@ -7,7 +7,7 @@
 ## Started on  Wed May 18 21:26:30 2016 Baptiste veyssiere
 ##
 
-NAME	= lib_arcade_nibbler.so
+NAME	= ../lib_arcade_nibbler.so
 
 RM	= rm -f
 
@@ -15,7 +15,8 @@ CXX	= g++
 
 MKDIR	= mkdir -p
 
-SRC	= src/Nibbler.cpp
+SRC	= src/Nibbler.cpp \
+	src/play.cpp
 
 SRCDIR	= src
 
