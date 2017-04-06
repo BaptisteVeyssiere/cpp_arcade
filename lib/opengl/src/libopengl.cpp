@@ -5,12 +5,12 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Thu Apr  6 14:07:28 2017 Nathan Scutari
+// Last update Thu Apr  6 16:31:26 2017 Nathan Scutari
 //
 
 #include <iostream>
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
 #include "library_error.hpp"
 #include "technical_spec.hpp"
 #include "libopengl.hpp"
