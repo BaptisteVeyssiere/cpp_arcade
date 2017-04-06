@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 22:14:32 2017 Nathan Scutari
+// Last update Thu Apr  6 13:19:49 2017 Nathan Scutari
 //
 
 #include <iostream>
@@ -84,9 +84,9 @@ static void	main_loop(const std::string &libname)
   core.graph_selector = i;
   init_gamedata(gamedata);
   core.Display_menu();
-  core.load_game_lib("games/snake/lib_arcade_snake.so");
+  core.load_game_lib("games/" + core.game + "/lib_arcade_" + core.game + ".so");
   graph = reinterpret_cast<IGraph *(*)()>(reinterpret_cast<long>(core.get_graphic_function("factory")))();
-  graph->Init("snake");
+  graph->Init(core.game);
   game = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
   game->Get_map(gamedata.map);
   previous = clock();
