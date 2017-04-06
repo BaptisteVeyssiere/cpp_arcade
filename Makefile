@@ -35,7 +35,7 @@ OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 CXXFLAGS	= -Iinclude -g
 
-LDFLAGS		= -ldl
+LDFLAGS		= -ldl -L./deps/SDL-1.2.15/install/lib/
 
 $(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -o $(NAME) $(OBJ)

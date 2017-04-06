@@ -24,9 +24,9 @@ OBJDIR	= obj
 
 OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
-CXXFLAGS	= -Iinclude
+CXXFLAGS	= -Iinclude -I../../deps/SDL-1.2.15/install/include
 
-LDFLAGS = -lSDL -lSDL_image -lSDL_gfx
+LDFLAGS = -lSDL -L../../deps/SDL-1.2.15/install/lib/ -lSDL_image -lSDL_gfx
 
 $(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -shared -o $(NAME) $(OBJ)
