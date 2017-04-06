@@ -753,7 +753,7 @@ configure:17536: $? = 0
 configure:17554: result: yes
 configure:17474: checking for strlcpy
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/cc2aVfzG.o: In function `main':
+/tmp/cc0QuwWU.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:93: undefined reference to `strlcpy'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -857,7 +857,7 @@ configure: failed program was:
 configure:17554: result: no
 configure:17474: checking for strlcat
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccCJCRGH.o: In function `main':
+/tmp/ccITHRJV.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:93: undefined reference to `strlcat'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -968,7 +968,7 @@ configure:17536: $? = 0
 configure:17554: result: yes
 configure:17474: checking for _strrev
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccc9TEVP.o: In function `main':
+/tmp/cc1mf300.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:94: undefined reference to `_strrev'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -1073,7 +1073,7 @@ configure: failed program was:
 configure:17554: result: no
 configure:17474: checking for _strupr
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccX6yqNR.o: In function `main':
+/tmp/cc6WmxV6.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:94: undefined reference to `_strupr'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -1178,7 +1178,7 @@ configure: failed program was:
 configure:17554: result: no
 configure:17474: checking for _strlwr
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/cciWUmAN.o: In function `main':
+/tmp/ccVNBpca.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:94: undefined reference to `_strlwr'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -1304,7 +1304,7 @@ configure:17536: $? = 0
 configure:17554: result: yes
 configure:17474: checking for itoa
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccUS0y5Z.o: In function `main':
+/tmp/ccSaJTOl.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:97: undefined reference to `itoa'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -1412,7 +1412,7 @@ configure: failed program was:
 configure:17554: result: no
 configure:17474: checking for _ltoa
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccrvN320.o: In function `main':
+/tmp/ccxtZb6o.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:97: undefined reference to `_ltoa'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -1520,7 +1520,7 @@ configure: failed program was:
 configure:17554: result: no
 configure:17474: checking for _uitoa
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccQCADc4.o: In function `main':
+/tmp/ccuyrbSp.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:97: undefined reference to `_uitoa'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -1628,7 +1628,7 @@ configure: failed program was:
 configure:17554: result: no
 configure:17474: checking for _ultoa
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccVQVTI6.o: In function `main':
+/tmp/cco8Pvbl.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:97: undefined reference to `_ultoa'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -1744,7 +1744,7 @@ configure:17536: $? = 0
 configure:17554: result: yes
 configure:17474: checking for _i64toa
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccGNUqYf.o: In function `main':
+/tmp/cc0KDHCv.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:99: undefined reference to `_i64toa'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -1854,7 +1854,7 @@ configure: failed program was:
 configure:17554: result: no
 configure:17474: checking for _ui64toa
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccnDEHlj.o: In function `main':
+/tmp/ccrHuhKx.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:99: undefined reference to `_ui64toa'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -1994,7 +1994,7 @@ configure:17536: $? = 0
 configure:17554: result: yes
 configure:17474: checking for _stricmp
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/cc6c6zpG.o: In function `main':
+/tmp/cc3d1Z3Q.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:105: undefined reference to `_stricmp'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -2117,7 +2117,7 @@ configure:17536: $? = 0
 configure:17554: result: yes
 configure:17474: checking for _strnicmp
 configure:17530: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c  >&5
-/tmp/ccdhRwYO.o: In function `main':
+/tmp/ccJQqiWZ.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:106: undefined reference to `_strnicmp'
 collect2: error: ld returned 1 exit status
 configure:17536: $? = 1
@@ -2398,7 +2398,7 @@ configure:27873: $? = 0
 configure:27889: result: yes
 configure:27893: checking for dlopen in -lc
 configure:27928: gcc -o conftest -g -O2 -I./include -D_GNU_SOURCE=1  -I./include -D_GNU_SOURCE=1   conftest.c -lc   >&5
-/tmp/cc5Usz7j.o: In function `main':
+/tmp/ccNO8K4s.o: In function `main':
 /home/ilyas/rendu/CPP/cpp_arcade/deps/SDL-1.2.15/conftest.c:97: undefined reference to `dlopen'
 collect2: error: ld returned 1 exit status
 configure:27934: $? = 1
