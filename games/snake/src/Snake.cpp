@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 23:30:59 2017 Baptiste Veyssiere
+// Last update Thu Apr  6 09:08:35 2017 Baptiste Veyssiere
 //
 
 #include "Snake.hpp"
@@ -117,6 +117,14 @@ int	Snake::check_ahead(t_map &game_map)
 
 void	Snake::change_direction(t_gamedata &data)
 {
+  if (data.up)
+    this->last_key = 0;
+  else if (data.right)
+    this->last_key = 1;
+  else if (data.down)
+    this->last_key = 2;
+  else if (data.left)
+    this->last_key = 3;
   if (this->counter > (FPS / 5))
     {
       if (this->last_key == 0 || this->last_key == 2)
@@ -132,17 +140,6 @@ void	Snake::change_direction(t_gamedata &data)
       else if (this->last_key == 3 && this->player_xdirection != 1)
 	this->player_xdirection = -1;
       this->last_key = -1;
-    }
-  else
-    {
-      if (data.up)
-	this->last_key = 0;
-      else if (data.right)
-	this->last_key = 1;
-      else if (data.down)
-	this->last_key = 2;
-      else if (data.left)
-	this->last_key = 3;
     }
 }
 
