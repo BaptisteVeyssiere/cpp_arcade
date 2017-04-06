@@ -40,12 +40,6 @@ LDFLAGS		= -ldl
 $(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -o $(NAME) $(OBJ)
 	@echo "Linking complete!"
-	@$(MAKE) -C $(NCURSESDIR)
-	@echo "Ncurses library linked"
-	@$(MAKE) -C $(SDLDIR)
-	@echo "SDL library linked"
-	@$(MAKE) -C $(GLDIR)
-	@echo "openGL library linked"
 	@$(MAKE) -C $(NIBBLERDIR)
 	@echo "Nibbler library linked"
 
@@ -53,6 +47,14 @@ $(OBJ): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	@$(MKDIR) $(OBJDIR)
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 	@echo "Compiled "$<" successfully!"
+
+lib: 
+	@$(MAKE) -C $(NCURSESDIR)
+	@echo "Ncurses library linked"
+	@$(MAKE) -C $(SDLDIR)
+	@echo "SDL library linked"
+	@$(MAKE) -C $(GLDIR)
+	@echo "openGL library linked"
 
 all: $(NAME)
 
@@ -74,4 +76,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re lib
