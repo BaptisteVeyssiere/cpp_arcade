@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Apr  6 13:49:35 2017 Baptiste Veyssiere
-// Last update Fri Apr  7 17:42:28 2017 ilyas semmaoui
+// Last update Fri Apr  7 23:41:38 2017 ilyas semmaoui
 //
 
 # include <iostream>
@@ -64,6 +64,15 @@ void	go_left(arcade::GetMap *map, arcade::WhereAmI *snake, char &direction)
 
 void	play(arcade::GetMap *map, arcade::WhereAmI *snake, char &direction)
 {
+  int	i;
+
+  if (direction >= 0 && direction < 4) {
+    i = snake->lenght;
+    while (--i > 0) {
+      snake->position[i].x = snake->position[i-1].x;
+      snake->position[i].y = snake->position[i-1].y;
+    }
+  }
   if (direction == 0)
     --(snake->position[0].y);
   else if (direction == 3)
@@ -152,6 +161,12 @@ void	InitPosition(arcade::WhereAmI *snake)
   snake->lenght = 4;
   snake->position[0].x = 20 / 2;
   snake->position[0].y = 20 / 2;
+  snake->position[1].x = snake->position[0].x - 1;
+  snake->position[1].y = snake->position[0].y;
+  snake->position[2].x = snake->position[1].x - 1;
+  snake->position[2].y = snake->position[1].y;
+  snake->position[3].x = snake->position[2].x - 1;
+  snake->position[3].y = snake->position[2].y;
 }
 
 extern "C" void	Play(void)
