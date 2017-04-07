@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Apr  6 13:49:35 2017 Baptiste Veyssiere
-// Last update Fri Apr  7 00:13:06 2017 ilyas semmaoui
+// Last update Fri Apr  7 17:42:28 2017 ilyas semmaoui
 //
 
 # include <iostream>
@@ -21,17 +21,17 @@ uint16_t	gen_randnbr()
 void	where_am_i(arcade::GetMap *map, arcade::WhereAmI *snake, char &direction)
 {
   map = map;
-  direction = direction; 
+  direction = direction;
+  snake->type = arcade::CommandType::WHERE_AM_I;
   std::cout.write(reinterpret_cast<char*>(snake), (sizeof(uint16_t)*2)*(snake->lenght+1));
-  //std::cout.write(reinterpret_cast<char*>(snake), sizeof(snake) + sizeof(arcade::Position)) << std::endl;
 }
 
 void	get_map(arcade::GetMap *map, arcade::WhereAmI *snake, char &direction)
 {
   snake = snake;
   direction = direction;
+  map->type = arcade::CommandType::GET_MAP;
   std::cout.write(reinterpret_cast<char*>(map),sizeof(uint16_t)*3 + sizeof(uint16_t)*((map->width * map->height)));
-  //std::cout.write(reinterpret_cast<char*>(map), sizeof(map) + 800) << std::endl;
 }
 
 void	go_up(arcade::GetMap *map, arcade::WhereAmI *snake, char &direction)
@@ -118,7 +118,6 @@ void	choose_function(char ch, arcade::GetMap *map, arcade::WhereAmI *snake, char
       play
     };
   std::string	symlist = "0123456789";
-
   for (int i = 0; i < 10; i++)
     if (ch == symlist[i])
       ptr[i](map, snake, direction);
@@ -167,11 +166,9 @@ extern "C" void	Play(void)
   InitMap(map);
   snake = new arcade::WhereAmI[sizeof(arcade::WhereAmI) + sizeof(arcade::Position)];
   InitPosition(snake);
-  //  while ((ch = getchar()))
-  while (std::cin.get(buff, 2) && std::cin.eof() == false)
+  while (std::cin.read(buff, 2) && std::cin.good() == true)
     {
       ch = *reinterpret_cast<int*>(buff);
-      //std::cerr << sizeof(arcade::TileType) << std::endl;
       choose_function(ch + '0', map, snake, direction);
     }
   delete map;
