@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:15:00 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 13:17:53 2017 Baptiste Veyssiere
+// Last update Fri Apr  7 21:33:50 2017 Baptiste Veyssiere
 //
 
 #ifndef __CORE_PROGRAM_HPP__
@@ -15,6 +15,8 @@
 # include <dlfcn.h>
 # include <unistd.h>
 # include <iostream>
+# include <sstream>
+# include <fstream>
 # include <sys/types.h>
 # include <dirent.h>
 # include <algorithm>
@@ -22,17 +24,24 @@
 # include "technical_spec.hpp"
 # include "gamedata.hpp"
 
+typedef struct	s_score
+{
+  std::string	username;
+  unsigned int	score;
+}		t_score;
+
 class	Core_program
 {
 public:
-  void				*graphic_handle;
-  void				*game_handle;
-  std::vector<std::string>	game_list;
-  std::vector<std::string>	graph_list;
-  std::string			game;
-  std::string			username;
-  int				graph_selector;
-  int				game_selector;
+  void					*graphic_handle;
+  void					*game_handle;
+  std::vector<std::string>		game_list;
+  std::vector<std::string>		graph_list;
+  std::vector<std::vector<t_score>>	score_list;
+  std::string				game;
+  std::string				username;
+  int					graph_selector;
+  int					game_selector;
 
 private:
   Core_program(const Core_program &);
@@ -49,12 +58,16 @@ public:
   void	load_game_lib(const std::string &);
   void	*get_game_function(const std::string &) const;
   void	Display_menu();
+  void	Add_Score(unsigned int);
+  void	Save_score() const;
 
 private:
   void	Set_Games();
   void	Set_Graph();
+  void	Set_Scores(const std::string &);
   void	Aff_Games() const;
   void	Aff_Graph() const;
+  void	Aff_Scores() const;
   void	Get_Username();
   int	Get_selected_game();
 };

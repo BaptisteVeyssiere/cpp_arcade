@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Thu Apr  6 13:38:50 2017 Nathan Scutari
+// Last update Fri Apr  7 21:29:14 2017 Baptiste Veyssiere
 //
 
 #include "Nibbler.hpp"
@@ -218,11 +218,11 @@ int	Nibbler::Game_loop(t_gamedata &data)
   if (this->counter > (FPS / 12))
     {
       if (this->check_ahead(data.map))
-	return (1);
+	return (this->score);
       this->move_nibbler(data.map);
       this->counter = 0;
     }
-  return (0);
+  return (1);
 }
 
 extern "C" IGame	*factory()

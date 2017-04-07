@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 19:03:49 2017 Nathan Scutari
+// Last update Fri Apr  7 21:45:05 2017 Baptiste Veyssiere
 //
 
 #include "Core_program.hpp"
@@ -70,6 +70,75 @@ void	*Core_program::get_game_function(const std::string &fname) const
   return (ptr);
 }
 
+void		Core_program::Set_Scores(const std::string &game_name)
+{
+  std::vector<t_score>	tab;
+  int			fd;
+  std::ifstream		file("games/"+game_name+"/highscore");
+  std::string		str;
+  t_score		result;
+  std::stringstream	stream;
+  std::string		word;
+  int			i;
+
+  i = -1;
+  while (getline(file, str) && ++i < 10)
+    {
+      stream << str;
+      stream >> word;
+      result.username = word;
+      stream >> word;
+      result.score = std::stoi(word);
+      tab.push_back(result);
+      stream.str(std::string());
+      stream.clear();
+    }
+  while (++i < 10)
+    {
+      result.username = "USERNAME";
+      result.score = 0;
+      tab.push_back(result);
+    }
+  this->score_list.push_back(tab);
+}
+
+void		Core_program::Add_Score(unsigned int score)
+{
+  t_score	score_struct;
+
+  score_struct.score = score;
+  score_struct.username = this->username;
+  for (unsigned int i = 0; i < this->score_list[this->game_selector].size(); i++)
+    if (this->score_list[this->game_selector][i].score < score)
+      {
+	this->score_list[this->game_selector].insert(this->score_list[this->game_selector].begin() + i, score_struct);
+	if (this->score_list[this->game_selector].size() > 10)
+	  this->score_list[this->game_selector].pop_back();
+	break;
+      }
+}
+
+void	Core_program::Save_score() const
+{
+  std::ofstream	file;
+  std::string	username;
+  unsigned int	score;
+
+  for (unsigned int id = 0; id < this->game_list.size(); id++)
+    {
+      file.open("games/"+this->game_list[id]+"/highscore", std::ios::trunc);
+      if (file.is_open())
+	for (unsigned int i = 0; i < this->score_list[id].size(); i++)
+	  {
+	    username = this->score_list[id][i].username;
+	    score = this->score_list[id][i].score;
+	    file << username << " " << score << std::endl;
+	  }
+      else
+	throw core_program_exception("Impossible to open or create highscore file");
+    }
+}
+
 void		Core_program::Set_Games()
 {
   DIR		*dir;
@@ -81,7 +150,10 @@ void		Core_program::Set_Games()
   while (file)
     {
       if (file->d_type == DT_DIR && file->d_name[0] != '.')
-	this->game_list.push_back(std::string(file->d_name));
+	{
+	  this->game_list.push_back(std::string(file->d_name));
+	  this->Set_Scores(file->d_name);
+	}
       file = readdir(dir);
     }
   if (closedir(dir) == -1)
@@ -136,6 +208,32 @@ void	Core_program::Aff_Graph() const
   std::cout << "*" << std::string(max_length + 2, ' ') << "*" << std::endl << std::string(max_length + 4, '*') << std::endl;
 }
 
+void	Core_program::Aff_Scores() const
+{
+  unsigned int	max_length;
+  unsigned int	length;
+
+  for (unsigned int i = 0; i < this->score_list.size(); i++)
+    {
+      max_length = 15 < this->game_list[i].size() ? this->game_list[i].size() : 15;
+      for (unsigned int j = 0; j < this->score_list[i].size(); j++)
+	{
+	  length = std::to_string(this->score_list[i][j].score).length() + 5 + this->score_list[i][j].username.size();
+	  max_length = length > max_length ? length : max_length;
+	}
+      std::cout << std::string(max_length + 4, '*') << std::endl << "*" <<
+	std::string(max_length + 2, ' ') << "*" << std::endl;
+      std::cout << "* " << this->game_list[i] << ":" << std::string(max_length - this->game_list[i].size() - 1, ' ') << " *" << std::endl;
+      std::cout << "* " << "Highscores:" << std::string(max_length - 11, ' ') << " *" << std::endl;
+      for (unsigned int j = 0; j < this->score_list[i].size(); j++)
+	{
+	  length = this->score_list[i][j].username.size() + std::to_string(this->score_list[i][j].score).length() + std::to_string((j + 1)).length() + 3;
+	  std::cout << "* " << j + 1 << ". " << this->score_list[i][j].username << " " << this->score_list[i][j].score << std::string(max_length - length, ' ') << " *" << std::endl;
+	}
+  std::cout << "*" << std::string(max_length + 2, ' ') << "*" << std::endl << std::string(max_length + 4, '*') << std::endl;
+    }
+}
+
 int	Core_program::Get_selected_game()
 {
   std::cout << "Please choose your game in the list above:" << std::endl;
@@ -150,16 +248,26 @@ int	Core_program::Get_selected_game()
 
 void	Core_program::Get_Username()
 {
-  std::cout << "Please enter a username:" << std::endl;
-  getline(std::cin, this->username);
-  std::cout << "Hi " << this->username << std::endl;
+  this->username = "";
+  while (this->username.size() < 1)
+    {
+      std::cout << "Please enter a username:" << std::endl;
+      getline(std::cin, this->username);
+      if (this->username.size() > 0)
+	std::cout << "Hi " << this->username << std::endl;
+      else
+	{
+	  std::cout << "So you don't have name ? Poor child..." << std::endl;
+	  std::cout << "Ok, so I let you choose a nickname :)" << std::endl;
+	}
+    }
 }
 
 void	Core_program::Display_menu()
 {
   this->Aff_Games();
   this->Aff_Graph();
-  //this->Aff_Scores();
+  this->Aff_Scores();
   this->Get_Username();
   while (this->Get_selected_game());
 }
