@@ -18,6 +18,7 @@ private:
   GLuint	getTextureId(std::string const& name) const;
   std::string	getFileName(std::string str) const;
   std::string	tile_to_file(t_block const &tile) const;
+  void		putBackground() const;
     
 public:
 

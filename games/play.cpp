@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Apr  6 13:49:35 2017 Baptiste Veyssiere
-// Last update Thu Apr  6 16:48:30 2017 Baptiste Veyssiere
+// Last update Thu Apr  6 23:51:46 2017 ilyas semmaoui
 //
 
 # include <iostream>
@@ -21,15 +21,17 @@ uint16_t	gen_randnbr()
 void	where_am_i(arcade::GetMap *map, arcade::WhereAmI *snake, char &direction)
 {
   map = map;
-  direction = direction;
-  std::cout.write(reinterpret_cast<char*>(snake), sizeof(snake)) << std::endl;
+  direction = direction; 
+  std::cout.write(reinterpret_cast<char*>(snake), (sizeof(uint16_t)*2)*(snake->lenght+1));
+  //std::cout.write(reinterpret_cast<char*>(snake), sizeof(snake) + sizeof(arcade::Position)) << std::endl;
 }
 
 void	get_map(arcade::GetMap *map, arcade::WhereAmI *snake, char &direction)
 {
   snake = snake;
   direction = direction;
-  std::cout.write(reinterpret_cast<char*>(map), sizeof(map)) << std::endl;
+  std::cout.write(reinterpret_cast<char*>(map), sizeof(uint16_t)*((map->width * map->height)+3));
+  //std::cout.write(reinterpret_cast<char*>(map), sizeof(map) + 800) << std::endl;
 }
 
 void	go_up(arcade::GetMap *map, arcade::WhereAmI *snake, char &direction)
@@ -135,7 +137,7 @@ void	InitMap(arcade::GetMap *map)
     {
       for (size_t j = 0; j < 20; j++)
 	{
-	  if (i == 0 || j == 0 || i == (map->height - 1) || j == (map->width - 1))
+	  if (i == 0 || j == 0 || i == 19 || j == 19)
 	    map->tile[i * 20 + j] = arcade::TileType::BLOCK;
 	  else if (i == powerup.y && j == powerup.x)
 	    map->tile[i * 20 + j] = arcade::TileType::POWERUP;
@@ -158,14 +160,20 @@ extern "C" void	Play(void)
   arcade::GetMap	*map;
   arcade::WhereAmI	*snake;
   char		direction;
-  char		ch;
+  int		ch;
+  char		buff[2];
 
   map = new arcade::GetMap[sizeof(arcade::GetMap) + (20 * 20 * sizeof(arcade::TileType))];
   InitMap(map);
   snake = new arcade::WhereAmI[sizeof(arcade::WhereAmI) + sizeof(arcade::Position)];
   InitPosition(snake);
-  while ((ch = getchar()))
-      choose_function(ch, map, snake, direction);
+  //  while ((ch = getchar()))
+  while (std::cin.get(buff, 2) && std::cin.eof() == false)
+    {
+      ch = *reinterpret_cast<int*>(buff);
+      //std::cerr << sizeof(arcade::TileType) << std::endl;
+      choose_function(ch + '0', map, snake, direction);
+    }
   delete map;
   delete snake;
 }
