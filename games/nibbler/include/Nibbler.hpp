@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:39:26 2017 Baptiste Veyssiere
-// Last update Thu Apr  6 13:10:22 2017 Baptiste Veyssiere
+// Last update Fri Apr  7 23:02:19 2017 Baptiste Veyssiere
 //
 
 #ifndef __NIBBLER_HPP__
@@ -51,11 +51,11 @@ private:
   void	Get_file_content(std::vector<std::string> &) const;
   void	Add_mapline(const std::string &, std::vector<std::vector<t_block>> &) const;
   void	Add_player(t_map &);
-  void	Add_cell(t_map &, unsigned int, unsigned int);
+  void	Add_cell(t_map &, unsigned int, unsigned int, float, float);
   int	check_ahead(t_map &);
   void	change_direction(t_gamedata &);
   void	move_nibbler(t_map &);
-  void	move(t_map &);
+  int	move(t_map &);
   void	Add_powerup(t_map &) const;
   void	Remove_last_cell(t_map &);
 };

@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Mar 30 00:59:21 2017 Baptiste Veyssiere
-// Last update Tue Apr  4 23:33:48 2017 Baptiste Veyssiere
+// Last update Fri Apr  7 21:59:12 2017 Baptiste Veyssiere
 //
 
 #ifndef __GAMEDATA_HPP__
@@ -35,6 +35,8 @@ typedef struct	s_block
   blockType	type;
   unsigned char	sprite;
   unsigned int	angle;
+  float		shiftx;
+  float		shifty;
 }		t_block;
 
 typedef struct                          s_map
