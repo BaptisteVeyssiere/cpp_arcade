@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Fri Apr  7 16:48:59 2017 Nathan Scutari
+// Last update Fri Apr  7 17:17:54 2017 Nathan Scutari
 //
 
 #include <iostream>
@@ -163,13 +163,8 @@ void	libopengl::Loop_display(const t_map &map) const {
 	      glVertex2d(posx-1, (posy-1+(y_size*2/WINSIDE))*-1);
 
 	      glTexCoord2d(0, 1);
-<<<<<<< HEAD
 	      glVertex2d(posx-1, (posy-1)*-1);
 
-=======
-	      glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1+(y_size*2/WINSIDE))*-1);
-
->>>>>>> a14b67537e6cc5329b70e20b212db8240693d9ef
 	      glEnd();
 	      glMatrixMode(GL_TEXTURE);
 	      glPopMatrix();
