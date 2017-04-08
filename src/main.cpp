@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sat Apr  8 10:26:13 2017 Nathan Scutari
+// Last update Sat Apr  8 10:27:56 2017 Nathan Scutari
 //
 
 #include <iostream>
@@ -89,7 +89,7 @@ static void	main_loop(const std::string &libname)
   core.graph_selector = i;
   init_gamedata(gamedata);
   core.Display_menu();
-  core.load_game_lib("games/" + core.game + "/lib_arcade_" + core.game + ".so");
+  core.load_game_lib("games/lib_arcade_" + core.game + ".so");
   i = -1;
   while (++i >= 0 && core.game.find(core.game_list[i]) == std::string::npos);
   core.game_selector = i;

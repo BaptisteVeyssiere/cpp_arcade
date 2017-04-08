@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Sat Apr  8 00:47:57 2017 Nathan Scutari
+// Last update Sat Apr  8 10:34:25 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -117,8 +117,8 @@ void	lib_sdl::Loop_display(const t_map &map)
       x = -1;
       while (++x < map.width)
 	{
-	  pos.x = static_cast<double>(x) * x_size;
-	  pos.y = static_cast<double>(y) * y_size;
+	  pos.x = static_cast<double>(x) * x_size + map.map[y][x].shiftx * x_size;
+	  pos.y = static_cast<double>(y) * y_size + map.map[y][x].shifty * y_size;
 	  file = tile_to_file(map.map[y][x]);
 	  if (file.size() > 0 && textures.find(file) == textures.end())
 	    {
