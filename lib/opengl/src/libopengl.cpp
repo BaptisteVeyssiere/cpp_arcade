@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sat Apr  8 12:47:14 2017 ilyas semmaoui
+// Last update Sat Apr  8 12:58:27 2017 ilyas semmaoui
 //
 
 #include <iostream>
@@ -130,8 +130,8 @@ void	libopengl::Loop_display(const t_map &map) const {
       x = -1;
       while (++x < map.width)
 	{
-	  posx = (static_cast<double>(x) * x_size + map.map[y][x].shiftx) * 2.0 / static_cast<double>(WINSIDE);
-	  posy = (static_cast<double>(y) * y_size + map.map[y][x].shifty) * 2.0 / static_cast<double>(WINSIDE);
+	  posx = ((static_cast<double>(x) + map.map[y][x].shiftx) * x_size) * 2.0 / static_cast<double>(WINSIDE);
+	  posy = ((static_cast<double>(y) + map.map[y][x].shifty) * y_size) * 2.0 / static_cast<double>(WINSIDE);
 	  if ((file = this->tile_to_file(map.map[y][x])) != "")
 	    {
 	      if (textures.find(file) == textures.end())
