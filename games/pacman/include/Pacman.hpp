@@ -5,12 +5,13 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:21:05 2017 Nathan Scutari
-// Last update Sat Apr  8 15:04:35 2017 Nathan Scutari
+// Last update Sat Apr  8 23:39:16 2017 Nathan Scutari
 //
 
 #ifndef __PACMAN_HPP__
 # define __PACMAN_HPP__
 
+# include <list>
 # include <iostream>
 # include "IGame.hpp"
 # include "game_error.hpp"
@@ -22,14 +23,36 @@ typedef struct	s_pos
   double	y;
 }		t_pos;
 
+typedef struct	s_node
+{
+  t_pos					pos;
+  int					value;
+  int					dist_to_end;
+  int					dist_to_start;
+  struct s_node				*previous;
+}		t_node;
+
+typedef struct	s_ghost
+{
+  t_pos			direction;
+  std::vector<t_pos>	path;
+}		t_ghost;
+
 class	Pacman : public IGame
 {
 private:
+  std::vector<std::string>	basic_map;
   int		frame_counter;
   t_pos		pac_pos;
   int		current_direction;
-  int		last_direction;
+  int		facing;
   int		next_direction;
+  int		score;
+  int		start[4] = {0};
+  t_pos		g_pos[4];
+  t_ghost	ghost[4];
+  std::list<t_node *>	open;
+  std::list<t_node *>	closed;
 
 private:
   Pacman(const Pacman &);
@@ -47,13 +70,32 @@ public:
   void	check_basic_direction(t_gamedata &);
   void	check_collision(t_gamedata &);
   void	remove_block(t_gamedata &, int, int, blockType);
+  void	pacman_move(t_gamedata &);
   int	get_angle();
+  void	eat_pacgum(t_gamedata &);
   int	is_direction_valid(t_gamedata &);
   int	is_cross_direction(t_gamedata &);
   void	check_backward_direction(t_gamedata &);
   void	go_towards_direction(t_gamedata &);
   virtual int	Game_loop(t_gamedata &);
   virtual void	Get_map(t_map &);
+  t_node	*pick_shortest();
+  void	update_clyde(t_gamedata &);
+  void	clyde_move(t_gamedata &);
+  void	update_pinky(t_gamedata &);
+  void	pinky_move(t_gamedata &);
+  void	update_blinky(t_gamedata &);
+  void	blinky_move(t_gamedata &);
+  void	update_inky(t_gamedata &);
+  void	inky_move(t_gamedata &);
+  void	path_finder(int, int, int);
+  void	go_to(int, int, int);
+  t_node	*already_in_list(int, int);
+  void	compare_value(t_node *, t_node *);
+  void	add_to_list(t_node *, t_pos, int, int);
+  void	trace_back(int);
+  void	move_ghost(int);
+  void	move_to_random_pos(int);
 
 private:
 };

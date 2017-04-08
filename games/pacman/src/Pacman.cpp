@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:27:31 2017 Nathan Scutari
-// Last update Sat Apr  8 15:15:12 2017 Nathan Scutari
+// Last update Sat Apr  8 23:47:26 2017 Nathan Scutari
 //
 
 #include "Pacman.hpp"
@@ -29,13 +29,13 @@ void	Pacman::Init_map(std::vector<std::string> &map)
   map.push_back("10111111010111111101011111101");
   map.push_back("10000001000100000100010000001");
   map.push_back("11111101010001010001010111111");
-  map.push_back("00000100010111111101000100000");
-  map.push_back("00000101010100000101010100000");
-  map.push_back("11111101010100000101010111111");
-  map.push_back("00000000000100000100000000000");
-  map.push_back("11111101010100000101010111111");
-  map.push_back("00000101010111111101010100000");
-  map.push_back("00000100010000000001000100000");
+  map.push_back("22222100010111111101000122222");
+  map.push_back("22222101010122222101010122222");
+  map.push_back("11111101010122222101010111111");
+  map.push_back("00000000000122222100000000000");
+  map.push_back("11111101010122222101010111111");
+  map.push_back("22222101010111111101010122222");
+  map.push_back("22222100010000200001000122222");
   map.push_back("11111101010111011101010111111");
   map.push_back("10000001000000000000010000001");
   map.push_back("10111111010111111101011111101");
@@ -61,6 +61,8 @@ void	Pacman::Get_map(t_map &game_map)
   game_map.width = 29;
   game_map.height = 29;
   Init_map(map);
+  basic_map = map;
+  basic_map[11][14] = '0';
   data.sprite = 0;
   data.angle = 0;
   data.shiftx = 0;
@@ -70,7 +72,7 @@ void	Pacman::Get_map(t_map &game_map)
       map_line.clear();
       for (int x = 0 ; x < 29 ; ++x)
 	{
-	  if (map[y][x] == '0')
+	  if (map[y][x] == '0' || map[y][x] == '2')
 	    data.type = blockType::EMPTY;
 	  else
 	    data.type = blockType::BLOCK;
@@ -92,9 +94,19 @@ void	Pacman::Get_map(t_map &game_map)
     }
   pac_pos.y = 17.0;
   pac_pos.x = 14.0;
+  g_pos[0].x = 12;
+  g_pos[0].y = 15;
+  g_pos[1].x = 16;
+  g_pos[1].y = 15;
+  g_pos[3].x = 16;
+  g_pos[3].y = 12;
+  g_pos[2].x = 12;
+  g_pos[2].y = 12;
   frame_counter = 0;
   current_direction = -1;
   next_direction = -1;
+  facing = 0;
+  score = 0;
 }
 
 void	Pacman::check_next_direction(t_gamedata &data)
@@ -229,8 +241,16 @@ void	Pacman::update_map(t_gamedata &data)
 
   new_block.type = blockType::PLAYER;
   if (current_direction != -1)
-    new_block.angle = get_angle();
-  new_block.sprite = (frame_counter % 15 < 7) ? 0 : 1;
+    {
+      new_block.angle = get_angle();
+      facing = new_block.angle;
+    }
+  else
+    new_block.angle = facing;
+  if (current_direction == -1)
+    new_block.sprite = 0;
+  else
+    new_block.sprite = (frame_counter % 15 < 7) ? 0 : 1;
   new_block.shiftx = pac_pos.x - static_cast<int>(pac_pos.x);
   new_block.shifty = pac_pos.y - static_cast<int>(pac_pos.y);
   data.map.map[pac_pos.y][pac_pos.x].push_back(new_block);
@@ -248,7 +268,22 @@ void	Pacman::remove_block(t_gamedata &data, int y, int x, blockType type)
     }
 }
 
-int	Pacman::Game_loop(t_gamedata &data)
+void	Pacman::eat_pacgum(t_gamedata &data)
+{
+  int	i;
+
+  i = -1;
+  while (++i < data.map.map[pac_pos.y][pac_pos.x].size())
+    {
+      if (data.map.map[pac_pos.y][pac_pos.x][i].type == blockType::PACGUM)
+	{
+	  remove_block(data, pac_pos.y, pac_pos.x, blockType::PACGUM);
+	  score += 42;
+	}
+    }
+}
+
+void	Pacman::pacman_move(t_gamedata &data)
 {
   check_next_direction(data);
   remove_block(data, pac_pos.y, pac_pos.x, blockType::PLAYER);
@@ -258,11 +293,309 @@ int	Pacman::Game_loop(t_gamedata &data)
       pac_pos.y - static_cast<int>(pac_pos.y) < 0.1)
     {
       check_direction_change(data);
+      eat_pacgum(data);
     }
   else
     check_backward_direction(data);
   go_towards_direction(data);
   update_map(data);
+}
+
+void	Pacman::update_clyde(t_gamedata &data)
+{
+  t_block	new_block;
+
+  new_block.type = blockType::EVIL_DUDE;
+  new_block.sprite = 12;
+  new_block.angle = 0;
+  new_block.shiftx = g_pos[3].x - static_cast<int>(g_pos[3].x);
+  new_block.shifty = g_pos[3].y - static_cast<int>(g_pos[3].y);
+  data.map.map[g_pos[3].y][g_pos[3].x].push_back(new_block);
+}
+
+void	Pacman::update_inky(t_gamedata &data)
+{
+  t_block	new_block;
+
+  new_block.type = blockType::EVIL_DUDE;
+  new_block.sprite = 8;
+  new_block.angle = 0;
+  new_block.shiftx = 0;
+  new_block.shifty = 0;
+  data.map.map[g_pos[2].y][g_pos[2].x].push_back(new_block);
+}
+
+void	Pacman::update_blinky(t_gamedata &data)
+{
+  t_block	new_block;
+
+  new_block.type = blockType::EVIL_DUDE;
+  new_block.sprite = 0;
+  new_block.angle = 0;
+  new_block.shiftx = 0;
+  new_block.shifty = 0;
+  data.map.map[g_pos[0].y][g_pos[0].x].push_back(new_block);
+}
+
+void	Pacman::update_pinky(t_gamedata &data)
+{
+  t_block	new_block;
+
+  new_block.type = blockType::EVIL_DUDE;
+  new_block.sprite = 4;
+  new_block.angle = 0;
+  new_block.shiftx = 0;
+  new_block.shifty = 0;
+  data.map.map[g_pos[1].y][g_pos[1].x].push_back(new_block);
+}
+
+void	Pacman::pinky_move(t_gamedata &data)
+{
+  remove_block(data, g_pos[1].y, g_pos[1].x, blockType::EVIL_DUDE);
+  if (frame_counter >= 300)
+    {
+
+    }
+  update_pinky(data);
+}
+
+void	Pacman::blinky_move(t_gamedata &data)
+{
+  remove_block(data, g_pos[0].y, g_pos[0].x, blockType::EVIL_DUDE);
+  if (frame_counter >= 300)
+    {
+
+    }
+  update_blinky(data);
+}
+
+t_node	*Pacman::pick_shortest()
+{
+  t_node			*ret;
+  std::list<t_node *>::iterator	shortest = open.begin();
+  int	value = (*shortest)->value;
+
+  for (std::list<t_node *>::iterator it = open.begin() ; it != open.end() ; ++it)
+    {
+      if ((*it)->value < value)
+	{
+	  shortest = it;
+	  value = (*it)->value;
+	}
+    }
+  ret = (*shortest);
+  basic_map[ret->pos.y][ret->pos.x] = '3';
+  closed.push_back(ret);
+  open.erase(shortest);
+  return (ret);
+}
+
+t_node	*Pacman::already_in_list(int x, int y)
+{
+  for (std::list<t_node *>::iterator it = open.begin() ; it != open.end() ; ++it)
+    {
+      if (static_cast<int>((*it)->pos.x) == x && static_cast<int>((*it)->pos.y) == y)
+	return (*it);
+    }
+  return (0);
+}
+
+void	Pacman::compare_value(t_node *current, t_node *compare)
+{
+  int	new_value;
+
+  new_value = compare->dist_to_end + (current->dist_to_start + 1);
+  if (new_value < compare->value)
+    {
+      compare->previous = current;
+      compare->value = new_value;
+      compare->dist_to_start = current->dist_to_start + 1;
+    }
+}
+
+void	Pacman::path_finder(int y, int x, int g)
+{
+  t_pos				pos;
+  int				i;
+  t_node			*compare;
+  t_node			*current;
+  int	n_pos[4][2] =
+    {
+      {-1, 0},
+      {1, 0},
+      {0, -1},
+      {0, 1}
+    };
+
+  while (open.size())
+    {
+      i = -1;
+      current = pick_shortest();
+      while (++i < 4)
+	if (current->pos.x + n_pos[i][1] >= 0 && current->pos.y + n_pos[i][0] >= 0 &&
+	    current->pos.x + n_pos[i][1] < 29 && current->pos.y + n_pos[i][1] < 29 &&
+	    (basic_map[current->pos.y + n_pos[i][0]][current->pos.x + n_pos[i][1]] == '0' ||
+	     basic_map[current->pos.y + n_pos[i][0]][current->pos.x + n_pos[i][1]] == '2'))
+	  {
+	    pos.x = current->pos.x + n_pos[i][1];
+	    pos.y = current->pos.y + n_pos[i][0];
+	    if ((compare = already_in_list(pos.x, pos.y)))
+	      compare_value(current, compare);
+	    else
+	      add_to_list(current, pos, y, x);
+	    if (current->pos.x + n_pos[i][1] == x && current->pos.y + n_pos[i][0] == y)
+	      {
+		trace_back(g);
+		std::cout << "Ah !" << std::endl;
+		return ;
+	      }
+	  }
+    }
+}
+
+void	Pacman::trace_back(int g)
+{
+  t_pos		pos;
+  t_node	*tmp;
+
+  tmp = open.back();
+  ghost[g].path.clear();
+  while (tmp->previous)
+    {
+      pos.x = tmp->pos.x;
+      pos.y = tmp->pos.y;
+      ghost[g].path.push_back(pos);
+      tmp = tmp->previous;
+    }
+  while (open.size())
+    {
+      delete open.back();
+      open.pop_back();
+    }
+  while (closed.size())
+    {
+      delete closed.back();
+      closed.pop_back();
+    }
+  for (int i = 0 ; i < 29 ; ++i)
+    {
+      for (int x = 0 ; x < 29 ; ++x)
+	if (basic_map[i][x] == '3')
+	  basic_map[i][x] = '0';
+    }
+}
+
+int	get_dist(int y, int x, int y2, int x2)
+{
+  int	dist;
+
+  dist = y - y2 + x - x2;
+  return ((dist < 0) ? -dist : dist);
+}
+
+void	Pacman::add_to_list(t_node *current, t_pos pos, int y, int x)
+{
+  t_node	*new_node;
+
+  new_node = new t_node;
+  new_node->previous = current;
+  new_node->pos.x = pos.x;
+  new_node->pos.y = pos.y;
+  new_node->dist_to_start = current->dist_to_start + 1;
+  new_node->dist_to_end = get_dist(pos.y, y, pos.x, x);
+  new_node->value = new_node->dist_to_start + new_node->dist_to_end;
+  open.push_back(new_node);
+}
+
+void	Pacman::go_to(int y, int x, int g)
+{
+  t_node	*node = new t_node;
+
+  open.clear();
+  closed.clear();
+  node->dist_to_start = 0;
+  node->dist_to_end = get_dist(y, x, g_pos[g].y, g_pos[g].x);
+  node->value = node->dist_to_start + node->dist_to_end;
+  node->previous = NULL;
+  node->pos.x = g_pos[g].x;
+  node->pos.y = g_pos[g].y;
+  open.push_back(node);
+  path_finder(y, x, g);
+}
+
+void	Pacman::move_ghost(int g)
+{
+  int	x;
+  int	y;
+
+  x = g_pos[g].x;
+  y = g_pos[g].y;
+  if (ghost[g].path.size() == 0)
+    return ;
+  if (g_pos[g].x != ghost[g].path.back().x)
+    {
+      if (g_pos[g].x < ghost[g].path.back().x)
+	g_pos[g].x += 0.125;
+      else
+	g_pos[g].x -= 0.125;
+    }
+  else if (g_pos[g].y != ghost[g].path.back().y)
+    {
+      if (g_pos[g].y < ghost[g].path.back().y)
+	g_pos[g].y += 0.125;
+      else
+	g_pos[g].y -= 0.125;
+    }
+  if (g_pos[g].y == ghost[g].path.back().y &&
+      g_pos[g].x == ghost[g].path.back().x)
+    ghost[g].path.pop_back();
+}
+
+void	Pacman::move_to_random_pos(int g)
+{
+  t_pos	pos;
+  bool	ok;
+
+  ok = false;
+  while (ok == false)
+    {
+      pos.x = rand() % 29;
+      pos.y = rand() % 29;
+      if (basic_map[pos.y][pos.x] != '0')
+	ok = true;
+    }
+  go_to(pos.y, pos.x, 3);
+}
+
+void	Pacman::clyde_move(t_gamedata &data)
+{
+  remove_block(data, g_pos[3].y, g_pos[3].x, blockType::EVIL_DUDE);
+  if (frame_counter >= 300)
+    {
+      if (ghost[3].path.size() == 0)
+	move_to_random_pos(3);
+    }
+  move_ghost(3);
+  update_clyde(data);
+}
+
+void	Pacman::inky_move(t_gamedata &data)
+{
+  remove_block(data, g_pos[2].y, g_pos[2].x, blockType::EVIL_DUDE);
+  if (frame_counter >= 300)
+    {
+
+    }
+  update_inky(data);
+}
+
+int	Pacman::Game_loop(t_gamedata &data)
+{
+  pacman_move(data);
+  clyde_move(data);
+  inky_move(data);
+  blinky_move(data);
+  pinky_move(data);
   return (1);
 }
 

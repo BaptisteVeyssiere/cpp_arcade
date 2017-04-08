@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Sat Apr  8 15:10:12 2017 Nathan Scutari
+// Last update Sat Apr  8 16:54:13 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -50,7 +50,7 @@ std::string	tile_to_file(t_block const &tile)
     return (file);
   file = std::to_string(value);
   file += "-";
-  file += tile.sprite + 48;
+  file += std::to_string(tile.sprite);
   return (file);
 }
 
