@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Thu Apr  6 16:26:36 2017 Nathan Scutari
+// Last update Sat Apr  8 00:47:57 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -21,8 +21,6 @@
 
 lib_sdl::lib_sdl()
 {
-  if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) == -1)
-    throw library_error("SDL_Init failed\n");
 }
 
 lib_sdl::~lib_sdl()
@@ -147,6 +145,8 @@ void	lib_sdl::Init(const std::string &game)
   std::vector<std::string>	files;
   SDL_Surface	*tmp;
 
+  if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) == -1)
+    throw library_error("SDL_Init failed\n");
   file_name = "games/" + game;
   get_directory_filenames(file_name, files);
   while (files.size() > 0)
@@ -200,6 +200,7 @@ void	lib_sdl::Release()
   for (std::map<std::string, SDL_Surface *>::iterator it = textures.begin() ;
        it != textures.end() ; ++it)
     SDL_FreeSurface(it->second);
+  textures.clear();
   SDL_Quit();
 }
 

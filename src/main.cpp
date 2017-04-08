@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Thu Apr  6 13:19:49 2017 Nathan Scutari
+// Last update Sat Apr  8 00:51:39 2017 Nathan Scutari
 //
 
 #include <iostream>
@@ -58,6 +58,8 @@ void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_
       core.load_game_lib("games/" + core.game_list[core.game_selector] + "/lib_arcade_" + core.game_list[core.game_selector] + ".so");
       (*game) = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
       (*game)->Get_map(gamedata.map);
+      (*graph)->Release();
+      (*graph)->Init(core.game_list[core.game_selector]);
     }
   else if (gamedata.prev_game)
     {
@@ -66,6 +68,8 @@ void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_
       core.load_game_lib("games/" + core.game_list[core.game_selector] + "/lib_arcade_" + core.game_list[core.game_selector] + ".so");
       (*game) = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
       (*game)->Get_map(gamedata.map);
+      (*graph)->Release();
+      (*graph)->Init(core.game_list[core.game_selector]);
     }
 }
 
@@ -85,6 +89,9 @@ static void	main_loop(const std::string &libname)
   init_gamedata(gamedata);
   core.Display_menu();
   core.load_game_lib("games/" + core.game + "/lib_arcade_" + core.game + ".so");
+  i = -1;
+  while (++i >= 0 && core.game.find(core.game_list[i]) == std::string::npos);
+  core.game_selector = i;
   graph = reinterpret_cast<IGraph *(*)()>(reinterpret_cast<long>(core.get_graphic_function("factory")))();
   graph->Init(core.game);
   game = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();

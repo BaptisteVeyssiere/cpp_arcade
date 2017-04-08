@@ -17,6 +17,8 @@ MKDIR	= mkdir -p
 
 NIBBLERDIR	= games/nibbler/
 
+PACMANDIR	= games/pacman/
+
 NCURSESDIR	= lib/ncurses/
 
 SDLDIR		= lib/sdl/
@@ -42,13 +44,15 @@ $(NAME): $(OBJ)
 	@echo "Linking complete!"
 	@$(MAKE) -C $(NIBBLERDIR)
 	@echo "Nibbler library linked"
+	@$(MAKE) -C $(PACMANDIR)
+	@echo "Pacman library linked"
 
 $(OBJ): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	@$(MKDIR) $(OBJDIR)
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 	@echo "Compiled "$<" successfully!"
 
-lib: 
+lib:
 	@$(MAKE) -C $(NCURSESDIR)
 	@echo "Ncurses library linked"
 	@$(MAKE) -C $(SDLDIR)
@@ -64,6 +68,7 @@ clean:
 	@$(MAKE) -C $(SDLDIR) clean
 	@$(MAKE) -C $(GLDIR) clean
 	@$(MAKE) -C $(NIBBLERDIR) clean
+	@$(MAKE) -C $(PACMANDIR) clean
 	@echo "Cleanup complete!"
 
 fclean: clean
@@ -73,6 +78,7 @@ fclean: clean
 	@$(MAKE) -C $(GLDIR) fclean
 	@$(MAKE) -C $(SDLDIR) fclean
 	@$(MAKE) -C $(NIBBLERDIR) fclean
+	@$(MAKE) -C $(PACMANDIR) fclean
 
 re: fclean all
 
