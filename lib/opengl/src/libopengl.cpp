@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Fri Apr  7 17:17:54 2017 Nathan Scutari
+// Last update Fri Apr  7 17:58:32 2017 ilyas semmaoui
 //
 
 #include <iostream>
@@ -57,12 +57,8 @@ GLuint	libopengl::getTextureId(std::string const &name) const {
   glGenTextures(1, &id);
   glBindTexture(GL_TEXTURE_2D, id);
   iformat = GL_RGB;
-  if (surface->format->BytesPerPixel == 4) {
-    std::cout << name << "=" << "Alpha" << std::endl;
+  if (surface->format->BytesPerPixel == 4)
     iformat = GL_RGBA;
-  } else {
-    std::cout << name << "=" << "NotAlpha" << std::endl;
-  }
   glTexImage2D(GL_TEXTURE_2D, 0, iformat, surface->w, surface->h, 0,
 	       iformat, GL_UNSIGNED_BYTE, surface->pixels);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -149,22 +145,14 @@ void	libopengl::Loop_display(const t_map &map) const {
 	      glRotatef(-angle, 0.0, 0.0, 1.0);
 	      glMatrixMode(GL_MODELVIEW);
 	      glBegin(GL_QUADS);
-
-
-
-
 	      glTexCoord2d(0, 0);
-	      glVertex2d(posx-1, (posy-1+(y_size*2/WINSIDE))*-1);
-
+	      glVertex2d(posx-1+(x_size*2/WINSIDE), -(posy-1));
 	      glTexCoord2d(1, 0);
-	      glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1+(y_size*2/WINSIDE))*-1);
-
+	      glVertex2d(posx-1, -(posy-1));
 	      glTexCoord2d(1, 1);
 	      glVertex2d(posx-1, (posy-1+(y_size*2/WINSIDE))*-1);
-
 	      glTexCoord2d(0, 1);
-	      glVertex2d(posx-1, (posy-1)*-1);
-
+	      glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1+(y_size*2/WINSIDE))*-1);
 	      glEnd();
 	      glMatrixMode(GL_TEXTURE);
 	      glPopMatrix();

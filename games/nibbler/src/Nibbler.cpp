@@ -5,9 +5,10 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Thu Apr  6 13:38:50 2017 Nathan Scutari
+// Last update Sat Apr  8 00:33:48 2017 Baptiste Veyssiere
 //
 
+#include <iostream>
 #include "Nibbler.hpp"
 
 Nibbler::Nibbler() : counter(0) {}
@@ -40,12 +41,14 @@ void	Nibbler::Add_mapline(const std::string &line, std::vector<std::vector<t_blo
       block.type = static_cast<blockType>(line[i] - '0');
       block.sprite = 0;
       block.angle = 0;
+      block.shiftx = 0.0;
+      block.shifty = 0.0;
       mapline.push_back(block);
     }
   map.push_back(mapline);
 }
 
-void	Nibbler::Add_cell(t_map &map, unsigned int y, unsigned int x)
+void	Nibbler::Add_cell(t_map &map, unsigned int y, unsigned int x, float shiftx, float shifty)
 {
   t_cell	cell;
 
@@ -54,6 +57,8 @@ void	Nibbler::Add_cell(t_map &map, unsigned int y, unsigned int x)
   this->head.push_back(cell);
   map.map[y][x].type = blockType::SNAKTAIL;
   map.map[y][x].sprite = 0;
+  map.map[y][x].shiftx = shiftx;
+  map.map[y][x].shifty = shifty;
 }
 
 void	Nibbler::Add_player(t_map &game_map)
@@ -68,9 +73,9 @@ void	Nibbler::Add_player(t_map &game_map)
   game_map.map[head.y][head.x].type = blockType::PLAYER;
   game_map.map[head.y][head.x].angle = 270;
   game_map.map[head.y][head.x].sprite = 0;
-  this->Add_cell(game_map, head.y, head.x - 1);
-  this->Add_cell(game_map, head.y, head.x - 2);
-  this->Add_cell(game_map, head.y, head.x - 3);
+  this->Add_cell(game_map, head.y, head.x - 1, 0.0, 0.0);
+  this->Add_cell(game_map, head.y, head.x - 2, 0.0, 0.0);
+  this->Add_cell(game_map, head.y, head.x - 3, 0.0, 0.0);
 }
 
 void	Nibbler::Get_map(t_map &game_map)
@@ -126,7 +131,7 @@ void	Nibbler::change_direction(t_gamedata &data)
     this->last_key = 2;
   else if (data.left)
     this->last_key = 3;
-  if (this->counter > (FPS / 12))
+  if (this->counter > (FPS / 120))
     {
       if (this->last_key == 0 || this->last_key == 2)
 	this->player_xdirection = 0;
@@ -148,14 +153,18 @@ void	Nibbler::change_direction(t_gamedata &data)
 void	Nibbler::Remove_last_cell(t_map &map)
 {
   map.map[(this->head.back()).y][(this->head.back()).x].type = blockType::EMPTY;
+  map.map[(this->head.back()).y][(this->head.back()).x].shiftx = 0.0;
+  map.map[(this->head.back()).y][(this->head.back()).x].shifty = 0.0;
   this->head.pop_back();
 }
 
-void	Nibbler::move(t_map &map)
+int	Nibbler::move(t_map &map)
 {
   t_cell	cell;
   unsigned int	angle;
+  int		ret;
 
+  ret = 0;
   angle = 0;
   if (this->player_xdirection == 1)
     angle = 270;
@@ -165,14 +174,42 @@ void	Nibbler::move(t_map &map)
     angle = 180;
   cell.x = this->head.begin()->x;
   cell.y = this->head.begin()->y;
-  this->head.begin()->x += this->player_xdirection;
-  this->head.begin()->y += this->player_ydirection;
-  map.map[cell.y][cell.x].type = blockType::SNAKTAIL;
-  map.map[cell.y][cell.x].angle = 0;
-  map.map[this->head.begin()->y][this->head.begin()->x].type = blockType::PLAYER;
+  if ((angle == 270 && map.map[cell.y][cell.x].shiftx >= 0.9) ||
+      (angle == 90 && map.map[cell.y][cell.x].shiftx <= -0.9) ||
+      (angle == 180 && map.map[cell.y][cell.x].shifty >= 0.9) ||
+      (angle == 0 && map.map[cell.y][cell.x].shifty <= -0.9))
+    {
+      this->head.begin()->x += this->player_xdirection;
+      this->head.begin()->y += this->player_ydirection;
+      map.map[cell.y][cell.x].type = blockType::SNAKTAIL;
+      map.map[cell.y][cell.x].angle = 0;
+      this->head.insert(++this->head.begin(), cell);
+      map.map[this->head.begin()->y][this->head.begin()->x].type = blockType::PLAYER;
+      ret = 1;
+    }
+  for (std::list<t_cell>::iterator it = this->head.begin();
+       it != this->head.end(); it++)
+    {
+      if (it == this->head.begin())
+	{
+	  map.map[it->y][it->x].shiftx += static_cast<float>(this->player_xdirection) / 10.0;
+	  map.map[it->y][it->x].shifty += static_cast<float>(this->player_ydirection) / 10.0;
+	}
+      else
+	{
+	  map.map[it->y][it->x].shiftx += static_cast<float>((--it)->x - it->x) / 10.0;
+	  ++it;
+	  map.map[it->y][it->x].shifty += static_cast<float>((--it)->y - it->y) / 10.0;
+	  ++it;
+	}
+      if (map.map[it->y][it->x].shiftx >= 1 || map.map[it->y][it->x].shiftx <= -1)
+  	map.map[it->y][it->x].shiftx = 0.0;
+      if (map.map[it->y][it->x].shifty >= 1 || map.map[it->y][it->x].shifty <= -1)
+  	map.map[it->y][it->x].shifty = 0.0;
+    }
   map.map[this->head.begin()->y][this->head.begin()->x].angle =
     angle;
-  this->head.insert(++this->head.begin(), cell);
+  return (ret);
 }
 
 void	Nibbler::Add_powerup(t_map &map) const
@@ -197,14 +234,25 @@ void	Nibbler::Add_powerup(t_map &map) const
 void	Nibbler::move_nibbler(t_map &map)
 {
   bool	powerup;
+  int	ret;
+  int	x;
+  int	y;
 
   powerup = false;
-  if (map.map[this->head.begin()->y + this->player_ydirection][this->head.begin()->x + this->player_xdirection].type == blockType::POWERUP)
+  x = this->head.begin()->x + this->player_xdirection;
+  y = this->head.begin()->y + this->player_ydirection;
+  if (map.map[y][x].type == blockType::POWERUP//  &&
+      // ((this->head.begin()->x == x &&
+      // 	this->head.begin()->y - map.map[this->head.begin()->y][this->head.begin()->x].shifty - y >= -0.5 &&
+      // 	this->head.begin()->y - map.map[this->head.begin()->y][this->head.begin()->x].shifty - y <= 0.5) ||
+      //  (this->head.begin()->y == y &&
+      // 	this->head.begin()->x - map.map[this->head.begin()->y][this->head.begin()->x].shiftx - x >= -0.5 &&
+      // 	this->head.begin()->x - map.map[this->head.begin()->y][this->head.begin()->x].shiftx - x <= 0.5))
+      )
     powerup = true;
-  this->move(map);
-  if (!powerup)
+  if ((ret = this->move(map)) && !powerup)
     this->Remove_last_cell(map);
-  else
+  else if (ret && powerup)
     {
       this->Add_powerup(map);
       this->score += POWERUP_SCORE;
@@ -215,14 +263,14 @@ int	Nibbler::Game_loop(t_gamedata &data)
 {
   ++this->counter;
   this->change_direction(data);
-  if (this->counter > (FPS / 12))
+  if (this->counter > (FPS / 120))
     {
       if (this->check_ahead(data.map))
-	return (1);
+	return (this->score);
       this->move_nibbler(data.map);
       this->counter = 0;
     }
-  return (0);
+  return (1);
 }
 
 extern "C" IGame	*factory()

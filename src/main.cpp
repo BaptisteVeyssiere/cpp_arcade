@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sat Apr  8 00:51:39 2017 Nathan Scutari
+// Last update Sat Apr  8 10:26:13 2017 Nathan Scutari
 //
 
 #include <iostream>
@@ -55,7 +55,7 @@ void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_
     {
       if (++core.game_selector == core.game_list.size())
 	core.game_selector = 0;
-      core.load_game_lib("games/" + core.game_list[core.game_selector] + "/lib_arcade_" + core.game_list[core.game_selector] + ".so");
+      core.load_game_lib("games/lib_arcade_" + core.game_list[core.game_selector] + ".so");
       (*game) = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
       (*game)->Get_map(gamedata.map);
       (*graph)->Release();
@@ -65,7 +65,7 @@ void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_
     {
       if (--core.game_selector < 0)
 	core.game_selector = core.game_list.size() - 1;
-      core.load_game_lib("games/" + core.game_list[core.game_selector] + "/lib_arcade_" + core.game_list[core.game_selector] + ".so");
+      core.load_game_lib("games/lib_arcade_" + core.game_list[core.game_selector] + ".so");
       (*game) = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
       (*game)->Get_map(gamedata.map);
       (*graph)->Release();
@@ -82,6 +82,7 @@ static void	main_loop(const std::string &libname)
   clock_t	t;
   clock_t	previous;
   int		i;
+  unsigned int	score;
 
   i = -1;
   while (++i >= 0 && libname.find(core.graph_list[i]) == std::string::npos);
@@ -99,8 +100,11 @@ static void	main_loop(const std::string &libname)
   previous = clock();
   while (gamedata.exit_game == false)
     {
-      if (game->Game_loop(gamedata))
-	break;
+      if ((score = game->Game_loop(gamedata)) != 1)
+	{
+	  core.Add_Score(score);
+	  break;
+	}
       graph->Loop_display(gamedata.map);
       init_gamedata(gamedata);
       graph->Get_key(gamedata);
@@ -109,6 +113,7 @@ static void	main_loop(const std::string &libname)
       usleep((1000000 / FPS - (t - previous)) < 0 ? 0 : (1000000 / FPS - (t - previous)));
       previous = t;
     }
+  core.Save_score();
   graph->Release();
 }
 
