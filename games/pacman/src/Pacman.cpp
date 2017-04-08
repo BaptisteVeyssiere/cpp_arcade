@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:27:31 2017 Nathan Scutari
-// Last update Sat Apr  8 12:48:14 2017 Nathan Scutari
+// Last update Sat Apr  8 15:15:12 2017 Nathan Scutari
 //
 
 #include "Pacman.hpp"
@@ -51,9 +51,10 @@ void	Pacman::Init_map(std::vector<std::string> &map)
 
 void	Pacman::Get_map(t_map &game_map)
 {
-  t_block			data;
+  std::vector<t_block>		block_line;
+  t_block		data;
   std::vector<std::string>	map;
-  std::vector<t_block>		map_line;
+  std::vector<std::vector<t_block>>		map_line;
 
   srand(time(NULL));
   game_map.map.clear();
@@ -73,9 +74,21 @@ void	Pacman::Get_map(t_map &game_map)
 	    data.type = blockType::EMPTY;
 	  else
 	    data.type = blockType::BLOCK;
-	  map_line.push_back(data);
+	  block_line.clear();
+	  block_line.push_back(data);
+	  map_line.push_back(block_line);
 	}
       game_map.map.push_back(map_line);
+    }
+  data.type = blockType::PACGUM;
+  data.sprite = 0;
+  for (int y = 0 ; y < 29 ; ++y)
+    {
+      for (int x = 0 ; x < 29 ; ++x)
+	{
+	  if (map[y][x] == '0')
+	    game_map.map[y][x].push_back(data);
+	}
     }
   pac_pos.y = 17.0;
   pac_pos.x = 14.0;
@@ -104,13 +117,13 @@ int	Pacman::is_cross_direction(t_gamedata &data)
   int	direction_counter;
 
   direction_counter = 0;
-  if (data.map.map[pac_pos.y + 1][pac_pos.x].type == blockType::EMPTY)
+  if (data.map.map[pac_pos.y + 1][pac_pos.x][0].type == blockType::EMPTY)
     ++direction_counter;
-  if (data.map.map[pac_pos.y - 1][pac_pos.x].type == blockType::EMPTY)
+  if (data.map.map[pac_pos.y - 1][pac_pos.x][0].type == blockType::EMPTY)
     ++direction_counter;
-  if (data.map.map[pac_pos.y][pac_pos.x + 1].type == blockType::EMPTY)
+  if (data.map.map[pac_pos.y][pac_pos.x + 1][0].type == blockType::EMPTY)
     ++direction_counter;
-  if (data.map.map[pac_pos.y][pac_pos.x - 1].type == blockType::EMPTY)
+  if (data.map.map[pac_pos.y][pac_pos.x - 1][0].type == blockType::EMPTY)
     ++direction_counter;
   if (direction_counter > 2)
     return (1);
@@ -129,7 +142,7 @@ int	Pacman::is_direction_valid(t_gamedata &data)
 
   if (next_direction == -1)
     return (0);
-  if (data.map.map[pac_pos.y + dir[next_direction][0]][pac_pos.x + dir[next_direction][1]].type == blockType::EMPTY)
+  if (data.map.map[pac_pos.y + dir[next_direction][0]][pac_pos.x + dir[next_direction][1]][0].type == blockType::EMPTY)
     return (1);
   return (0);
 }
@@ -146,7 +159,7 @@ void	Pacman::check_collision(t_gamedata &data)
 
   if (current_direction == -1)
     return ;
-  if (data.map.map[pac_pos.y + dir[current_direction][0]][pac_pos.x + dir[current_direction][1]].type == blockType::BLOCK)
+  if (data.map.map[pac_pos.y + dir[current_direction][0]][pac_pos.x + dir[current_direction][1]][0].type == blockType::BLOCK)
     current_direction = -1;
 }
 
@@ -203,17 +216,44 @@ void	Pacman::check_backward_direction(t_gamedata &data)
     }
 }
 
+int	Pacman::get_angle()
+{
+  int	angle[4] = {90, 270, 0, 180};
+
+  return (angle[current_direction]);
+}
+
 void	Pacman::update_map(t_gamedata &data)
 {
-  data.map.map[pac_pos.y][pac_pos.x].type = blockType::PLAYER;
-  data.map.map[pac_pos.y][pac_pos.x].shiftx = pac_pos.x - static_cast<int>(pac_pos.x);
-  data.map.map[pac_pos.y][pac_pos.x].shifty = pac_pos.y - static_cast<int>(pac_pos.y);
+  t_block	new_block;
+
+  new_block.type = blockType::PLAYER;
+  if (current_direction != -1)
+    new_block.angle = get_angle();
+  new_block.sprite = (frame_counter % 15 < 7) ? 0 : 1;
+  new_block.shiftx = pac_pos.x - static_cast<int>(pac_pos.x);
+  new_block.shifty = pac_pos.y - static_cast<int>(pac_pos.y);
+  data.map.map[pac_pos.y][pac_pos.x].push_back(new_block);
+}
+
+void	Pacman::remove_block(t_gamedata &data, int y, int x, blockType type)
+{
+  int	i;
+
+  i = -1;
+  while (++i < data.map.map[y][x].size())
+    {
+      if (data.map.map[y][x][i].type == type)
+	data.map.map[y][x].erase(data.map.map[y][x].begin() + i);
+    }
 }
 
 int	Pacman::Game_loop(t_gamedata &data)
 {
   check_next_direction(data);
-  data.map.map[pac_pos.y][pac_pos.x].type = blockType::EMPTY;
+  remove_block(data, pac_pos.y, pac_pos.x, blockType::PLAYER);
+  data.map.map[pac_pos.y][pac_pos.x][0].type = blockType::EMPTY;
+  ++frame_counter;
   if (pac_pos.x - static_cast<int>(pac_pos.x) < 0.1 &&
       pac_pos.y - static_cast<int>(pac_pos.y) < 0.1)
     {

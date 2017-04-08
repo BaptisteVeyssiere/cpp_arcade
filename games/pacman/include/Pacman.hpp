@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:21:05 2017 Nathan Scutari
-// Last update Sat Apr  8 12:31:05 2017 Nathan Scutari
+// Last update Sat Apr  8 15:04:35 2017 Nathan Scutari
 //
 
 #ifndef __PACMAN_HPP__
@@ -28,6 +28,7 @@ private:
   int		frame_counter;
   t_pos		pac_pos;
   int		current_direction;
+  int		last_direction;
   int		next_direction;
 
 private:
@@ -45,6 +46,8 @@ public:
   void	update_map(t_gamedata &);
   void	check_basic_direction(t_gamedata &);
   void	check_collision(t_gamedata &);
+  void	remove_block(t_gamedata &, int, int, blockType);
+  int	get_angle();
   int	is_direction_valid(t_gamedata &);
   int	is_cross_direction(t_gamedata &);
   void	check_backward_direction(t_gamedata &);

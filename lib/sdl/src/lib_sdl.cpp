@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Sat Apr  8 10:34:25 2017 Nathan Scutari
+// Last update Sat Apr  8 15:10:12 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -100,6 +100,7 @@ void	lib_sdl::Loop_display(const t_map &map)
 {
   int		y;
   int		x;
+  int		i;
   double	x_size;
   double	y_size;
   std::string	file;
@@ -117,22 +118,26 @@ void	lib_sdl::Loop_display(const t_map &map)
       x = -1;
       while (++x < map.width)
 	{
-	  pos.x = static_cast<double>(x) * x_size + map.map[y][x].shiftx * x_size;
-	  pos.y = static_cast<double>(y) * y_size + map.map[y][x].shifty * y_size;
-	  file = tile_to_file(map.map[y][x]);
-	  if (file.size() > 0 && textures.find(file) == textures.end())
-	    {
-	      std::cout << file << std::endl;
-	      throw std::exception();
-	    }
-	  if (file.size() > 0 && map.map[y][x].angle != 0)
-	    {
-	      tmp = rotozoomSurface(textures.at(file), map.map[y][x].angle, 1, 1);
-	      SDL_BlitSurface(tmp, NULL, win, &pos);
-	      SDL_FreeSurface(tmp);
-	    }
-	  else if (file.size() > 0)
-	    SDL_BlitSurface(textures.at(file), NULL, win, &pos);
+	  i = -1;
+	  while (++i < map.map[y][x].size())
+		 {
+		   pos.x = static_cast<double>(x) * x_size + map.map[y][x][i].shiftx * x_size;
+		   pos.y = static_cast<double>(y) * y_size + map.map[y][x][i].shifty * y_size;
+		   file = tile_to_file(map.map[y][x][i]);
+		   if (file.size() > 0 && textures.find(file) == textures.end())
+		     {
+		       std::cout << file << std::endl;
+		       throw std::exception();
+		     }
+		   if (file.size() > 0 && map.map[y][x][i].angle != 0)
+		     {
+		       tmp = rotozoomSurface(textures.at(file), map.map[y][x][i].angle, 1, 1);
+		       SDL_BlitSurface(tmp, NULL, win, &pos);
+		       SDL_FreeSurface(tmp);
+		     }
+		   else if (file.size() > 0)
+		     SDL_BlitSurface(textures.at(file), NULL, win, &pos);
+		 }
 	}
     }
   SDL_Flip(win);

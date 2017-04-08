@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Mar 30 00:59:21 2017 Baptiste Veyssiere
-// Last update Fri Apr  7 21:59:12 2017 Baptiste Veyssiere
+// Last update Sat Apr  8 15:02:59 2017 Nathan Scutari
 //
 
 #ifndef __GAMEDATA_HPP__
@@ -41,9 +41,9 @@ typedef struct	s_block
 
 typedef struct                          s_map
 {
-  size_t                                width;
-  size_t                                height;
-  std::vector<std::vector<t_block>>	map;
+  size_t						width;
+  size_t						height;
+  std::vector<std::vector<std::vector<t_block>>>	map;
 }                                       t_map;
 
 typedef struct	s_gamedata
