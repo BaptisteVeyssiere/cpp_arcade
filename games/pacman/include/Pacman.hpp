@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:21:05 2017 Nathan Scutari
-// Last update Fri Apr  7 22:48:13 2017 Nathan Scutari
+// Last update Sat Apr  8 11:09:10 2017 Nathan Scutari
 //
 
 #ifndef __PACMAN_HPP__
@@ -16,10 +16,19 @@
 # include "game_error.hpp"
 # include "technical_spec.hpp"
 
+typedef struct	s_pos
+{
+  double	x;
+  double	y;
+}		t_pos;
+
 class	Pacman : public IGame
 {
 private:
-
+  int		frame_counter;
+  t_pos		pac_pos;
+  int		current_direction;
+  int		next_direction;
 
 private:
   Pacman(const Pacman &);
@@ -31,6 +40,7 @@ public:
 
 public:
   void	Init_map(std::vector<std::string> &);
+  void	check_next_direction(t_gamedata &);
   virtual int	Game_loop(t_gamedata &);
   virtual void	Get_map(t_map &);
 

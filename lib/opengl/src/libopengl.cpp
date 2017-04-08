@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sat Apr  8 11:28:54 2017 ilyas semmaoui
+// Last update Sat Apr  8 11:35:00 2017 Nathan Scutari
 //
 
 #include <iostream>
@@ -89,7 +89,7 @@ void	libopengl::Init(const std::string &game) {
 
 void	libopengl::putBackground() const
 {
-  glBindTexture(GL_TEXTURE_2D, textures.at("bg"));
+  glBindTexture(GL_TEXTURE_2D, textures.at("bg1"));
   glBegin(GL_QUADS);
 
   glTexCoord2d(0, 0);
@@ -121,7 +121,7 @@ void	libopengl::Loop_display(const t_map &map) const {
   glClear(GL_COLOR_BUFFER_BIT);
   x_size = WINSIDE / map.width;
   y_size = WINSIDE / map.height;
-  if (textures.find("bg") == textures.end())
+  if (textures.find("bg1") == textures.end())
     throw library_error("Failed to find a texture !");
   putBackground();
   y = -1;

@@ -7,7 +7,7 @@
 ## Started on  Wed May 18 21:26:30 2016 Baptiste veyssiere
 ##
 
-NAME	= lib_arcade_pacman.so
+NAME	= ../lib_arcade_pacman.so
 
 RM	= rm -f
 
