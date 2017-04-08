@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Fri Apr  7 17:58:32 2017 ilyas semmaoui
+// Last update Sat Apr  8 11:28:54 2017 ilyas semmaoui
 //
 
 #include <iostream>
@@ -78,7 +78,7 @@ void	libopengl::Init(const std::string &game) {
   if (SDL_SetVideoMode(WINSIDE, WINSIDE, 32, SDL_OPENGL) == NULL)
     throw library_error("Failed to initialize libopengl !");
   glEnable(GL_TEXTURE_2D);
-  get_directory_filenames("games/"+fname, files);
+  get_directory_filenames("games/"+game, files);
   while (files.size() > 0) {
     fname = getFileName(files.back());
     if ((tmp = getTextureId(files.back())) != -1)
