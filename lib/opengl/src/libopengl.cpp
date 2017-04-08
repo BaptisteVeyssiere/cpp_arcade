@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sat Apr  8 11:35:00 2017 Nathan Scutari
+// Last update Sat Apr  8 12:13:02 2017 ilyas semmaoui
 //
 
 #include <iostream>
@@ -89,19 +89,19 @@ void	libopengl::Init(const std::string &game) {
 
 void	libopengl::putBackground() const
 {
-  glBindTexture(GL_TEXTURE_2D, textures.at("bg1"));
+  glBindTexture(GL_TEXTURE_2D, textures.at("bg"));
   glBegin(GL_QUADS);
 
-  glTexCoord2d(0, 0);
+  glTexCoord2d(1, 0);
   glVertex2d(1.0, 1.0);
 
-  glTexCoord2d(1, 0);
+  glTexCoord2d(0, 0);
   glVertex2d(-1.0, 1.0);
 
-  glTexCoord2d(1, 1);
+  glTexCoord2d(0, 1);
   glVertex2d(-1.0, -1.0);
 
-  glTexCoord2d(0, 1);
+  glTexCoord2d(1, 1);
   glVertex2d(1.0, -1.0);
 
   glEnd();
@@ -121,7 +121,7 @@ void	libopengl::Loop_display(const t_map &map) const {
   glClear(GL_COLOR_BUFFER_BIT);
   x_size = WINSIDE / map.width;
   y_size = WINSIDE / map.height;
-  if (textures.find("bg1") == textures.end())
+  if (textures.find("bg") == textures.end())
     throw library_error("Failed to find a texture !");
   putBackground();
   y = -1;
@@ -142,16 +142,16 @@ void	libopengl::Loop_display(const t_map &map) const {
 	      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	      angle = map.map[y][x].angle;
 	      glPushMatrix();
-	      glRotatef(-angle, 0.0, 0.0, 1.0);
+	      glRotatef(angle, 0.0, 0.0, 1.0);
 	      glMatrixMode(GL_MODELVIEW);
 	      glBegin(GL_QUADS);
-	      glTexCoord2d(0, 0);
-	      glVertex2d(posx-1+(x_size*2/WINSIDE), -(posy-1));
 	      glTexCoord2d(1, 0);
-	      glVertex2d(posx-1, -(posy-1));
-	      glTexCoord2d(1, 1);
-	      glVertex2d(posx-1, (posy-1+(y_size*2/WINSIDE))*-1);
+	      glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1)*-1);
+	      glTexCoord2d(0, 0);
+	      glVertex2d(posx-1, (posy-1)*-1);
 	      glTexCoord2d(0, 1);
+	      glVertex2d(posx-1, (posy-1+(y_size*2/WINSIDE))*-1);
+	      glTexCoord2d(1, 1);
 	      glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1+(y_size*2/WINSIDE))*-1);
 	      glEnd();
 	      glMatrixMode(GL_TEXTURE);
