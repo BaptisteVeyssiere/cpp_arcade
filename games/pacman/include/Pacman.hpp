@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:21:05 2017 Nathan Scutari
-// Last update Sat Apr  8 11:09:10 2017 Nathan Scutari
+// Last update Sat Apr  8 12:31:05 2017 Nathan Scutari
 //
 
 #ifndef __PACMAN_HPP__
@@ -41,6 +41,14 @@ public:
 public:
   void	Init_map(std::vector<std::string> &);
   void	check_next_direction(t_gamedata &);
+  void	check_direction_change(t_gamedata &);
+  void	update_map(t_gamedata &);
+  void	check_basic_direction(t_gamedata &);
+  void	check_collision(t_gamedata &);
+  int	is_direction_valid(t_gamedata &);
+  int	is_cross_direction(t_gamedata &);
+  void	check_backward_direction(t_gamedata &);
+  void	go_towards_direction(t_gamedata &);
   virtual int	Game_loop(t_gamedata &);
   virtual void	Get_map(t_map &);
 
