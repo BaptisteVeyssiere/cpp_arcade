@@ -5,19 +5,21 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sat Apr  8 12:58:27 2017 ilyas semmaoui
+// Last update Sat Apr  8 23:14:46 2017 ilyas semmaoui
 //
 
 #include <iostream>
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 #include "library_error.hpp"
 #include "technical_spec.hpp"
 #include "libopengl.hpp"
 
 libopengl::libopengl() {
-  if (SDL_Init(SDL_INIT_VIDEO) == -1)
+  if (SDL_Init(SDL_INIT_VIDEO) == -1 || TTF_Init() == -1)
     throw library_error("Failed to initialize libopengl !");
+  font = NULL;
 }
 
 libopengl::~libopengl() {
@@ -47,13 +49,73 @@ std::string	libopengl::tile_to_file(t_block const &tile) const {
   return (file);
 }
 
-GLuint	libopengl::getTextureId(std::string const &name) const {
-  SDL_Surface	*surface;
-  GLuint	id;
-  int		iformat;
+GLuint	libopengl::getFontId(std::string const &str, uint32_t &w, uint32_t &h) {
+  SDL_Color		color = {255, 255, 255};
+  SDL_PixelFormat	format;
+  SDL_Surface		*text;
+  SDL_Surface		*tmp;
+  GLuint		id;
+  int			iformat;
 
-  if ((surface = IMG_Load(name.c_str())) == NULL)
+  if ((tmp = TTF_RenderText_Solid(font, str.c_str(), color)) == NULL)
+    throw library_error("Failed to make text !");
+  format = *(tmp->format);
+  format.BitsPerPixel = 32;
+  format.BytesPerPixel = 4;
+  if (SDL_BYTEORDER == SDL_LIL_ENDIAN) {
+    format.Rmask = 0x000000ff;
+    format.Gmask = 0x0000ff00;
+    format.Bmask = 0x00ff0000;
+    format.Amask = 0xff000000;
+  } else {
+    format.Rmask = 0xff000000;
+    format.Gmask = 0x00ff0000;
+    format.Bmask = 0x0000ff00;
+    format.Amask = 0x000000ff;
+  }
+  if ((text = SDL_ConvertSurface(tmp, &format, SDL_SWSURFACE)) == NULL)
+    throw library_error("Failed to convert font !");
+  glGenTextures(1, &id);
+  glBindTexture(GL_TEXTURE_2D, id);
+  iformat = GL_RGB;
+  if (text->format->BytesPerPixel == 4)
+    iformat = GL_RGBA;
+  w = text->w;
+  h = text->h;
+  glTexImage2D(GL_TEXTURE_2D, 0, iformat, text->w, text->h, 0,
+	       iformat, GL_UNSIGNED_BYTE, text->pixels);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  SDL_FreeSurface(tmp);
+  SDL_FreeSurface(text);
+  return (id);
+}
+
+GLuint	libopengl::getTextureId(std::string const &name) const {
+  SDL_PixelFormat	format;
+  SDL_Surface		*surface;
+  SDL_Surface		*tmp;
+  GLuint		id;
+  int			iformat;
+
+  if ((tmp = IMG_Load(name.c_str())) == NULL)
     return (-1);
+  format = *(tmp->format);
+  format.BitsPerPixel = 32;
+  format.BytesPerPixel = 4;
+  if (SDL_BYTEORDER == SDL_LIL_ENDIAN) {
+    format.Rmask = 0x000000ff;
+    format.Gmask = 0x0000ff00;
+    format.Bmask = 0x00ff0000;
+    format.Amask = 0xff000000;
+  } else {
+    format.Rmask = 0xff000000;
+    format.Gmask = 0x00ff0000;
+    format.Bmask = 0x0000ff00;
+    format.Amask = 0x000000ff;
+  }
+  if ((surface = SDL_ConvertSurface(tmp, &format, SDL_SWSURFACE)) == NULL)
+    throw library_error("Failed to convert font !");
   glGenTextures(1, &id);
   glBindTexture(GL_TEXTURE_2D, id);
   iformat = GL_RGB;
@@ -63,6 +125,7 @@ GLuint	libopengl::getTextureId(std::string const &name) const {
 	       iformat, GL_UNSIGNED_BYTE, surface->pixels);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  SDL_FreeSurface(tmp);
   SDL_FreeSurface(surface);
   return (id);
 }
@@ -75,9 +138,11 @@ void	libopengl::Init(const std::string &game) {
 
   SDL_WM_SetCaption(game.c_str(), NULL);
   SDL_putenv(center);
-  if (SDL_SetVideoMode(WINSIDE, WINSIDE, 32, SDL_OPENGL) == NULL)
+  if (SDL_SetVideoMode(WINSIDE, WINSIDE+GUISIDE, 32, SDL_OPENGL) == NULL)
     throw library_error("Failed to initialize libopengl !");
   glEnable(GL_TEXTURE_2D);
+  if ((font = TTF_OpenFont("lib/opengl/fonts/LemonMilk.otf", 32)) == NULL)
+    throw library_error("Failed to load font !");
   get_directory_filenames("games/"+game, files);
   while (files.size() > 0) {
     fname = getFileName(files.back());
@@ -107,7 +172,82 @@ void	libopengl::putBackground() const
   glEnd();
 }
 
-void	libopengl::Loop_display(const t_map &map) const {
+void	libopengl::displayGui(const t_map &map)
+{
+  GLuint	tmp;
+  uint32_t	w;
+  uint32_t	h;
+  double	nh;
+  double	nw;
+  double	x;
+  double	y;
+
+  tmp = getFontId("Score: "+std::to_string(map.gui.score), w, h);
+  nw = static_cast<double>(w) / (static_cast<double>(h) / ((static_cast<double>(GUISIDE) / 2.0) - 10.0));
+  nh = (static_cast<double>(GUISIDE) / 2.0) - 10.0;
+  nw = nw * 2.0 / static_cast<double>(WINSIDE);
+  nh = nh * 2.0 / (static_cast<double>(WINSIDE) + static_cast<double>(GUISIDE));
+  x = 5.0 * 2.0 / static_cast<double>(WINSIDE) - 1;
+  y = (static_cast<double>(WINSIDE) + 5.0) * 2.0 / (static_cast<double>(WINSIDE) + static_cast<double>(GUISIDE)) - 1;
+  glBindTexture(GL_TEXTURE_2D, tmp);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glPushMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glBegin(GL_QUADS);
+  glTexCoord2d(1, 0);
+  glVertex2d(x+nw, y*-1);
+  glTexCoord2d(0, 0);
+  glVertex2d(x, y*-1);
+  glTexCoord2d(0, 1);
+  glVertex2d(x, (y+nh)*-1);
+  glTexCoord2d(1, 1);
+  glVertex2d(x+nw, (y+nh)*-1);
+  glEnd();
+  glDeleteTextures(1, &tmp);
+  tmp = getFontId("Time: "+std::to_string(map.gui.sec), w, h);
+  nw = static_cast<double>(w) / (static_cast<double>(h) / ((static_cast<double>(GUISIDE) / 2.0) - 10.0));
+  nh = (static_cast<double>(GUISIDE) / 2.0) - 10.0;
+  y = (static_cast<double>(WINSIDE) + 10.0 + nh) * 2.0 / (static_cast<double>(WINSIDE) + static_cast<double>(GUISIDE)) - 1;
+  x = 5.0 * 2.0 / static_cast<double>(WINSIDE) - 1;
+  nw = nw * 2.0 / static_cast<double>(WINSIDE);
+  nh = nh * 2.0 / (static_cast<double>(WINSIDE) + static_cast<double>(GUISIDE));
+  glBindTexture(GL_TEXTURE_2D, tmp);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glPushMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glBegin(GL_QUADS);
+  glTexCoord2d(1, 0);
+  glVertex2d(x+nw, y*-1);
+  glTexCoord2d(0, 0);
+  glVertex2d(x, y*-1);
+  glTexCoord2d(0, 1);
+  glVertex2d(x, (y+nh)*-1);
+  glTexCoord2d(1, 1);
+  glVertex2d(x+nw, (y+nh)*-1);
+  glEnd();
+  glDeleteTextures(1, &tmp);
+  /*tmp = getFontId("Time : "+std::to_string(map->gui.sec), w, h);
+  glBindTexture(GL_TEXTURE_2D, tmp);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glPushMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glBegin(GL_QUADS);
+  glTexCoord2d(1, 0);
+  glVertex2d(0.5, 0.5);
+  glTexCoord2d(0, 0);
+  glVertex2d(-0.5, 0.5);
+  glTexCoord2d(0, 1);
+  glVertex2d(-0.5, -0.5);
+  glTexCoord2d(1, 1);
+  glVertex2d(0.5, -0.5);
+  glEnd();
+  glDeleteTextures(1, &tmp);*/
+}
+
+void	libopengl::Loop_display(const t_map &map) {
   std::string	file;
   double	posx;
   double	posy;
@@ -115,6 +255,7 @@ void	libopengl::Loop_display(const t_map &map) const {
   double	y_size;
   int		y;
   int		x;
+  int		i;
   GLuint	tmp;
   GLdouble	angle;
 
@@ -130,35 +271,39 @@ void	libopengl::Loop_display(const t_map &map) const {
       x = -1;
       while (++x < map.width)
 	{
-	  posx = ((static_cast<double>(x) + map.map[y][x].shiftx) * x_size) * 2.0 / static_cast<double>(WINSIDE);
-	  posy = ((static_cast<double>(y) + map.map[y][x].shifty) * y_size) * 2.0 / static_cast<double>(WINSIDE);
-	  if ((file = this->tile_to_file(map.map[y][x])) != "")
-	    {
-	      if (textures.find(file) == textures.end())
-		throw library_error("Failed to find a texture !");
-	      tmp = textures.at(file);
-	      glBindTexture(GL_TEXTURE_2D, tmp);
-	      glEnable(GL_BLEND);
-	      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	      angle = map.map[y][x].angle;
-	      glPushMatrix();
-	      glRotatef(angle, 0.0, 0.0, 1.0);
-	      glMatrixMode(GL_MODELVIEW);
-	      glBegin(GL_QUADS);
-	      glTexCoord2d(1, 0);
-	      glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1)*-1);
-	      glTexCoord2d(0, 0);
-	      glVertex2d(posx-1, (posy-1)*-1);
-	      glTexCoord2d(0, 1);
-	      glVertex2d(posx-1, (posy-1+(y_size*2/WINSIDE))*-1);
-	      glTexCoord2d(1, 1);
-	      glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1+(y_size*2/WINSIDE))*-1);
-	      glEnd();
-	      glMatrixMode(GL_TEXTURE);
-	      glPopMatrix();
-	    }
+	  i = -1;
+	  while (++i < map.map[y][x].size()) {
+	    posx = ((static_cast<double>(x) + map.map[y][x][i].shiftx) * x_size) * 2.0 / static_cast<double>(WINSIDE);
+	    posy = ((static_cast<double>(y) + map.map[y][x][i].shifty) * y_size) * 2.0 / static_cast<double>(WINSIDE+GUISIDE);
+	    if ((file = this->tile_to_file(map.map[y][x][i])) != "")
+	      {
+		if (textures.find(file) == textures.end())
+		  throw library_error("Failed to find a texture !");
+		tmp = textures.at(file);
+		glBindTexture(GL_TEXTURE_2D, tmp);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		angle = map.map[y][x][i].angle;
+		glPushMatrix();
+		glRotatef(angle, 0.0, 0.0, 1.0);
+		glMatrixMode(GL_MODELVIEW);
+		glBegin(GL_QUADS);
+		glTexCoord2d(1, 0);
+		glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1)*-1);
+		glTexCoord2d(0, 0);
+		glVertex2d(posx-1, (posy-1)*-1);
+		glTexCoord2d(0, 1);
+		glVertex2d(posx-1, (posy-1+(y_size*2/(WINSIDE+GUISIDE)))*-1);
+		glTexCoord2d(1, 1);
+		glVertex2d(posx-1+(x_size*2/WINSIDE), (posy-1+(y_size*2/(WINSIDE+GUISIDE)))*-1);
+		glEnd();
+		glMatrixMode(GL_TEXTURE);
+		glPopMatrix();
+	      }
+	  }
 	}
     }
+  displayGui(map);
   glFlush();
   SDL_GL_SwapBuffers();
 }

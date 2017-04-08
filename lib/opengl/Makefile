@@ -26,7 +26,7 @@ OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 CXXFLAGS	= -Iinclude
 
-LDFLAGS = -lSDL_image -lGL
+LDFLAGS = -lSDL -lSDL_ttf -lSDL_image -lGL 
 
 $(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -shared -o $(NAME) $(OBJ)

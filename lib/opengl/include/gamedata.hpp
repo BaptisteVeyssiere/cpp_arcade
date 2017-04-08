@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Mar 30 00:59:21 2017 Baptiste Veyssiere
-// Last update Fri Apr  7 21:59:12 2017 Baptiste Veyssiere
+// Last update Sat Apr  8 21:09:07 2017 ilyas semmaoui
 //
 
 #ifndef __GAMEDATA_HPP__
@@ -39,12 +39,20 @@ typedef struct	s_block
   float		shifty;
 }		t_block;
 
-typedef struct                          s_map
+typedef struct	s_gui
 {
-  size_t                                width;
-  size_t                                height;
-  std::vector<std::vector<t_block>>	map;
-}                                       t_map;
+  uint32_t	sec;
+  uint32_t	score;
+}		t_gui;
+
+typedef struct						s_map
+{
+  size_t						width;
+  size_t						height;
+  std::vector<std::vector<std::vector<t_block>>>	map;
+  t_gui							gui;
+}							t_map;
+
 
 typedef struct	s_gamedata
 {

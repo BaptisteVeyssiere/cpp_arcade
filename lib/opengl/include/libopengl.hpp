@@ -12,13 +12,16 @@ private:
 
   std::unordered_map<std::string,GLuint>	textures;
   SDL_Event					event;
-  
+  TTF_Font					*font;
+
 private:
 
+  GLuint	getFontId(std::string const& str, uint32_t &w, uint32_t &h);
   GLuint	getTextureId(std::string const& name) const;
   std::string	getFileName(std::string str) const;
   std::string	tile_to_file(t_block const &tile) const;
   void		putBackground() const;
+  void		displayGui(const t_map &map);
     
 public:
 
@@ -26,7 +29,7 @@ public:
   virtual ~libopengl();
 
   virtual void	Init(const std::string &game);
-  virtual void	Loop_display(const t_map &map) const;
+  virtual void	Loop_display(const t_map &map);
   virtual void	Release();
   virtual void	Get_key(t_gamedata &gamedata) const;
   
