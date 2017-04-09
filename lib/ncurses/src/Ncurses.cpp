@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 17:12:59 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 18:20:12 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -104,7 +104,7 @@ void	Ncurses::Gui_display(const t_gui &gui) const
   getyx(this->win, y, x);
   check_ncurses_ret(wprintw(this->win, "Score: %u", gui.score), ERR, WPRINTW_ERROR);
   check_ncurses_ret(wmove(this->win, y + 1, 1), ERR, WMOVE_ERROR);
-  check_ncurses_ret(wprintw(this->win, "Score: %02u:%02u", gui.sec / 60, gui.sec % 60), ERR, WPRINTW_ERROR);
+  check_ncurses_ret(wprintw(this->win, "Time: %02u:%02u", gui.sec / 60, gui.sec % 60), ERR, WPRINTW_ERROR);
 }
 
 void	Ncurses::color_on(const t_map &map, int i, int j, int k) const
