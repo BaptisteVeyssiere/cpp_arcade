@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:27:31 2017 Nathan Scutari
-// Last update Sun Apr  9 14:46:59 2017 Nathan Scutari
+// Last update Sun Apr  9 17:10:12 2017 Nathan Scutari
 //
 
 #include "Pacman.hpp"
@@ -103,6 +103,7 @@ void	Pacman::Get_map(t_map &game_map)
     }
   pac_pos.y = 17.0;
   pac_pos.x = 14.0;
+  pacgum = 1;
   g_pos[0].x = 12;
   g_pos[0].y = 15;
   g_pos[1].x = 16;
@@ -111,6 +112,7 @@ void	Pacman::Get_map(t_map &game_map)
   g_pos[3].y = 12;
   g_pos[2].x = 12;
   g_pos[2].y = 12;
+  time_sec = time(NULL);
   ghost[0].alive = 1;
   ghost[1].alive = 1;
   ghost[2].alive = 1;
@@ -119,6 +121,7 @@ void	Pacman::Get_map(t_map &game_map)
   ghost[1].speed = 0.125;
   ghost[2].speed = 0.125;
   ghost[3].speed = 0.125;
+  begin = 0;
   alive = 1;
   killer_state = 0;
   death_sprite = 3;
@@ -332,6 +335,7 @@ void	Pacman::eat_pacgum(t_gamedata &data)
     {
       if (data.map.map[pac_pos.y][pac_pos.x][i].type == blockType::PACGUM)
 	{
+	  pacgum = 1;
 	  remove_block(data, pac_pos.y, pac_pos.x, blockType::PACGUM);
 	  score += 42;
 	}
@@ -811,6 +815,7 @@ int	Pacman::kill_ghost(int g)
 {
   if (ghost[g].alive)
     {
+      score += 294;
       ghost[g].alive = 0;
       go_to(14, 14, g);
       ghost[g].speed = 0.250;
@@ -818,7 +823,7 @@ int	Pacman::kill_ghost(int g)
   return (0);
 }
 
-int	Pacman::is_dead()
+int	Pacman::is_dead(t_gamedata &data)
 {
   double	distancex;
   double	distancey;
@@ -836,9 +841,15 @@ int	Pacman::is_dead()
       if (distance <= 0.4 && distance >= -0.4)
 	{
 	  if (killer_state == 0)
-	    return (1);
+	    {
+	      data.map.sName.push_back("5");
+	      return (1);
+	    }
 	  else
-	    return (kill_ghost(i));
+	    {
+	      data.map.sName.push_back("4");
+	      return (kill_ghost(i));
+	    }
 	}
     }
   return (0);
@@ -873,8 +884,19 @@ void	Pacman::tp_ghost(int y)
 
 int	Pacman::Game_loop(t_gamedata &data)
 {
-  if (alive)
+  data.map.sName.clear();
+  data.map.sNameLoop.clear();
+  if (pacgum && ++pacgum == 40)
+    data.map.sNameLoop.push_back("1");
+  if (++begin <= 200)
+    if (begin == 1)
+      data.map.sName.push_back("0");
+  else if (alive)
     {
+      if (killer_state == 0)
+	data.map.sNameLoop.push_back("2");
+      else
+	data.map.sNameLoop.push_back("3");
       if (killer_state && ++killer_state == 300)
 	{
 	  for (int y = 0 ; y < 4 ; ++y)
@@ -894,7 +916,7 @@ int	Pacman::Game_loop(t_gamedata &data)
       inky_move(data);
       blinky_move(data);
       pinky_move(data);
-      if (is_dead())
+      if (is_dead(data))
 	{
 	  alive = 0;
 	  frame_counter = 0;
@@ -906,6 +928,8 @@ int	Pacman::Game_loop(t_gamedata &data)
       if (pac_death(data))
 	return (score);
     }
+  data.map.gui.score = score;
+  data.map.gui.sec = time(NULL) - time_sec;
   return (1);
 }
 
