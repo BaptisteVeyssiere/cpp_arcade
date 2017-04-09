@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:21:05 2017 Nathan Scutari
-// Last update Sat Apr  8 23:39:16 2017 Nathan Scutari
+// Last update Sun Apr  9 14:35:38 2017 Nathan Scutari
 //
 
 #ifndef __PACMAN_HPP__
@@ -34,6 +34,8 @@ typedef struct	s_node
 
 typedef struct	s_ghost
 {
+  double			speed;
+  int			alive;
   t_pos			direction;
   std::vector<t_pos>	path;
 }		t_ghost;
@@ -47,8 +49,12 @@ private:
   int		current_direction;
   int		facing;
   int		next_direction;
+  int		loop_count;
+  int		killer_state;
   int		score;
+  int		alive;
   int		start[4] = {0};
+  int		death_sprite;
   t_pos		g_pos[4];
   t_ghost	ghost[4];
   std::list<t_node *>	open;
@@ -96,6 +102,15 @@ public:
   void	trace_back(int);
   void	move_ghost(int);
   void	move_to_random_pos(int);
+  void	move_behind_pacman(int);
+  int	ghost_cross_direction(int);
+  void	move_front_pacman(int);
+  int	is_dead();
+  int	pac_death(t_gamedata &);
+  int	check_tp(t_gamedata &);
+  void	find_opposite_pos(t_pos &);
+  int	kill_ghost(int);
+  void	tp_ghost(int);
 
 private:
 };
