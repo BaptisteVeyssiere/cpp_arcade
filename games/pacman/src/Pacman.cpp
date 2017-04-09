@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:27:31 2017 Nathan Scutari
-// Last update Sun Apr  9 17:32:22 2017 Nathan Scutari
+// Last update Sun Apr  9 18:08:59 2017 Nathan Scutari
 //
 
 #include "Pacman.hpp"
@@ -886,8 +886,12 @@ int	Pacman::Game_loop(t_gamedata &data)
 {
   data.map.sName.clear();
   data.map.sNameLoop.clear();
-  if (pacgum && ++pacgum == 40)
-    data.map.sNameLoop.push_back("1");
+  if (pacgum)
+    {
+      if (++pacgum == 40)
+	pacgum = 0;
+      data.map.sNameLoop.push_back("1");
+    }
   if (++begin <= 150)
     {
       if (begin == 1)
