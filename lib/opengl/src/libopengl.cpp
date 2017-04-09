@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sun Apr  9 02:58:04 2017 ilyas semmaoui
+// Last update Sun Apr  9 13:54:50 2017 ilyas semmaoui
 //
 
 #include <iostream>
@@ -131,7 +131,7 @@ void	libopengl::Init(const std::string &game) {
   std::string			fname;
   GLuint			tmp;
 
-  if (SDL_Init(SDL_INIT_VIDEO) == -1 || TTF_Init() == -1)
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1 || TTF_Init() == -1)
     throw library_error("Failed to initialize libopengl !");
   SDL_WM_SetCaption(game.c_str(), NULL);
   SDL_putenv(center);
@@ -289,6 +289,8 @@ void	libopengl::Loop_display(const t_map &map) {
 }
 
 void	libopengl::Release() {
+  TTF_CloseFont(font);
+  TTF_Quit();
   SDL_Quit();
 }
 
