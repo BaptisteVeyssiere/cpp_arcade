@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Sun Apr  9 13:55:21 2017 ilyas semmaoui
+// Last update Sun Apr  9 18:54:41 2017 ilyas semmaoui
 //
 
 #include <SDL/SDL.h>
@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include <map>
 #include "lib_sdl.hpp"
 #include "technical_spec.hpp"
@@ -128,6 +129,37 @@ void	lib_sdl::displayGui(const std::string &str1, const std::string &str2)
   SDL_FreeSurface(surf);
 }
 
+void	lib_sdl::playSounds(const t_map &map)
+{
+  std::vector<std::string>::const_iterator	it;
+  std::vector<std::string>::const_iterator	itl;
+  int	i;
+
+  if (map.sNameLoop.size() > 0 || map.sName.size() > 0) {
+    i = -1;
+    while (++i < soundName.size()) {
+      itl = map.sNameLoop.end();
+      it = map.sName.end();
+      if ((itl = find(map.sNameLoop.begin(), map.sNameLoop.end(), soundName[i]))
+	  != map.sNameLoop.end()) {
+	if (Mix_Playing(i) == 0) {
+	  Mix_PlayChannel(i, soundChunk[i], 0);
+	}
+      }
+      if ((it = find(map.sName.begin(), map.sName.end(), soundName[i])) != map.sName.end()) {
+	if (find(notLoop.begin(), notLoop.end(), i) == notLoop.end())
+	  notLoop.push_back(i);
+	Mix_PlayChannel(i, soundChunk[i], 0);
+      }
+      
+      if (itl == map.sNameLoop.end() && find(notLoop.begin(), notLoop.end(), i) == notLoop.end()) {
+	Mix_HaltChannel(i);
+      }
+    }
+  }
+}
+
+
 void	lib_sdl::Loop_display(const t_map &map)
 {
   int		y;
@@ -139,6 +171,7 @@ void	lib_sdl::Loop_display(const t_map &map)
   SDL_Rect	pos;
   SDL_Surface	*tmp;
 
+  playSounds(map);
   x_size = static_cast<double>(WINSIDE) / static_cast<double>(map.width);
   y_size = static_cast<double>(WINSIDE) / static_cast<double>(map.height);
   y = -1;
@@ -183,6 +216,9 @@ void	lib_sdl::Init(const std::string &game)
   std::string	file_name;
   std::vector<std::string>	files;
   SDL_Surface	*tmp;
+  Mix_Chunk	*music;
+  int		i;
+  
 
   if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) == -1)
     throw library_error("SDL_Init failed\n");
@@ -190,6 +226,8 @@ void	lib_sdl::Init(const std::string &game)
     throw library_error("TTF_Init failed\n");
   if ((font = TTF_OpenFont("lib/sdl/fonts/LemonMilk.otf", 32)) == NULL)
     throw library_error("TTF_OpenFont failed\n");
+  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1)
+    throw library_error("Failed to initialize audio !");
   file_name = "games/" + game;
   get_directory_filenames(file_name, files);
   while (files.size() > 0)
@@ -205,6 +243,24 @@ void	lib_sdl::Init(const std::string &game)
     throw std::exception();
   SDL_WM_SetCaption(game.c_str(), NULL);
   first_loop = true;
+  files.clear();
+  get_directory_filenames("games/"+game+"/sounds", files);
+  while (files.size() > 0) {
+    file_name = get_name(files.back());
+    if ((music = Mix_LoadWAV(files.back().c_str())) != NULL) {
+      soundName.push_back(file_name);
+      soundChunk.push_back(music);
+    }
+    files.pop_back();
+  }
+  if (soundName.size() != soundChunk.size())
+    throw library_error("Something went wrong !");
+  if (soundName.size() > 0) {
+    Mix_AllocateChannels(soundName.size());
+    i = -1;
+    while (++i < soundName.size())
+      Mix_Volume(i, MIX_MAX_VOLUME / 2);
+  }
 }
 
 void	lib_sdl::Get_key(t_gamedata &gamedata) const
@@ -240,6 +296,19 @@ void	lib_sdl::Get_key(t_gamedata &gamedata) const
 
 void	lib_sdl::Release()
 {
+  int	i;
+
+  i = soundChunk.size();
+  while (--i >= 0) {
+    if (Mix_Playing(i) == 1)
+      Mix_HaltChannel(i);
+    Mix_FreeChunk(soundChunk[i]);
+    soundChunk.pop_back();
+  }
+  soundChunk.clear();
+  soundName.clear();
+  notLoop.clear();
+  Mix_CloseAudio();
   for (std::map<std::string, SDL_Surface *>::iterator it = textures.begin() ;
        it != textures.end() ; ++it)
     SDL_FreeSurface(it->second);

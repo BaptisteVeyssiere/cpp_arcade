@@ -11,7 +11,7 @@ NAME	= lib_arcade_opengl.so
 
 RM	= rm -f
 
-CXX	= g++
+CXX	= g++ -g
 
 MKDIR	= mkdir -p
 
@@ -26,7 +26,7 @@ OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 CXXFLAGS	= -Iinclude
 
-LDFLAGS = -lSDL -lSDL_ttf -lSDL_image -lGL 
+LDFLAGS = -lSDL -lSDL_ttf -lSDL_image -lGL -lSDL_mixer
 
 $(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -shared -o $(NAME) $(OBJ)

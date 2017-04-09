@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Tue Mar 21 11:33:44 2017 Nathan Scutari
-// Last update Sun Apr  9 01:20:55 2017 ilyas semmaoui
+// Last update Sun Apr  9 18:49:32 2017 ilyas semmaoui
 //
 
 #ifndef __LIB_SDL_HPP__
@@ -15,6 +15,7 @@
 #include <string>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
+#include <SDL/SDL_mixer.h>
 #include "IGraph.hpp"
 #include "gamedata.hpp"
 
@@ -24,12 +25,18 @@ class lib_sdl : public IGraph
   std::map<std::string, SDL_Surface *>	textures;
   SDL_Surface				*win;
   TTF_Font				*font;
+  std::vector<std::string>		soundName;
+  std::vector<Mix_Chunk*>		soundChunk;
+  std::vector<int>			notLoop;
+
 
 private:
   lib_sdl(lib_sdl &other);
   lib_sdl	&operator=(lib_sdl &other);
 
   void		displayGui(const std::string &str1, const std::string &str2);
+  void		playSounds(const t_map &map);
+
   
 public:
   lib_sdl();

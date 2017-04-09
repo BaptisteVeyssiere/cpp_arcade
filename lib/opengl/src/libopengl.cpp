@@ -5,10 +5,11 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sun Apr  9 13:54:50 2017 ilyas semmaoui
+// Last update Sun Apr  9 18:32:18 2017 ilyas semmaoui
 //
 
 #include <iostream>
+#include <algorithm>
 #include <SDL/SDL_image.h>
 #include "library_error.hpp"
 #include "technical_spec.hpp"
@@ -130,6 +131,8 @@ void	libopengl::Init(const std::string &game) {
   std::vector<std::string>	files;
   std::string			fname;
   GLuint			tmp;
+  Mix_Chunk			*music;
+  int				i;
 
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1 || TTF_Init() == -1)
     throw library_error("Failed to initialize libopengl !");
@@ -137,6 +140,8 @@ void	libopengl::Init(const std::string &game) {
   SDL_putenv(center);
   if (SDL_SetVideoMode(WINSIDE, WINSIDE+GUISIDE, 32, SDL_OPENGL) == NULL)
     throw library_error("Failed to initialize libopengl !");
+  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1)
+    throw library_error("Failed to initialize audio !");
   glEnable(GL_TEXTURE_2D);
   if ((font = TTF_OpenFont("lib/opengl/fonts/LemonMilk.otf", 32)) == NULL)
     throw library_error("Failed to load font !");
@@ -146,6 +151,24 @@ void	libopengl::Init(const std::string &game) {
     if ((tmp = getTextureId(files.back())) != -1)
       textures[fname] = tmp;
     files.pop_back();
+  }
+  files.clear();
+  get_directory_filenames("games/"+game+"/sounds", files);
+  while (files.size() > 0) {
+    fname = getFileName(files.back());
+    if ((music = Mix_LoadWAV(files.back().c_str())) != NULL) {
+      soundName.push_back(fname);
+      soundChunk.push_back(music);
+    }
+    files.pop_back();
+  }
+  if (soundName.size() != soundChunk.size())
+    throw library_error("Something went wrong !");
+  if (soundName.size() > 0) {
+    Mix_AllocateChannels(soundName.size());
+    i = -1;
+    while (++i < soundName.size())
+      Mix_Volume(i, MIX_MAX_VOLUME / 2);
   }
 }
 
@@ -167,6 +190,36 @@ void	libopengl::putBackground() const
   glVertex2d(1.0, (static_cast<double>(WINSIDE)*2.0/(static_cast<double>(WINSIDE)+static_cast<double>(GUISIDE))-1.0)*-1.0);
 
   glEnd();
+}
+
+void	libopengl::playSounds(const t_map &map)
+{
+  std::vector<std::string>::const_iterator	it;
+  std::vector<std::string>::const_iterator	itl;
+  int	i;
+
+  if (map.sNameLoop.size() > 0 || map.sName.size() > 0) {
+    i = -1;
+    while (++i < soundName.size()) {
+      itl = map.sNameLoop.end();
+      it = map.sName.end();
+      if ((itl = find(map.sNameLoop.begin(), map.sNameLoop.end(), soundName[i]))
+	  != map.sNameLoop.end()) {
+	if (Mix_Playing(i) == 0) {
+	  Mix_PlayChannel(i, soundChunk[i], 0);
+	}
+      }
+      if ((it = find(map.sName.begin(), map.sName.end(), soundName[i])) != map.sName.end()) {
+	if (find(notLoop.begin(), notLoop.end(), i) == notLoop.end())
+	  notLoop.push_back(i);
+	Mix_PlayChannel(i, soundChunk[i], 0);
+      }
+      
+      if (itl == map.sNameLoop.end() && find(notLoop.begin(), notLoop.end(), i) == notLoop.end()) {
+	Mix_HaltChannel(i);
+      }
+    }
+  }
 }
 
 void	libopengl::displayGui(const t_map &map)
@@ -239,6 +292,7 @@ void	libopengl::Loop_display(const t_map &map) {
   GLuint	tmp;
   GLdouble	angle;
 
+  playSounds(map);
   glClear(GL_COLOR_BUFFER_BIT);
   x_size = static_cast<double>(WINSIDE) / static_cast<double>(map.width);
   y_size = static_cast<double>(WINSIDE) / static_cast<double>(map.height);
@@ -289,6 +343,19 @@ void	libopengl::Loop_display(const t_map &map) {
 }
 
 void	libopengl::Release() {
+  int	i;
+  
+  i = soundChunk.size();
+  while (--i >= 0) {
+    if (Mix_Playing(i) == 1)
+      Mix_HaltChannel(i);
+    Mix_FreeChunk(soundChunk[i]);
+    soundChunk.pop_back();
+  }
+  soundChunk.clear();
+  soundName.clear();
+  notLoop.clear();
+  Mix_CloseAudio();
   TTF_CloseFont(font);
   TTF_Quit();
   SDL_Quit();

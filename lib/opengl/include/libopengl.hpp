@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
+#include <SDL/SDL_mixer.h>
 #include "IGraph.hpp"
 
 class libopengl : public IGraph {
@@ -15,6 +16,9 @@ private:
   std::unordered_map<std::string,GLuint>	textures;
   SDL_Event					event;
   TTF_Font					*font;
+  std::vector<std::string>			soundName;
+  std::vector<Mix_Chunk*>			soundChunk;
+  std::vector<int>				notLoop;
 
 private:
 
@@ -24,6 +28,7 @@ private:
   std::string	tile_to_file(t_block const &tile) const;
   void		putBackground() const;
   void		displayGui(const t_map &map);
+  void		playSounds(const t_map &map);
     
 public:
 
