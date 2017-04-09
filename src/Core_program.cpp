@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 16:15:54 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 22:04:27 2017 Baptiste Veyssiere
 //
 
 #include "Core_program.hpp"
@@ -251,14 +251,28 @@ int	Core_program::Get_selected_game()
 
 int	Core_program::Get_Username()
 {
+  int	ret;
+
+  ret = 1;
   this->username = "";
-  while (this->username.size() < 1)
+  while (this->username.size() < 1 || ret == 1)
     {
       std::cout << "Please enter a username:" << std::endl;
       getline(std::cin, this->username);
       if (this->username == "quit" || this->username == "q")
 	return (1);
-      if (this->username.size() > 0)
+      for (unsigned int i = 0; i < this->username.size(); i++)
+	if ((this->username[i] >= 'A' && this->username[i] <= 'Z') ||
+	    (this->username[i] >= 'a' && this->username[i] <= 'z') ||
+	    (this->username[i] >= '0' && this->username[i] <= '9') ||
+	    this->username[i] == '-' || this->username[i] == '_')
+	  ret = 0;
+	else
+	  {
+	    ret = 1;
+	    break;
+	  }
+      if (this->username.size() > 0 && ret == 0)
 	std::cout << "Hi " << this->username << std::endl;
       else
 	{
