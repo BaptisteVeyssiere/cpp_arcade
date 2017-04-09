@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Sun Apr  9 02:39:38 2017 ilyas semmaoui
+// Last update Sun Apr  9 13:55:21 2017 ilyas semmaoui
 //
 
 #include <SDL/SDL.h>
@@ -244,6 +244,8 @@ void	lib_sdl::Release()
        it != textures.end() ; ++it)
     SDL_FreeSurface(it->second);
   textures.clear();
+  TTF_CloseFont(font);
+  TTF_Quit();
   SDL_Quit();
 }
 
