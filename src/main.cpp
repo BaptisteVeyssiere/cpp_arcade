@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 16:09:16 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 17:37:25 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -31,8 +31,11 @@ static void	init_gamedata(t_gamedata &gamedata)
   gamedata.map.gui.sec = 0;
 }
 
-static void		check_restart_menu(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_program &core)
+static int		check_restart_menu(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_program &core)
 {
+  int			ret;
+  int			i;
+
   if (gamedata.restart)
     {
       init_gamedata(gamedata);
@@ -41,6 +44,22 @@ static void		check_restart_menu(t_gamedata &gamedata, IGraph **graph, IGame **ga
       (*game) = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
       (*game)->Get_map(gamedata.map);
     }
+  if (gamedata.menu)
+    {
+      (*graph)->Release();
+      init_gamedata(gamedata);
+      while ((ret = core.Get_selected_game()))
+	if (ret == 2)
+	  return (1);
+      (*graph)->Init(core.game);
+      core.load_game_lib("games/lib_arcade_" + core.game + ".so");
+      i = -1;
+      while (++i >= 0 && core.game.find(core.game_list[i]) == std::string::npos);
+      core.game_selector = i;
+      *game = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
+      (*game)->Get_map(gamedata.map);
+    }
+  return (0);
 }
 
 static void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_program &core)
@@ -141,7 +160,8 @@ static void	main_loop(const std::string &libname)
       init_gamedata(gamedata);
       graph->Get_key(gamedata);
       check_lib_change(gamedata, &graph, &game, core);
-      check_restart_menu(gamedata, &graph, &game, core);
+      if (check_restart_menu(gamedata, &graph, &game, core))
+	return ;
       t = clock();
       usleep((1000000 / FPS - (t - previous)) < 0 ? 0 : (1000000 / FPS - (t - previous)));
       previous = t;
