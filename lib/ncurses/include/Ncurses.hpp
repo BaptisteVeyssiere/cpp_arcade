@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 16:35:49 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 19:58:41 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
@@ -66,7 +66,7 @@ private:
 
 public:
   virtual void	Init(const std::string &game);
-  virtual void	Loop_display(const t_map &map) const;
+  virtual void	Loop_display(const t_map &map);
   virtual void	Release();
   virtual void	Get_key(t_gamedata &gamedata) const;
 

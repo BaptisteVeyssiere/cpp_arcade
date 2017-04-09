@@ -62,6 +62,11 @@ lib:
 
 all: $(NAME)
 
+clean_lib:
+	@$(MAKE) -C $(NCURSESDIR) fclean
+	@$(MAKE) -C $(GLDIR) fclean
+	@$(MAKE) -C $(SDLDIR) fclean
+
 clean:
 	@$(RM) $(OBJ)
 	@$(MAKE) -C $(NCURSESDIR) clean

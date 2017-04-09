@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 05:57:26 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 19:41:33 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -155,7 +155,10 @@ int	Nibbler::check_ahead(t_map &game_map)
       if (next_block == blockType::BLOCK ||
 	  next_block == blockType::SNAKTAIL ||
 	  next_block == blockType::OBSTACLE)
-	return (1);
+	{
+	  game_map.sName.push_back("wall");
+	  return (1);
+	}
     }
   return (0);
 }
@@ -251,6 +254,7 @@ void	Nibbler::move_nibbler(t_map &map)
   if (map.map[y][x][0].type == blockType::POWERUP)
     {
       powerup = true;
+      map.sName.push_back("eat");
       map.map[y][x][0].type = blockType::EMPTY;
     }
   this->move(map);
@@ -272,6 +276,7 @@ int	Nibbler::Game_loop(t_gamedata &data)
   this->change_direction(data);
   if (this->counter > (FPS / 12))
     {
+      data.map.sName.clear();
       if (this->check_ahead(data.map))
 	return (this->score);
       this->move_nibbler(data.map);

@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 18:20:12 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 19:32:35 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -139,7 +139,7 @@ void	Ncurses::color_off(const t_map &map, int i, int j, int k) const
     wattroff(this->win, COLOR_PAIR(6));
 }
 
-void	Ncurses::Loop_display(const t_map &map) const
+void	Ncurses::Loop_display(const t_map &map)
 {
   int	x;
   int	y;
