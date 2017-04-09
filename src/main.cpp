@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 23:20:09 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 23:29:03 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -182,12 +182,12 @@ int	main(int ac, char **av)
 	  std::cout << "USAGE: " << av[0] << " PATH_TO/lib_arcade_xxx.so" << std::endl;
 	  return (0);
 	}
+      main_loop(av[1]);
     }
   catch (const std::exception &e)
     {
       std::cerr << e.what() << std::endl;
       return (1);
     }
-  main_loop(av[1]);
   return (0);
 }
