@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 21:28:15 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 21:39:41 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -20,7 +20,6 @@ void    check_ncurses_ret(int ret, int error, const std::string &msg)
 {
   if (ret == error)
     {
-      //check_ncurses_ret(delwin(this->win), ERR, DELWIN_ERROR);
       check_ncurses_ret(endwin(), ERR, ENDWIN_ERROR);
       throw library_error(msg);
     }
