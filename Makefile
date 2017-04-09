@@ -74,9 +74,6 @@ clean:
 fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(LIBNAME)
-	@$(MAKE) -C $(NCURSESDIR) fclean
-	@$(MAKE) -C $(GLDIR) fclean
-	@$(MAKE) -C $(SDLDIR) fclean
 	@$(MAKE) -C $(NIBBLERDIR) fclean
 	@$(MAKE) -C $(PACMANDIR) fclean
 
