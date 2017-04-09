@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 23:12:39 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 23:25:05 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -270,6 +270,7 @@ void	Nibbler::move_nibbler(t_map &map)
 
 int	Nibbler::Game_loop(t_gamedata &data)
 {
+  data.map.sName.clear();
   if (this->end > 0)
     {
       ++this->end;
@@ -281,7 +282,6 @@ int	Nibbler::Game_loop(t_gamedata &data)
   this->change_direction(data);
   if (this->counter > (FPS / 12))
     {
-      data.map.sName.clear();
       if (this->check_ahead(data.map))
 	{
 	  this->end = 1;
