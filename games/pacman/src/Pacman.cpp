@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:27:31 2017 Nathan Scutari
-// Last update Sun Apr  9 18:24:28 2017 Nathan Scutari
+// Last update Sun Apr  9 18:25:42 2017 Nathan Scutari
 //
 
 #include "Pacman.hpp"
@@ -103,7 +103,7 @@ void	Pacman::Get_map(t_map &game_map)
     }
   pac_pos.y = 17.0;
   pac_pos.x = 14.0;
-  pacgum = 1;
+  pacgum = 0;
   g_pos[0].x = 12;
   g_pos[0].y = 15;
   g_pos[1].x = 16;
