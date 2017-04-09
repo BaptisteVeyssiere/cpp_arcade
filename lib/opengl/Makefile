@@ -24,7 +24,7 @@ OBJDIR	= obj
 
 OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
-CXXFLAGS	= -Iinclude
+CXXFLAGS	= -Iinclude -W -Wall -Werror
 
 LDFLAGS = -lSDL -lSDL_ttf -lSDL_image -lGL -lSDL_mixer
 

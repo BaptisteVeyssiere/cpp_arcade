@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sun Apr  9 19:29:27 2017 ilyas semmaoui
+// Last update Sun Apr  9 22:54:42 2017 ilyas semmaoui
 //
 
 #include <iostream>
@@ -46,13 +46,16 @@ std::string	libopengl::tile_to_file(t_block const &tile) const {
 }
 
 GLuint	libopengl::getFontId(std::string const &str, uint32_t &w, uint32_t &h) {
-  SDL_Color		color = {255, 255, 255};
+  SDL_Color		color;
   SDL_PixelFormat	format;
   SDL_Surface		*text;
   SDL_Surface		*tmp;
   GLuint		id;
   int			iformat;
 
+  color.r = 255;
+  color.g = 255;
+  color.b = 255;
   if ((tmp = TTF_RenderText_Solid(font, str.c_str(), color)) == NULL)
     throw library_error("Failed to make text !");
   format = *(tmp->format);
@@ -148,7 +151,7 @@ void	libopengl::Init(const std::string &game) {
   get_directory_filenames("games/"+game, files);
   while (files.size() > 0) {
     fname = getFileName(files.back());
-    if ((tmp = getTextureId(files.back())) != -1)
+    if ((tmp = getTextureId(files.back())) != static_cast<GLuint>(-1))
       textures[fname] = tmp;
     files.pop_back();
   }
@@ -167,7 +170,7 @@ void	libopengl::Init(const std::string &game) {
   if (soundName.size() > 0) {
     Mix_AllocateChannels(soundName.size());
     i = -1;
-    while (++i < soundName.size())
+    while (++i < static_cast<int>(soundName.size()))
       Mix_Volume(i, MIX_MAX_VOLUME / 2);
   }
 }
@@ -200,7 +203,7 @@ void	libopengl::playSounds(const t_map &map)
 
   if (map.sNameLoop.size() > 0 || map.sName.size() > 0) {
     i = -1;
-    while (++i < soundName.size()) {
+    while (++i < static_cast<int>(soundName.size())) {
       itl = map.sNameLoop.end();
       it = map.sName.end();
       if ((itl = find(map.sNameLoop.begin(), map.sNameLoop.end(), soundName[i]))
@@ -300,13 +303,13 @@ void	libopengl::Loop_display(const t_map &map) {
     throw library_error("Failed to find a texture !");
   putBackground();
   y = -1;
-  while (++y < map.height)
+  while (++y < static_cast<int>(map.height))
     {
       x = -1;
-      while (++x < map.width)
+      while (++x < static_cast<int>(map.width))
 	{
 	  i = -1;
-	  while (++i < map.map[y][x].size()) {
+	  while (++i < static_cast<int>(map.map[y][x].size())) {
 	    posx = ((static_cast<double>(x) + map.map[y][x][i].shiftx) * x_size) * 2.0 / static_cast<double>(WINSIDE);
 	    posy = ((static_cast<double>(y) + map.map[y][x][i].shifty) * y_size) * 2.0 / static_cast<double>(WINSIDE+GUISIDE);
 	    if ((file = this->tile_to_file(map.map[y][x][i])) != "")

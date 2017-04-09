@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 22:44:21 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 22:56:59 2017 ilyas semmaoui
 //
 
 #include "Core_program.hpp"
@@ -33,7 +33,6 @@ Core_program::~Core_program()
 
 void	Core_program::load_graphic_lib(const std::string &graphic_libname)
 {
-  std::cout << graphic_libname << std::endl;
   if (this->graphic_handle && dlclose(this->graphic_handle))
     throw core_program_exception(dlerror());
   this->graphic_handle = dlopen(graphic_libname.c_str(), RTLD_NOW);
