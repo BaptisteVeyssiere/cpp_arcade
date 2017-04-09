@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sun Apr  9 00:50:58 2017 ilyas semmaoui
+// Last update Sun Apr  9 02:58:04 2017 ilyas semmaoui
 //
 
 #include <iostream>
@@ -161,10 +161,10 @@ void	libopengl::putBackground() const
   glVertex2d(-1.0, 1.0);
 
   glTexCoord2d(0, 1);
-  glVertex2d(-1.0, -1.0);
+  glVertex2d(-1.0, (static_cast<double>(WINSIDE)*2.0/(static_cast<double>(WINSIDE)+static_cast<double>(GUISIDE))-1.0)*-1.0);
 
   glTexCoord2d(1, 1);
-  glVertex2d(1.0, -1.0);
+  glVertex2d(1.0, (static_cast<double>(WINSIDE)*2.0/(static_cast<double>(WINSIDE)+static_cast<double>(GUISIDE))-1.0)*-1.0);
 
   glEnd();
 }
