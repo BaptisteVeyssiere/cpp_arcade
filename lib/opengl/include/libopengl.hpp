@@ -4,6 +4,8 @@
 #include <string>
 #include <unordered_map>
 #include <GL/gl.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include "IGraph.hpp"
 
 class libopengl : public IGraph {

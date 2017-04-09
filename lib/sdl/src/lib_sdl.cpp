@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Sat Apr  8 16:54:13 2017 Nathan Scutari
+// Last update Sun Apr  9 01:21:36 2017 ilyas semmaoui
 //
 
 #include <SDL/SDL.h>
@@ -96,6 +96,38 @@ void	lib_sdl::resize_textures(std::map<std::string, SDL_Surface *> &textures,
     }
 }
 
+void	lib_sdl::displayGui(const std::string &str1, const std::string &str2)
+{
+  SDL_Surface	*surf;
+  SDL_Surface	*tmp;
+  SDL_Rect	pos;
+  double	x_size;
+  double	y_size;
+  int		y;
+  int		x;
+
+  if ((tmp = TTF_RenderText_Solid(font, str1.c_str(), {255, 255, 255})) == NULL)
+    throw library_error("TTF_RenderText_Solid failed\n");
+  x_size = static_cast<double>(tmp->w) / (static_cast<double>(tmp->h) / ((static_cast<double>(GUISIDE) / 2.0) - 10.0));
+  y_size = (static_cast<double>(GUISIDE) / 2.0) - 10.0;
+  pos.x = 5;
+  pos.y = WINSIDE + 5;
+  surf = zoomSurface(tmp, x_size/tmp->w, y_size/tmp->h, 1);
+  SDL_BlitSurface(surf, NULL, win, &pos);
+  SDL_FreeSurface(tmp);
+  SDL_FreeSurface(surf);
+  if ((tmp = TTF_RenderText_Solid(font, str2.c_str(), {255, 255, 255})) == NULL)
+    throw library_error("TTF_RenderText_Solid failed\n");
+  x_size = static_cast<double>(tmp->w) / (static_cast<double>(tmp->h) / ((static_cast<double>(GUISIDE) / 2.0) - 10.0));
+  y_size = (static_cast<double>(GUISIDE) / 2.0) - 10.0;
+  pos.x = 5;
+  pos.y = WINSIDE + 10 + y_size;
+  surf = zoomSurface(tmp, x_size/tmp->w, y_size/tmp->h, 1);
+  SDL_BlitSurface(surf, NULL, win, &pos);
+  SDL_FreeSurface(tmp);
+  SDL_FreeSurface(surf);
+}
+
 void	lib_sdl::Loop_display(const t_map &map)
 {
   int		y;
@@ -140,6 +172,7 @@ void	lib_sdl::Loop_display(const t_map &map)
 		 }
 	}
     }
+  displayGui("Score: " + std::to_string(map.gui.score), "Time: " + std::to_string(map.gui.sec));
   SDL_Flip(win);
 }
 
@@ -152,6 +185,10 @@ void	lib_sdl::Init(const std::string &game)
 
   if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) == -1)
     throw library_error("SDL_Init failed\n");
+  if (TTF_Init() == -1)
+    throw library_error("TTF_Init failed\n");
+  if ((font = TTF_OpenFont("lib/sdl/fonts/LemonMilk.otf", 32)) == NULL)
+    throw library_error("TTF_OpenFont failed\n");
   file_name = "games/" + game;
   get_directory_filenames(file_name, files);
   while (files.size() > 0)
@@ -162,7 +199,7 @@ void	lib_sdl::Init(const std::string &game)
       files.pop_back();
     }
   SDL_putenv(center);
-  if ((win = SDL_SetVideoMode(WINSIDE, WINSIDE, 32,
+  if ((win = SDL_SetVideoMode(WINSIDE, WINSIDE+GUISIDE, 32,
 			      SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
     throw std::exception();
   SDL_WM_SetCaption(game.c_str(), NULL);

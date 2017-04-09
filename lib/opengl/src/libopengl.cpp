@@ -5,21 +5,16 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sat Apr  8 23:14:46 2017 ilyas semmaoui
+// Last update Sun Apr  9 00:50:58 2017 ilyas semmaoui
 //
 
 #include <iostream>
-#include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
 #include "library_error.hpp"
 #include "technical_spec.hpp"
 #include "libopengl.hpp"
 
 libopengl::libopengl() {
-  if (SDL_Init(SDL_INIT_VIDEO) == -1 || TTF_Init() == -1)
-    throw library_error("Failed to initialize libopengl !");
-  font = NULL;
 }
 
 libopengl::~libopengl() {
@@ -45,7 +40,7 @@ std::string	libopengl::tile_to_file(t_block const &tile) const {
     return ("");
   file = std::to_string(value);
   file += "-";
-  file += tile.sprite + 48;
+  file += std::to_string(tile.sprite);
   return (file);
 }
 
@@ -136,6 +131,8 @@ void	libopengl::Init(const std::string &game) {
   std::string			fname;
   GLuint			tmp;
 
+  if (SDL_Init(SDL_INIT_VIDEO) == -1 || TTF_Init() == -1)
+    throw library_error("Failed to initialize libopengl !");
   SDL_WM_SetCaption(game.c_str(), NULL);
   SDL_putenv(center);
   if (SDL_SetVideoMode(WINSIDE, WINSIDE+GUISIDE, 32, SDL_OPENGL) == NULL)
@@ -228,23 +225,6 @@ void	libopengl::displayGui(const t_map &map)
   glVertex2d(x+nw, (y+nh)*-1);
   glEnd();
   glDeleteTextures(1, &tmp);
-  /*tmp = getFontId("Time : "+std::to_string(map->gui.sec), w, h);
-  glBindTexture(GL_TEXTURE_2D, tmp);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glPushMatrix();
-  glMatrixMode(GL_MODELVIEW);
-  glBegin(GL_QUADS);
-  glTexCoord2d(1, 0);
-  glVertex2d(0.5, 0.5);
-  glTexCoord2d(0, 0);
-  glVertex2d(-0.5, 0.5);
-  glTexCoord2d(0, 1);
-  glVertex2d(-0.5, -0.5);
-  glTexCoord2d(1, 1);
-  glVertex2d(0.5, -0.5);
-  glEnd();
-  glDeleteTextures(1, &tmp);*/
 }
 
 void	libopengl::Loop_display(const t_map &map) {

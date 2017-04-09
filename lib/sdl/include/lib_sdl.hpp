@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Tue Mar 21 11:33:44 2017 Nathan Scutari
-// Last update Tue Apr  4 20:17:15 2017 Nathan Scutari
+// Last update Sun Apr  9 01:20:55 2017 ilyas semmaoui
 //
 
 #ifndef __LIB_SDL_HPP__
@@ -14,6 +14,7 @@
 #include <map>
 #include <string>
 #include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include "IGraph.hpp"
 #include "gamedata.hpp"
 
@@ -22,11 +23,14 @@ class lib_sdl : public IGraph
   bool					first_loop;
   std::map<std::string, SDL_Surface *>	textures;
   SDL_Surface				*win;
+  TTF_Font				*font;
 
 private:
   lib_sdl(lib_sdl &other);
   lib_sdl	&operator=(lib_sdl &other);
 
+  void		displayGui(const std::string &str1, const std::string &str2);
+  
 public:
   lib_sdl();
   virtual ~lib_sdl();
