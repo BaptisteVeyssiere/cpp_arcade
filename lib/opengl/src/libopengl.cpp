@@ -5,7 +5,7 @@
 // Login   <ilyas.semmaoui@epitech.eu>
 //
 // Started on  Tue Apr  4 00:59:31 2017 ilyas semmaoui
-// Last update Sun Apr  9 18:32:18 2017 ilyas semmaoui
+// Last update Sun Apr  9 19:29:27 2017 ilyas semmaoui
 //
 
 #include <iostream>
@@ -383,6 +383,10 @@ void	libopengl::Get_key(t_gamedata &gamedata) const {
     return ;
   i = -1;
   value = static_cast<bool*>(&gamedata.prev_graph);
+  if (event.type == SDL_QUIT) {
+    value[10] = true;
+    return ;
+  }
   while (++i < 11)
     {
       if (event.key.keysym.sym == key[i])

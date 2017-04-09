@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Sun Apr  9 18:54:41 2017 ilyas semmaoui
+// Last update Sun Apr  9 19:31:55 2017 ilyas semmaoui
 //
 
 #include <SDL/SDL.h>
@@ -287,6 +287,10 @@ void	lib_sdl::Get_key(t_gamedata &gamedata) const
     return ;
   i = -1;
   value = static_cast<bool*>(&gamedata.prev_graph);
+  if (event.type == SDL_QUIT) {
+    value[10] = true;
+    return ;
+  }
   while (++i < 11)
     {
       if (event.key.keysym.sym == key[i])

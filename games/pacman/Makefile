@@ -15,7 +15,8 @@ CXX	= g++
 
 MKDIR	= mkdir -p
 
-SRC	= src/Pacman.cpp
+SRC	= src/Pacman.cpp	\
+	src/play.cpp
 
 SRCDIR	= src
 
