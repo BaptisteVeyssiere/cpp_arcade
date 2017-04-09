@@ -5,11 +5,12 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 17:37:25 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 22:28:03 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
 #include <ctime>
+#include <csignal>
 #include "Core_program.hpp"
 #include "IGraph.hpp"
 #include "IGame.hpp"
@@ -172,6 +173,7 @@ static void	main_loop(const std::string &libname)
 
 int	main(int ac, char **av)
 {
+  std::signal(SIGINT, SIG_IGN);
   if (ac != 2)
     {
       std::cout << "USAGE: " << av[0] << " PATH_TO/lib_arcade_xxx.so" << std::endl;

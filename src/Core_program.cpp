@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 22:04:27 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 22:24:36 2017 Baptiste Veyssiere
 //
 
 #include "Core_program.hpp"
@@ -238,7 +238,9 @@ void	Core_program::Aff_Scores() const
 int	Core_program::Get_selected_game()
 {
   std::cout << "Please choose your game in the list above:" << std::endl;
+  this->username.clear();
   getline(std::cin, this->game);
+  std::cin.clear();
   if (find(this->game_list.begin(), this->game_list.end(), this->game) == this->game_list.end())
     {
       if (this->game == "quit" || this->game == "q")
@@ -257,8 +259,10 @@ int	Core_program::Get_Username()
   this->username = "";
   while (this->username.size() < 1 || ret == 1)
     {
+      this->username.clear();
       std::cout << "Please enter a username:" << std::endl;
       getline(std::cin, this->username);
+      std::cin.clear();
       if (this->username == "quit" || this->username == "q")
 	return (1);
       for (unsigned int i = 0; i < this->username.size(); i++)
