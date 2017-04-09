@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 06:16:15 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 14:52:05 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -27,9 +27,23 @@ static void	init_gamedata(t_gamedata &gamedata)
   gamedata.down = false;
   gamedata.left = false;
   gamedata.right = false;
+  gamedata.map.gui.score = 0;
+  gamedata.map.gui.sec = 0;
 }
 
-void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_program &core)
+static void		check_restart_menu(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_program &core)
+{
+  if (gamedata.restart)
+    {
+      init_gamedata(gamedata);
+      (*graph)->Release();
+      (*graph)->Init(core.game_list[core.game_selector]);
+      (*game) = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
+      (*game)->Get_map(gamedata.map);
+    }
+}
+
+static void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game, Core_program &core)
 {
   if (gamedata.next_graph)
     {
@@ -105,6 +119,7 @@ static void	main_loop(const std::string &libname)
 	  core.Add_Score(score);
 	  graph->Release();
 	  std::cout << "Your score is " << score << std::endl;
+	  init_gamedata(gamedata);
 	  while (core.Get_selected_game());
 	  graph->Init(core.game);
 	  core.load_game_lib("games/lib_arcade_" + core.game + ".so");
@@ -119,6 +134,7 @@ static void	main_loop(const std::string &libname)
       init_gamedata(gamedata);
       graph->Get_key(gamedata);
       check_lib_change(gamedata, &graph, &game, core);
+      check_restart_menu(gamedata, &graph, &game, core);
       t = clock();
       usleep((1000000 / FPS - (t - previous)) < 0 ? 0 : (1000000 / FPS - (t - previous)));
       previous = t;

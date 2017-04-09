@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 05:52:46 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 14:38:06 2017 Baptiste Veyssiere
 //
 
 #include "Core_program.hpp"
@@ -127,13 +127,11 @@ void	Core_program::Save_score() const
   for (unsigned int id = 0; id < this->game_list.size(); id++)
     {
       file.open("games/"+this->game_list[id]+"/highscore", std::ios::trunc);
-      std::cout << "games/"+this->game_list[id]+"/highscore" << std::endl;
       if (file.is_open())
 	for (unsigned int i = 0; i < this->score_list[id].size(); i++)
 	  {
 	    username = this->score_list[id][i].username;
 	    score = this->score_list[id][i].score;
-	    std::cout << username << " " << score << std::endl;
 	    file << username << " " << score << std::endl;
 	  }
       else
