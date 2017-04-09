@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 14:52:05 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 16:09:16 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -97,12 +97,14 @@ static void	main_loop(const std::string &libname)
   clock_t	previous;
   int		i;
   unsigned int	score;
+  int		ret;
 
   i = -1;
   while (++i >= 0 && libname.find(core.graph_list[i]) == std::string::npos);
   core.graph_selector = i;
   init_gamedata(gamedata);
-  core.Display_menu();
+  if (core.Display_menu())
+    return ;
   core.load_game_lib("games/lib_arcade_" + core.game + ".so");
   i = -1;
   while (++i >= 0 && core.game.find(core.game_list[i]) == std::string::npos);
@@ -120,7 +122,12 @@ static void	main_loop(const std::string &libname)
 	  graph->Release();
 	  std::cout << "Your score is " << score << std::endl;
 	  init_gamedata(gamedata);
-	  while (core.Get_selected_game());
+	  while ((ret = core.Get_selected_game()))
+	    if (ret == 2)
+	      {
+		core.Save_score();
+		return ;
+	      }
 	  graph->Init(core.game);
 	  core.load_game_lib("games/lib_arcade_" + core.game + ".so");
 	  i = -1;

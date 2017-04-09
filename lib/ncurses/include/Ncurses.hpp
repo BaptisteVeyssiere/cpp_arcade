@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 04:22:09 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 16:35:49 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
@@ -21,7 +21,7 @@
 # include "technical_spec.hpp"
 
 # define HEIGHT		40
-# define WIDTH		40
+# define WIDTH		80
 # define STARTX		0
 # define STARTY		0
 # define BOXX		0
@@ -74,6 +74,8 @@ private:
   void	Get_sprites(const std::string &);
   char	get_sym(const std::string &) const;
   void	Gui_display(const t_gui &) const;
+  void	color_on(const t_map &, int, int, int) const;
+  void	color_off(const t_map &, int, int, int) const;
 };
 
 extern "C" IGraph	*factory();
