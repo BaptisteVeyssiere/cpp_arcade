@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 19:32:35 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 21:28:15 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -19,7 +19,11 @@ Ncurses::Ncurses(const Ncurses &) {}
 void    check_ncurses_ret(int ret, int error, const std::string &msg)
 {
   if (ret == error)
-    throw library_error(msg);
+    {
+      //check_ncurses_ret(delwin(this->win), ERR, DELWIN_ERROR);
+      check_ncurses_ret(endwin(), ERR, ENDWIN_ERROR);
+      throw library_error(msg);
+    }
 }
 
 char	Ncurses::get_sym(const std::string &name) const
