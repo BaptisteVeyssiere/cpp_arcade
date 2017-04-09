@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Sat Apr  8 00:33:48 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 05:57:26 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -27,10 +27,19 @@ void	Nibbler::Get_file_content(std::vector<std::string> &coded_map) const
     throw game_error("map.txt was not found (must be in games/nibbler/map/)");
 }
 
-void	Nibbler::Add_mapline(const std::string &line, std::vector<std::vector<t_block>> &map) const
+void	Nibbler::Add_block(t_block &block, std::vector<std::vector<t_block>> &mapline) const
 {
-  std::vector<t_block>	mapline;
-  t_block		block;
+  std::vector<t_block>	block_list;
+
+  block_list.push_back(block);
+  mapline.push_back(block_list);
+}
+
+void	Nibbler::Add_mapline(const std::string &line, std::vector<std::vector<std::vector<t_block>>> &map) const
+{
+  std::vector<std::vector<t_block>>	mapline;
+  t_block				block;
+  std::vector<t_block>			block_list;
 
   for (size_t i = 0; i < line.size(); i++)
     {
@@ -43,7 +52,7 @@ void	Nibbler::Add_mapline(const std::string &line, std::vector<std::vector<t_blo
       block.angle = 0;
       block.shiftx = 0.0;
       block.shifty = 0.0;
-      mapline.push_back(block);
+      this->Add_block(block, mapline);
     }
   map.push_back(mapline);
 }
@@ -51,28 +60,52 @@ void	Nibbler::Add_mapline(const std::string &line, std::vector<std::vector<t_blo
 void	Nibbler::Add_cell(t_map &map, unsigned int y, unsigned int x, float shiftx, float shifty)
 {
   t_cell	cell;
+  t_block	block;
 
   cell.x = x;
   cell.y = y;
   this->head.push_back(cell);
-  map.map[y][x].type = blockType::SNAKTAIL;
-  map.map[y][x].sprite = 0;
-  map.map[y][x].shiftx = shiftx;
-  map.map[y][x].shifty = shifty;
+  block.angle = 0;
+  block.type = blockType::SNAKTAIL;
+  block.sprite = 0;
+  block.shiftx = shiftx;
+  block.shifty = shifty;
+  map.map[y][x].push_back(block);
 }
 
 void	Nibbler::Add_player(t_map &game_map)
 {
   t_cell	head;
+  t_block	block;
 
-  head.x = game_map.width / 2 + 1;
-  head.y = game_map.height / 2;
+  head.x = (game_map.width / 2 + 1);
+  head.y = (game_map.height / 2);
   this->head.push_back(head);
   this->player_xdirection = 1;
   this->player_ydirection = 0;
-  game_map.map[head.y][head.x].type = blockType::PLAYER;
-  game_map.map[head.y][head.x].angle = 270;
-  game_map.map[head.y][head.x].sprite = 0;
+  block.type = blockType::PLAYER;
+  block.angle = 270;
+  block.sprite = 0;
+  block.shiftx = 0;
+  block.shifty = 0;
+  if (game_map.map[head.y][head.x][0].type == blockType::BLOCK ||
+      game_map.map[head.y][head.x][0].type == blockType::SNAKTAIL ||
+      game_map.map[head.y][head.x][0].type == blockType::PLAYER ||
+      game_map.map[head.y][head.x][0].type == blockType::OBSTACLE ||
+      game_map.map[head.y][head.x - 1][0].type == blockType::BLOCK ||
+      game_map.map[head.y][head.x - 1][0].type == blockType::SNAKTAIL ||
+      game_map.map[head.y][head.x - 1][0].type == blockType::PLAYER ||
+      game_map.map[head.y][head.x - 1][0].type == blockType::OBSTACLE ||
+      game_map.map[head.y][head.x - 2][0].type == blockType::BLOCK ||
+      game_map.map[head.y][head.x - 2][0].type == blockType::SNAKTAIL ||
+      game_map.map[head.y][head.x - 2][0].type == blockType::PLAYER ||
+      game_map.map[head.y][head.x - 2][0].type == blockType::OBSTACLE ||
+      game_map.map[head.y][head.x - 3][0].type == blockType::BLOCK ||
+      game_map.map[head.y][head.x - 3][0].type == blockType::SNAKTAIL ||
+      game_map.map[head.y][head.x - 3][0].type == blockType::PLAYER ||
+      game_map.map[head.y][head.x - 3][0].type == blockType::OBSTACLE)
+    throw game_error("Unauthorized block at the snake start position");
+  game_map.map[head.y][head.x].push_back(block);
   this->Add_cell(game_map, head.y, head.x - 1, 0.0, 0.0);
   this->Add_cell(game_map, head.y, head.x - 2, 0.0, 0.0);
   this->Add_cell(game_map, head.y, head.x - 3, 0.0, 0.0);
@@ -104,20 +137,26 @@ void	Nibbler::Get_map(t_map &game_map)
   this->Add_powerup(game_map);
   for (size_t i = 0; i < game_map.map.size(); i++)
     for (size_t j = 0; j < game_map.map[0].size(); j++)
-      if ((i == 0 || j == 0) && game_map.map[i][j].type != blockType::BLOCK)
+      if ((i == 0 || j == 0 || i == (game_map.map.size() - 1) || j == (game_map.map[0].size() - 1)) && game_map.map[i][j][0].type != blockType::BLOCK)
 	throw game_error("The map must be surrounded by blocks");
   this->last_key = -1;
+  this->start_time = time(NULL);
 }
 
 int	Nibbler::check_ahead(t_map &game_map)
 {
   blockType	next_block;
 
-  next_block = game_map.map[this->head.begin()->y + this->player_ydirection][this->head.begin()->x + this->player_xdirection].type;
-  if (next_block == blockType::BLOCK ||
-      next_block == blockType::SNAKTAIL ||
-      next_block == blockType::OBSTACLE)
-    return (1);
+  for (int i = 0; i < 2; i++)
+    {
+      if (i == 1 && game_map.map[this->head.begin()->y + this->player_ydirection][this->head.begin()->x + this->player_xdirection].size() < 2)
+	return (0);
+      next_block = game_map.map[this->head.begin()->y + this->player_ydirection][this->head.begin()->x + this->player_xdirection][i].type;
+      if (next_block == blockType::BLOCK ||
+	  next_block == blockType::SNAKTAIL ||
+	  next_block == blockType::OBSTACLE)
+	return (1);
+    }
   return (0);
 }
 
@@ -131,7 +170,7 @@ void	Nibbler::change_direction(t_gamedata &data)
     this->last_key = 2;
   else if (data.left)
     this->last_key = 3;
-  if (this->counter > (FPS / 120))
+  if (this->counter > (FPS / 12))
     {
       if (this->last_key == 0 || this->last_key == 2)
 	this->player_xdirection = 0;
@@ -149,22 +188,12 @@ void	Nibbler::change_direction(t_gamedata &data)
     }
 }
 
-
-void	Nibbler::Remove_last_cell(t_map &map)
+void	Nibbler::move(t_map &map)
 {
-  map.map[(this->head.back()).y][(this->head.back()).x].type = blockType::EMPTY;
-  map.map[(this->head.back()).y][(this->head.back()).x].shiftx = 0.0;
-  map.map[(this->head.back()).y][(this->head.back()).x].shifty = 0.0;
-  this->head.pop_back();
-}
-
-int	Nibbler::move(t_map &map)
-{
-  t_cell	cell;
   unsigned int	angle;
-  int		ret;
+  t_block	block;
+  t_cell	cell;
 
-  ret = 0;
   angle = 0;
   if (this->player_xdirection == 1)
     angle = 270;
@@ -172,44 +201,22 @@ int	Nibbler::move(t_map &map)
     angle = 90;
   else if (this->player_ydirection == 1)
     angle = 180;
+  map.map[this->head.begin()->y][this->head.begin()->x][1].type = blockType::SNAKTAIL;
+  map.map[this->head.begin()->y][this->head.begin()->x][1].angle = 0;
   cell.x = this->head.begin()->x;
   cell.y = this->head.begin()->y;
-  if ((angle == 270 && map.map[cell.y][cell.x].shiftx >= 0.9) ||
-      (angle == 90 && map.map[cell.y][cell.x].shiftx <= -0.9) ||
-      (angle == 180 && map.map[cell.y][cell.x].shifty >= 0.9) ||
-      (angle == 0 && map.map[cell.y][cell.x].shifty <= -0.9))
+  this->head.insert(++this->head.begin(), cell);
+  this->head.begin()->x += (this->player_xdirection);
+  this->head.begin()->y += (this->player_ydirection);
+  if (map.map[this->head.begin()->y][this->head.begin()->x].size() < 2)
     {
-      this->head.begin()->x += this->player_xdirection;
-      this->head.begin()->y += this->player_ydirection;
-      map.map[cell.y][cell.x].type = blockType::SNAKTAIL;
-      map.map[cell.y][cell.x].angle = 0;
-      this->head.insert(++this->head.begin(), cell);
-      map.map[this->head.begin()->y][this->head.begin()->x].type = blockType::PLAYER;
-      ret = 1;
+      block.shiftx = 0;
+      block.shifty = 0;
+      block.sprite = 0;
+      map.map[this->head.begin()->y][this->head.begin()->x].push_back(block);
     }
-  for (std::list<t_cell>::iterator it = this->head.begin();
-       it != this->head.end(); it++)
-    {
-      if (it == this->head.begin())
-	{
-	  map.map[it->y][it->x].shiftx += static_cast<float>(this->player_xdirection) / 10.0;
-	  map.map[it->y][it->x].shifty += static_cast<float>(this->player_ydirection) / 10.0;
-	}
-      else
-	{
-	  map.map[it->y][it->x].shiftx += static_cast<float>((--it)->x - it->x) / 10.0;
-	  ++it;
-	  map.map[it->y][it->x].shifty += static_cast<float>((--it)->y - it->y) / 10.0;
-	  ++it;
-	}
-      if (map.map[it->y][it->x].shiftx >= 1 || map.map[it->y][it->x].shiftx <= -1)
-  	map.map[it->y][it->x].shiftx = 0.0;
-      if (map.map[it->y][it->x].shifty >= 1 || map.map[it->y][it->x].shifty <= -1)
-  	map.map[it->y][it->x].shifty = 0.0;
-    }
-  map.map[this->head.begin()->y][this->head.begin()->x].angle =
-    angle;
-  return (ret);
+  map.map[this->head.begin()->y][this->head.begin()->x][1].type = blockType::PLAYER;
+  map.map[this->head.begin()->y][this->head.begin()->x][1].angle = angle;
 }
 
 void	Nibbler::Add_powerup(t_map &map) const
@@ -223,9 +230,10 @@ void	Nibbler::Add_powerup(t_map &map) const
     {
       x = rand() % (map.width - 2) + 1;
       y = rand() % (map.height - 2) + 1;
-      if (map.map[y][x].type == blockType::EMPTY)
+      if (map.map[y][x][0].type == blockType::EMPTY &&
+	  map.map[y][x].size() == 1)
 	{
-	  map.map[y][x].type = blockType::POWERUP;
+	  map.map[y][x][0].type = blockType::POWERUP;
 	  done = true;
 	}
     }
@@ -234,28 +242,27 @@ void	Nibbler::Add_powerup(t_map &map) const
 void	Nibbler::move_nibbler(t_map &map)
 {
   bool	powerup;
-  int	ret;
   int	x;
   int	y;
 
   powerup = false;
   x = this->head.begin()->x + this->player_xdirection;
   y = this->head.begin()->y + this->player_ydirection;
-  if (map.map[y][x].type == blockType::POWERUP//  &&
-      // ((this->head.begin()->x == x &&
-      // 	this->head.begin()->y - map.map[this->head.begin()->y][this->head.begin()->x].shifty - y >= -0.5 &&
-      // 	this->head.begin()->y - map.map[this->head.begin()->y][this->head.begin()->x].shifty - y <= 0.5) ||
-      //  (this->head.begin()->y == y &&
-      // 	this->head.begin()->x - map.map[this->head.begin()->y][this->head.begin()->x].shiftx - x >= -0.5 &&
-      // 	this->head.begin()->x - map.map[this->head.begin()->y][this->head.begin()->x].shiftx - x <= 0.5))
-      )
-    powerup = true;
-  if ((ret = this->move(map)) && !powerup)
-    this->Remove_last_cell(map);
-  else if (ret && powerup)
+  if (map.map[y][x][0].type == blockType::POWERUP)
+    {
+      powerup = true;
+      map.map[y][x][0].type = blockType::EMPTY;
+    }
+  this->move(map);
+  if (powerup)
     {
       this->Add_powerup(map);
       this->score += POWERUP_SCORE;
+    }
+  else if (!powerup)
+    {
+      map.map[std::prev(this->head.end())->y][std::prev(this->head.end())->x][1].type = blockType::EMPTY;
+      this->head.pop_back();
     }
 }
 
@@ -263,13 +270,15 @@ int	Nibbler::Game_loop(t_gamedata &data)
 {
   ++this->counter;
   this->change_direction(data);
-  if (this->counter > (FPS / 120))
+  if (this->counter > (FPS / 12))
     {
       if (this->check_ahead(data.map))
 	return (this->score);
       this->move_nibbler(data.map);
       this->counter = 0;
     }
+  data.map.gui.score = this->score;
+  data.map.gui.sec = time(NULL) - this->start_time;
   return (1);
 }
 

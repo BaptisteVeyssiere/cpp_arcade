@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:12:35 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 21:49:09 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 04:22:09 2017 Baptiste Veyssiere
 //
 
 #ifndef __NCURSES_HPP__
@@ -40,6 +40,7 @@
 # define CURS_SET_ERROR	"Error occured while calling curs_set()"
 # define OPEN_ERROR	"Error occured while calling open()"
 # define NODELAY_ERROR	"Error occured while calling nodelay()"
+# define WPRINTW_ERROR	"Error occured while calling wprintw()"
 # define GETLINE_ERROR	"Error: sprite file is empty"
 # define KEY_ESC	27
 # define KEY_2		169
@@ -72,6 +73,7 @@ public:
 private:
   void	Get_sprites(const std::string &);
   char	get_sym(const std::string &) const;
+  void	Gui_display(const t_gui &) const;
 };
 
 extern "C" IGraph	*factory();

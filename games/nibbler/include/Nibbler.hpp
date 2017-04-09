@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:39:26 2017 Baptiste Veyssiere
-// Last update Fri Apr  7 23:02:19 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 05:30:01 2017 Baptiste Veyssiere
 //
 
 #ifndef __NIBBLER_HPP__
@@ -21,8 +21,8 @@
 
 typedef struct	s_cell
 {
-  unsigned int	x;
-  unsigned int	y;
+  int		x;
+  int		y;
 }		t_cell;
 
 class	Nibbler : public IGame
@@ -34,6 +34,7 @@ private:
   int			counter;
   unsigned int		score;
   int			last_key;
+  time_t		start_time;
 
 private:
   Nibbler(const Nibbler &);
@@ -49,15 +50,15 @@ public:
 
 private:
   void	Get_file_content(std::vector<std::string> &) const;
-  void	Add_mapline(const std::string &, std::vector<std::vector<t_block>> &) const;
+  void	Add_mapline(const std::string &, std::vector<std::vector<std::vector<t_block>>> &) const;
   void	Add_player(t_map &);
   void	Add_cell(t_map &, unsigned int, unsigned int, float, float);
   int	check_ahead(t_map &);
   void	change_direction(t_gamedata &);
   void	move_nibbler(t_map &);
-  int	move(t_map &);
+  void	move(t_map &);
   void	Add_powerup(t_map &) const;
-  void	Remove_last_cell(t_map &);
+  void	Add_block(t_block&, std::vector<std::vector<t_block>>&) const;
 };
 
 extern "C" IGame	*factory();

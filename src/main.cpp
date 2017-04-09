@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sat Apr  8 10:27:56 2017 Nathan Scutari
+// Last update Sun Apr  9 06:16:15 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -103,7 +103,17 @@ static void	main_loop(const std::string &libname)
       if ((score = game->Game_loop(gamedata)) != 1)
 	{
 	  core.Add_Score(score);
-	  break;
+	  graph->Release();
+	  std::cout << "Your score is " << score << std::endl;
+	  while (core.Get_selected_game());
+	  graph->Init(core.game);
+	  core.load_game_lib("games/lib_arcade_" + core.game + ".so");
+	  i = -1;
+	  while (++i >= 0 && core.game.find(core.game_list[i]) == std::string::npos);
+	  core.game_selector = i;
+	  game = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();
+	  game->Get_map(gamedata.map);
+	  game->Game_loop(gamedata);
 	}
       graph->Loop_display(gamedata.map);
       init_gamedata(gamedata);

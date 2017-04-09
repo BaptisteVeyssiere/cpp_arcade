@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Wed Apr  5 21:51:20 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 04:21:15 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -88,16 +88,33 @@ void	Ncurses::Release()
   check_ncurses_ret(endwin(), ERR, ENDWIN_ERROR);
 }
 
+void	Ncurses::Gui_display(const t_gui &gui) const
+{
+  int	x;
+  int	y;
+
+  getyx(this->win, y, x);
+  check_ncurses_ret(wprintw(this->win, "Score: %u", gui.score), ERR, WPRINTW_ERROR);
+  check_ncurses_ret(wmove(this->win, y + 1, 1), ERR, WMOVE_ERROR);
+  check_ncurses_ret(wprintw(this->win, "Score: %02u:02%u", gui.sec / 60, gui.sec % 60), ERR, WPRINTW_ERROR);
+}
+
 void	Ncurses::Loop_display(const t_map &map) const
 {
   check_ncurses_ret(wmove(this->win, 1, 1), ERR, WMOVE_ERROR);
   for (size_t i = 0; i < map.height; i++)
     {
       for (size_t j = 0; j < map.width; j++)
-        check_ncurses_ret(waddch(this->win, this->symlist[static_cast<int>(map.map[i][j].type)]),
-			  ERR, WADDCH_ERROR);
+	for (size_t k = 0; k < map.map[i][j].size(); k++)
+	  {
+	    check_ncurses_ret(waddch(this->win, this->symlist[static_cast<int>(map.map[i][j][k].type)]),
+			      ERR, WADDCH_ERROR);
+	    if ((k + 1) < map.map[i][j].size())
+	      check_ncurses_ret(wmove(this->win, i + 1, j + 1), ERR, WMOVE_ERROR);
+	  }
       check_ncurses_ret(wmove(this->win, i + 2, 1), ERR, WMOVE_ERROR);
     }
+  this->Gui_display(map.gui);
   check_ncurses_ret(wrefresh(this->win), ERR, WREFRESH_ERROR);
 }
 
