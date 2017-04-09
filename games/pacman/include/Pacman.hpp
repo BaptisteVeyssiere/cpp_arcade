@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:21:05 2017 Nathan Scutari
-// Last update Sun Apr  9 14:35:38 2017 Nathan Scutari
+// Last update Sun Apr  9 17:09:51 2017 Nathan Scutari
 //
 
 #ifndef __PACMAN_HPP__
@@ -46,12 +46,15 @@ private:
   std::vector<std::string>	basic_map;
   int		frame_counter;
   t_pos		pac_pos;
+  time_t	time_sec;
   int		current_direction;
   int		facing;
   int		next_direction;
   int		loop_count;
   int		killer_state;
   int		score;
+  int		pacgum;
+  int		begin;
   int		alive;
   int		start[4] = {0};
   int		death_sprite;
@@ -105,7 +108,7 @@ public:
   void	move_behind_pacman(int);
   int	ghost_cross_direction(int);
   void	move_front_pacman(int);
-  int	is_dead();
+  int	is_dead(t_gamedata &);
   int	pac_death(t_gamedata &);
   int	check_tp(t_gamedata &);
   void	find_opposite_pos(t_pos &);

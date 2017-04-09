@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Mar 30 00:59:21 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 00:28:03 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 16:55:29 2017 Nathan Scutari
 //
 
 #ifndef __GAMEDATA_HPP__
@@ -51,6 +51,8 @@ typedef struct						s_map
   size_t						height;
   std::vector<std::vector<std::vector<t_block>>>	map;
   t_gui							gui;
+  std::vector<std::string>				sNameLoop;
+  std::vector<std::string>				sName;
 }							t_map;
 
 
