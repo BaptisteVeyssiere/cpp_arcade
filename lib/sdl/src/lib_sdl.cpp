@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Mon Apr 10 00:55:53 2017 Nathan Scutari
+// Last update Mon Apr 10 01:21:24 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -193,10 +193,7 @@ void	lib_sdl::Loop_display(const t_map &map)
 		   pos.y = static_cast<double>(y) * y_size + map.map[y][x][i].shifty * y_size;
 		   file = tile_to_file(map.map[y][x][i]);
 		   if (file.size() > 0 && textures.find(file) == textures.end())
-		     {
-		       std::cout << file << std::endl;
-		       throw std::exception();
-		     }
+		     throw library_error("Couldn't find texture: " + file);
 		   if (file.size() > 0 && map.map[y][x][i].angle != 0)
 		     {
 		       tmp = rotozoomSurface(textures.at(file), map.map[y][x][i].angle, 1, 1);
@@ -242,7 +239,7 @@ void	lib_sdl::Init(const std::string &game)
   SDL_putenv(center);
   if ((win = SDL_SetVideoMode(WINSIDE, WINSIDE+GUISIDE, 32,
 			      SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
-    throw std::exception();
+    throw library_error("SDL_SetVideoMode failed");
   SDL_WM_SetCaption(game.c_str(), NULL);
   first_loop = true;
   files.clear();
