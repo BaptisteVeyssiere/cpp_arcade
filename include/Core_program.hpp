@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:15:00 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 05:58:24 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 16:11:11 2017 Baptiste Veyssiere
 //
 
 #ifndef __CORE_PROGRAM_HPP__
@@ -57,7 +57,7 @@ public:
 
   void	load_game_lib(const std::string &);
   void	*get_game_function(const std::string &) const;
-  void	Display_menu();
+  int	Display_menu();
   void	Add_Score(unsigned int);
   void	Save_score() const;
   int	Get_selected_game();
@@ -69,7 +69,7 @@ private:
   void	Aff_Games() const;
   void	Aff_Graph() const;
   void	Aff_Scores() const;
-  void	Get_Username();
+  int	Get_Username();
 };
 
 #endif // !__CORE_PROGRAM_HPP__

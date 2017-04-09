@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 14:38:06 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 16:15:54 2017 Baptiste Veyssiere
 //
 
 #include "Core_program.hpp"
@@ -241,34 +241,45 @@ int	Core_program::Get_selected_game()
   getline(std::cin, this->game);
   if (find(this->game_list.begin(), this->game_list.end(), this->game) == this->game_list.end())
     {
+      if (this->game == "quit" || this->game == "q")
+	return (2);
       std::cout << "This game doesn't exist at this time" << std::endl;
       return (1);
     }
   return (0);
 }
 
-void	Core_program::Get_Username()
+int	Core_program::Get_Username()
 {
   this->username = "";
   while (this->username.size() < 1)
     {
       std::cout << "Please enter a username:" << std::endl;
       getline(std::cin, this->username);
+      if (this->username == "quit" || this->username == "q")
+	return (1);
       if (this->username.size() > 0)
 	std::cout << "Hi " << this->username << std::endl;
       else
 	{
-	  std::cout << "So you don't have name ? Poor child..." << std::endl;
+	  std::cout << "So you don't have name ?" << std::endl;
 	  std::cout << "Ok, so I let you choose a nickname :)" << std::endl;
 	}
     }
+  return (0);
 }
 
-void	Core_program::Display_menu()
+int	Core_program::Display_menu()
 {
+  int	ret;
+
   this->Aff_Games();
   this->Aff_Graph();
   this->Aff_Scores();
-  this->Get_Username();
-  while (this->Get_selected_game());
+  if (this->Get_Username())
+    return (1);
+  while ((ret = this->Get_selected_game()))
+    if (ret == 2)
+      return (1);
+  return (0);
 }
