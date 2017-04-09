@@ -24,7 +24,7 @@ OBJDIR	= obj
 
 OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
-CXXFLAGS	= -Iinclude
+CXXFLAGS	= -Iinclude -W -Wall -Werror
 
 $(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -shared -o $(NAME) $(OBJ)

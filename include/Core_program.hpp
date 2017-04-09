@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:15:00 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 16:11:11 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 22:43:00 2017 Baptiste Veyssiere
 //
 
 #ifndef __CORE_PROGRAM_HPP__

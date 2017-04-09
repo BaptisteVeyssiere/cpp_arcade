@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Apr  6 13:49:35 2017 Baptiste Veyssiere
-// Last update Sat Apr  8 00:29:33 2017 ilyas semmaoui
+// Last update Sun Apr  9 22:45:54 2017 Baptiste Veyssiere
 //
 
 # include <iostream>
@@ -107,8 +107,8 @@ void	play(arcade::GetMap *map, arcade::WhereAmI **snake, char &direction)
     {
       ++(*snake)->lenght;
       snakeGrowth(snake, last);
-      map->tile[(*snake)->position[0].y * 20 + (*snake)->position[0].x] == arcade::TileType::EMPTY;
-      map->tile[gen_randnbr() * 20 + gen_randnbr()] == arcade::TileType::POWERUP;
+      map->tile[(*snake)->position[0].y * 20 + (*snake)->position[0].x] = arcade::TileType::EMPTY;
+      map->tile[gen_randnbr() * 20 + gen_randnbr()] = arcade::TileType::POWERUP;
     }
   direction = direction;
 }

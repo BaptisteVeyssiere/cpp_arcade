@@ -35,7 +35,7 @@ OBJDIR	= obj
 
 OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
-CXXFLAGS	= -Iinclude -g
+CXXFLAGS	= -Iinclude -W -Werror -Wall
 
 LDFLAGS		= -ldl
 

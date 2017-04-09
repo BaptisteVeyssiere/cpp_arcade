@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Wed Mar 22 23:14:28 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 22:32:49 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 22:44:05 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -67,7 +67,7 @@ static void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game
 {
   if (gamedata.next_graph)
     {
-      if (++core.graph_selector == core.graph_list.size())
+      if (static_cast<unsigned int>(++core.graph_selector) == core.graph_list.size())
 	core.graph_selector = 0;
       (*graph)->Release();
       delete *graph;
@@ -87,7 +87,7 @@ static void		check_lib_change(t_gamedata &gamedata, IGraph **graph, IGame **game
     }
   else if (gamedata.next_game)
     {
-      if (++core.game_selector == core.game_list.size())
+      if (static_cast<unsigned int>(++core.game_selector) == core.game_list.size())
 	core.game_selector = 0;
       core.load_game_lib("games/lib_arcade_" + core.game_list[core.game_selector] + ".so");
       (*game) = reinterpret_cast<IGame *(*)()>(reinterpret_cast<long>(core.get_game_function("factory")))();

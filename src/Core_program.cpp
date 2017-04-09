@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Fri Mar 31 14:21:00 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 22:24:36 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 22:44:21 2017 Baptiste Veyssiere
 //
 
 #include "Core_program.hpp"
@@ -73,7 +73,6 @@ void	*Core_program::get_game_function(const std::string &fname) const
 void		Core_program::Set_Scores(const std::string &game_name)
 {
   std::vector<t_score>	tab;
-  int			fd;
   std::ifstream		file("games/"+game_name+"/highscore");
   std::string		str;
   t_score		result;

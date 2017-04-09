@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sun Mar 26 22:02:12 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 21:39:41 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 22:47:55 2017 Baptiste Veyssiere
 //
 
 #include "Ncurses.hpp"
@@ -56,7 +56,7 @@ void	Ncurses::Get_sprites(const std::string &game)
       "games/"+game+"/sprites/text/snaktail",
       "games/"+game+"/sprites/text/player"
     };
-  int	i;
+  unsigned int	i;
 
   this->symlist.clear();
   get_directory_filenames("games/"+game+"/sprites/text/", tab);
