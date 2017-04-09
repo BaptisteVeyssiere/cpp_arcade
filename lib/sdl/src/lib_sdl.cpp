@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Sat Mar 25 23:29:39 2017 Nathan Scutari
-// Last update Sun Apr  9 19:31:55 2017 ilyas semmaoui
+// Last update Mon Apr 10 00:55:53 2017 Nathan Scutari
 //
 
 #include <SDL/SDL.h>
@@ -64,10 +64,10 @@ bool	lib_sdl::is_map_texture(std::string file_name) const
       pos_s == file_name.size() - 1 || pos_s == 0)
     return (false);
   i = -1;
-  while (++i < pos_s)
+  while (++i < static_cast<int>(pos_s))
     if (file_name[i] < '0' || file_name[i] > '9')
       return (false);
-  while (++i < file_name.size())
+  while (++i < static_cast<int>(file_name.size()))
     if (file_name[i] < '0' || file_name[i] > '9')
       return (false);
   return (true);
@@ -101,13 +101,15 @@ void	lib_sdl::displayGui(const std::string &str1, const std::string &str2)
 {
   SDL_Surface	*surf;
   SDL_Surface	*tmp;
+  SDL_Color	color;
   SDL_Rect	pos;
   double	x_size;
   double	y_size;
-  int		y;
-  int		x;
 
-  if ((tmp = TTF_RenderText_Solid(font, str1.c_str(), {255, 255, 255})) == NULL)
+  color.r = 255;
+  color.g = 255;
+  color.b = 255;
+  if ((tmp = TTF_RenderText_Solid(font, str1.c_str(), color)) == NULL)
     throw library_error("TTF_RenderText_Solid failed\n");
   x_size = static_cast<double>(tmp->w) / (static_cast<double>(tmp->h) / ((static_cast<double>(GUISIDE) / 2.0) - 10.0));
   y_size = (static_cast<double>(GUISIDE) / 2.0) - 10.0;
@@ -117,7 +119,7 @@ void	lib_sdl::displayGui(const std::string &str1, const std::string &str2)
   SDL_BlitSurface(surf, NULL, win, &pos);
   SDL_FreeSurface(tmp);
   SDL_FreeSurface(surf);
-  if ((tmp = TTF_RenderText_Solid(font, str2.c_str(), {255, 255, 255})) == NULL)
+  if ((tmp = TTF_RenderText_Solid(font, str2.c_str(), color)) == NULL)
     throw library_error("TTF_RenderText_Solid failed\n");
   x_size = static_cast<double>(tmp->w) / (static_cast<double>(tmp->h) / ((static_cast<double>(GUISIDE) / 2.0) - 10.0));
   y_size = (static_cast<double>(GUISIDE) / 2.0) - 10.0;
@@ -137,7 +139,7 @@ void	lib_sdl::playSounds(const t_map &map)
 
   if (map.sNameLoop.size() > 0 || map.sName.size() > 0) {
     i = -1;
-    while (++i < soundName.size()) {
+    while (++i < static_cast<int>(soundName.size())) {
       itl = map.sNameLoop.end();
       it = map.sName.end();
       if ((itl = find(map.sNameLoop.begin(), map.sNameLoop.end(), soundName[i]))
@@ -151,7 +153,7 @@ void	lib_sdl::playSounds(const t_map &map)
 	  notLoop.push_back(i);
 	Mix_PlayChannel(i, soundChunk[i], 0);
       }
-      
+
       if (itl == map.sNameLoop.end() && find(notLoop.begin(), notLoop.end(), i) == notLoop.end()) {
 	Mix_HaltChannel(i);
       }
@@ -179,13 +181,13 @@ void	lib_sdl::Loop_display(const t_map &map)
     resize_textures(textures, first_loop, x_size, y_size);
   SDL_FillRect(win, NULL, 0x000000);
   SDL_BlitSurface(textures["bg"], NULL, win, 0);
-  while (++y < map.height)
+  while (++y < static_cast<int>(map.height))
     {
       x = -1;
-      while (++x < map.width)
+      while (++x < static_cast<int>(map.width))
 	{
 	  i = -1;
-	  while (++i < map.map[y][x].size())
+	  while (++i < static_cast<int>(map.map[y][x].size()))
 		 {
 		   pos.x = static_cast<double>(x) * x_size + map.map[y][x][i].shiftx * x_size;
 		   pos.y = static_cast<double>(y) * y_size + map.map[y][x][i].shifty * y_size;
@@ -218,7 +220,7 @@ void	lib_sdl::Init(const std::string &game)
   SDL_Surface	*tmp;
   Mix_Chunk	*music;
   int		i;
-  
+
 
   if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) == -1)
     throw library_error("SDL_Init failed\n");
@@ -258,7 +260,7 @@ void	lib_sdl::Init(const std::string &game)
   if (soundName.size() > 0) {
     Mix_AllocateChannels(soundName.size());
     i = -1;
-    while (++i < soundName.size())
+    while (++i < static_cast<int>(soundName.size()))
       Mix_Volume(i, MIX_MAX_VOLUME / 2);
   }
 }

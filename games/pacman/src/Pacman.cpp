@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:27:31 2017 Nathan Scutari
-// Last update Sun Apr  9 18:25:42 2017 Nathan Scutari
+// Last update Mon Apr 10 00:51:26 2017 Nathan Scutari
 //
 
 #include "Pacman.hpp"
@@ -209,11 +209,11 @@ void	Pacman::check_direction_change(t_gamedata &data)
 	}
     }
   else
-    check_basic_direction(data);
+    check_basic_direction();
   check_collision(data);
 }
 
-void	Pacman::check_basic_direction(t_gamedata &data)
+void	Pacman::check_basic_direction()
 {
   if (current_direction == -1)
     {
@@ -221,10 +221,10 @@ void	Pacman::check_basic_direction(t_gamedata &data)
       next_direction = -1;
     }
   else
-    check_backward_direction(data);
+    check_backward_direction();
 }
 
-void	Pacman::go_towards_direction(t_gamedata &data)
+void	Pacman::go_towards_direction()
 {
   double	dir[4][2] =
     {
@@ -240,7 +240,7 @@ void	Pacman::go_towards_direction(t_gamedata &data)
   pac_pos.x += dir[current_direction][1];
 }
 
-void	Pacman::check_backward_direction(t_gamedata &data)
+void	Pacman::check_backward_direction()
 {
   int	back[4] = {1, 0, 3, 2};
 
@@ -284,7 +284,7 @@ void	Pacman::remove_block(t_gamedata &data, int y, int x, blockType type)
   int	i;
 
   i = -1;
-  while (++i < data.map.map[y][x].size())
+  while (++i < static_cast<int>(data.map.map[y][x].size()))
     {
       if (data.map.map[y][x][i].type == type)
 	data.map.map[y][x].erase(data.map.map[y][x].begin() + i);
@@ -331,7 +331,7 @@ void	Pacman::eat_pacgum(t_gamedata &data)
   int	i;
 
   i = -1;
-  while (++i < data.map.map[pac_pos.y][pac_pos.x].size())
+  while (++i < static_cast<int>(data.map.map[pac_pos.y][pac_pos.x].size()))
     {
       if (data.map.map[pac_pos.y][pac_pos.x][i].type == blockType::PACGUM)
 	{
@@ -389,8 +389,8 @@ void	Pacman::pacman_move(t_gamedata &data)
 	check_direction_change(data);
     }
   else
-    check_backward_direction(data);
-  go_towards_direction(data);
+    check_backward_direction();
+  go_towards_direction();
   update_map(data);
 }
 
@@ -735,11 +735,6 @@ void	Pacman::go_to(int y, int x, int g)
 
 void	Pacman::move_ghost(int g)
 {
-  int	x;
-  int	y;
-
-  x = g_pos[g].x;
-  y = g_pos[g].y;
   if (ghost[g].path.size() == 0)
     return ;
   if (g_pos[g].x != ghost[g].path.back().x)

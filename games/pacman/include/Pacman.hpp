@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:21:05 2017 Nathan Scutari
-// Last update Sun Apr  9 21:53:35 2017 Nathan Scutari
+// Last update Mon Apr 10 00:50:02 2017 Nathan Scutari
 //
 
 #ifndef __PACMAN_HPP__
@@ -80,7 +80,7 @@ private:
   void	check_next_direction(t_gamedata &);
   void	check_direction_change(t_gamedata &);
   void	update_map(t_gamedata &);
-  void	check_basic_direction(t_gamedata &);
+  void	check_basic_direction();
   void	check_collision(t_gamedata &);
   void	remove_block(t_gamedata &, int, int, blockType);
   void	pacman_move(t_gamedata &);
@@ -88,8 +88,8 @@ private:
   void	eat_pacgum(t_gamedata &);
   int	is_direction_valid(t_gamedata &);
   int	is_cross_direction(t_gamedata &);
-  void	check_backward_direction(t_gamedata &);
-  void	go_towards_direction(t_gamedata &);
+  void	check_backward_direction();
+  void	go_towards_direction();
   t_node	*pick_shortest();
   void	update_clyde(t_gamedata &);
   void	clyde_move(t_gamedata &);

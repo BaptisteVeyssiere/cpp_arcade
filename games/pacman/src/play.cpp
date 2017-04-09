@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Thu Apr  6 13:49:35 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 20:49:31 2017 ilyas semmaoui
+// Last update Mon Apr 10 00:52:34 2017 Nathan Scutari
 //
 
 # include <iostream>
@@ -59,8 +59,6 @@ void	go_left(arcade::GetMap *map, arcade::WhereAmI **pac, char &direction)
 
 void	play(arcade::GetMap *map, arcade::WhereAmI **pac, char &direction)
 {
-  int	i;
-
   if (direction == 0) {
     if(map->tile[((*pac)->position[0].y-1) * 20 + (*pac)->position[0].x] == arcade::TileType::EMPTY ||
        map->tile[((*pac)->position[0].y-1) * 20 + (*pac)->position[0].x] == arcade::TileType::POWERUP ||
@@ -88,7 +86,7 @@ void	play(arcade::GetMap *map, arcade::WhereAmI **pac, char &direction)
   }
   if (map->tile[(*pac)->position[0].y * 20 + (*pac)->position[0].x] == arcade::TileType::POWERUP)
     {
-      map->tile[(*pac)->position[0].y * 20 + (*pac)->position[0].x] == arcade::TileType::EMPTY;
+      map->tile[(*pac)->position[0].y * 20 + (*pac)->position[0].x] = arcade::TileType::EMPTY;
     }
   direction = direction;
 }

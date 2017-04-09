@@ -7,7 +7,7 @@
 ## Started on  Wed May 18 21:26:30 2016 Baptiste veyssiere
 ##
 
-NAME	= ../lib_arcade_pacman.so
+NAME	= ../lib_arcade_nibbler.so
 
 RM	= rm -f
 
@@ -15,7 +15,7 @@ CXX	= g++
 
 MKDIR	= mkdir -p
 
-SRC	= src/Pacman.cpp	\
+SRC	= src/Nibbler.cpp \
 	src/play.cpp
 
 SRCDIR	= src
@@ -24,7 +24,7 @@ OBJDIR	= obj
 
 OBJ	= $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
-CXXFLAGS	= -Iinclude -W -Wall -Werror
+CXXFLAGS	= -Iinclude
 
 $(NAME): $(OBJ)
 	@$(CXX) $(LDFLAGS) -shared -o $(NAME) $(OBJ)
