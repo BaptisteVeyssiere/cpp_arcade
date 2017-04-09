@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:41:59 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 19:41:33 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 23:12:39 2017 Baptiste Veyssiere
 //
 
 #include <iostream>
@@ -141,6 +141,7 @@ void	Nibbler::Get_map(t_map &game_map)
 	throw game_error("The map must be surrounded by blocks");
   this->last_key = -1;
   this->start_time = time(NULL);
+  this->end = 0;
 }
 
 int	Nibbler::check_ahead(t_map &game_map)
@@ -155,10 +156,7 @@ int	Nibbler::check_ahead(t_map &game_map)
       if (next_block == blockType::BLOCK ||
 	  next_block == blockType::SNAKTAIL ||
 	  next_block == blockType::OBSTACLE)
-	{
-	  game_map.sName.push_back("wall");
-	  return (1);
-	}
+	return (1);
     }
   return (0);
 }
@@ -272,13 +270,24 @@ void	Nibbler::move_nibbler(t_map &map)
 
 int	Nibbler::Game_loop(t_gamedata &data)
 {
+  if (this->end > 0)
+    {
+      ++this->end;
+      if (this->end >= 20)
+	return (this->score);
+      return (1);
+    }
   ++this->counter;
   this->change_direction(data);
   if (this->counter > (FPS / 12))
     {
       data.map.sName.clear();
       if (this->check_ahead(data.map))
-	return (this->score);
+	{
+	  this->end = 1;
+	  data.map.sName.push_back("wall");
+	  return (1);
+	}
       this->move_nibbler(data.map);
       this->counter = 0;
     }

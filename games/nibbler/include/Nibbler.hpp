@@ -5,7 +5,7 @@
 // Login   <veyssi_b@epitech.net>
 //
 // Started on  Sat Apr  1 14:39:26 2017 Baptiste Veyssiere
-// Last update Sun Apr  9 05:30:01 2017 Baptiste Veyssiere
+// Last update Sun Apr  9 23:08:40 2017 Baptiste Veyssiere
 //
 
 #ifndef __NIBBLER_HPP__
@@ -35,6 +35,7 @@ private:
   unsigned int		score;
   int			last_key;
   time_t		start_time;
+  int			end;
 
 private:
   Nibbler(const Nibbler &);
