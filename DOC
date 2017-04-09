@@ -1,0 +1,46 @@
+The core_program "arcade" sets the link between graphic and game libraries.
+
+
+---GRAPHIC LIBRARIES---
+=Directory disposition= (from arcade binary directory)
+/lib/"libname"/
+
+- contains the .so library file corresponding to the graphic library
+
+- contains fonts directory with fonts files (ex: .otf) used to display informations such as score
+
+
+=Functionnality=
+Init method is called by the core program before a new game starts taking a string as parameter. The string corresponds to the game name for the library to load textures files in /games/"gamename"/ and open a window
+
+Release method is called by the core programe at the end of a game or library change to free any loaded data
+
+Loop_display method is called every frame to refresh the window and takes a t_map as parameter containing informations on the textures to display (see class diagram and gamedata.hpp)
+
+Get_key method is called every frame to get any event that occured from last call, the corresponding event will be set in the gamedata structure
+
+Must contain an extern fonction "factory" which returns a new instance of the library class in an IGraph *
+
+
+
+
+
+---GAME LIBRARIES---
+=Directory disposition= (from arcade binary directory)
+/games/"gamename"/
+
+
+Must inherit from IGame (see IGame.hpp and class diagram)
+
+- contains the .so library file corresponding to the game library
+
+- contains a "sounds" directory containing every sound files that needs to be played by the graphic library
+
+- contains a "sprites" directory containing every textures files that needs to be displayed from the graphic library and a sub_directory "text" that contains characters text textures for text libraries
+
+=Functionnality=
+Get_map method will be called at the beginning of a game to init the game and the t_map passed as parameter
+
+Game_loop method will be called at every frame from the core program to compute game informations and fill the t_map contained in the t_gamedata passed as parameter, the game will also read from the t_gamedata passed as parameter containing informations on the key pressed
+
+Must contain an extern fonction "factory" which returns a new instance of the library class in an IGame *

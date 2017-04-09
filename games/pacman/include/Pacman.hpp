@@ -5,7 +5,7 @@
 // Login   <scutar_n@epitech.net>
 //
 // Started on  Fri Apr  7 17:21:05 2017 Nathan Scutari
-// Last update Sun Apr  9 17:09:51 2017 Nathan Scutari
+// Last update Sun Apr  9 21:53:35 2017 Nathan Scutari
 //
 
 #ifndef __PACMAN_HPP__
@@ -72,6 +72,10 @@ public:
   virtual ~Pacman();
 
 public:
+  virtual int	Game_loop(t_gamedata &);
+  virtual void	Get_map(t_map &);
+
+private:
   void	Init_map(std::vector<std::string> &);
   void	check_next_direction(t_gamedata &);
   void	check_direction_change(t_gamedata &);
@@ -86,8 +90,6 @@ public:
   int	is_cross_direction(t_gamedata &);
   void	check_backward_direction(t_gamedata &);
   void	go_towards_direction(t_gamedata &);
-  virtual int	Game_loop(t_gamedata &);
-  virtual void	Get_map(t_map &);
   t_node	*pick_shortest();
   void	update_clyde(t_gamedata &);
   void	clyde_move(t_gamedata &);
